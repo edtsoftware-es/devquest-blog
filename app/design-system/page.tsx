@@ -18,7 +18,7 @@ export default function DesignSystem() {
         <h1 className="text-center font-bold text-4xl">Example components</h1>
 
         <Button className="w-fit rounded-full" size="sm">
-          <Gamepad2 />
+          <Gamepad2 aria-hidden="true" />
           Gaming
         </Button>
 
@@ -32,35 +32,37 @@ export default function DesignSystem() {
 
         <div className="flex gap-4">
           <Button size="icon">
-            <ArrowLeft />
+            <ArrowLeft aria-hidden="true" />
           </Button>
           <Button size="icon" variant="secondary">
-            <ArrowRight />
+            <ArrowRight aria-hidden="true" />
           </Button>
         </div>
 
         <div className="flex gap-1.5">
           <Button
+            aria-label="Previous page"
             className="border-none bg-neutral-100 hover:bg-neutral-900 hover:text-system-white"
             size="icon"
           >
-            <ArrowLeft />
+            <ArrowLeft aria-hidden="true" />
           </Button>
-          {Array.from({ length: 5 }).map((_, index) => (
+          {/* biome-ignore lint/style/noMagicNumbers : example */}
+          {[1, 2, 3, 4, 5].map((n) => (
             <Button
               className="border-none bg-neutral-100 hover:bg-neutral-900 hover:text-system-white"
-              // biome-ignore lint/suspicious/noArrayIndexKey : We need to use the index as the key in this case
-              key={index}
+              key={n}
               size="icon"
             >
-              {index + 1}
+              {n}
             </Button>
           ))}
           <Button
+            aria-label="Next page"
             className="border-none bg-neutral-100 hover:bg-neutral-900 hover:text-system-white"
             size="icon"
           >
-            <ArrowRight />
+            <ArrowRight aria-hidden="true" />
           </Button>
         </div>
 
@@ -73,7 +75,7 @@ export default function DesignSystem() {
 
         <Button className="group w-fit" size="auto" variant="ghost">
           <span className="rounded-full bg-neutral-900 p-1 text-system-white transition-colors group-hover:bg-neutral-900/90">
-            <ChevronRight />
+            <ChevronRight aria-hidden="true" />
           </span>
           View more
         </Button>
@@ -94,11 +96,11 @@ export default function DesignSystem() {
         <div className="flex gap-x-10">
           <Button>
             Explore Now
-            <ArrowUpRight />
+            <ArrowUpRight aria-hidden="true" />
           </Button>
           <Button variant="secondary">
             View More Testimonials
-            <ArrowUpRight />
+            <ArrowUpRight aria-hidden="true" />
           </Button>
           <Button variant="destructive">Delete</Button>
         </div>
