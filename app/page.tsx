@@ -1,21 +1,21 @@
 "use client";
 
-import { useConvexAuth, useMutation, useQuery } from "convex/react";
-import { api } from "../convex/_generated/api";
-import Link from "next/link";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { api } from "../convex/_generated/api";
 
 export default function Home() {
   return (
     <>
-      <header className="sticky top-0 z-10 bg-neutral-50 p-4 border-b-2 border-slate-200 dark:border-slate-800 flex flex-row justify-between items-center">
+      <header className="sticky top-0 z-10 flex flex-row items-center justify-between border-slate-200 border-b-2 bg-neutral-50 p-4 dark:border-slate-800">
         Convex + Next.js + Convex Auth
         <SignOutButton />
       </header>
-      <DiscordSignIn/>
-      <main className="p-8 flex flex-col gap-8">
-        <h1 className="text-4xl font-bold text-center">
+      <DiscordSignIn />
+      <main className="flex flex-col gap-8 p-8">
+        <h1 className="text-center font-bold text-4xl">
           Convex + Next.js + Convex Auth
         </h1>
         <Content />
@@ -25,11 +25,9 @@ export default function Home() {
 }
 
 function DiscordSignIn() {
-  const { signIn } = useAuthActions()
+  const { signIn } = useAuthActions();
 
-  return (
-    <button onClick={() => void signIn('discord')}>Discord</button>
-  )
+  return <button onClick={() => void signIn("discord")}>Discord</button>;
 }
 
 function SignOutButton() {
@@ -40,7 +38,7 @@ function SignOutButton() {
     <>
       {isAuthenticated && (
         <button
-          className="bg-slate-200 dark:bg-slate-800 text-foreground rounded-md px-2 py-1"
+          className="rounded-md bg-slate-200 px-2 py-1 text-foreground dark:bg-slate-800"
           onClick={() =>
             void signOut().then(() => {
               router.push("/signin");
@@ -70,7 +68,7 @@ function Content() {
   }
 
   return (
-    <div className="flex flex-col gap-8 max-w-lg mx-auto">
+    <div className="mx-auto flex max-w-lg flex-col gap-8">
       <p>Welcome {viewer ?? "Anonymous"}!</p>
       <p>
         Click the button below and open this page in another window - this data
@@ -78,7 +76,7 @@ function Content() {
       </p>
       <p>
         <button
-          className="bg-foreground text-background text-sm px-4 py-2 rounded-md"
+          className="rounded-md bg-foreground px-4 py-2 text-background text-sm"
           onClick={() => {
             void addNumber({ value: Math.floor(Math.random() * 10) });
           }}
@@ -94,52 +92,52 @@ function Content() {
       </p>
       <p>
         Edit{" "}
-        <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
+        <code className="rounded-md bg-slate-200 px-1 py-0.5 font-bold font-mono text-sm dark:bg-slate-800">
           convex/myFunctions.ts
         </code>{" "}
         to change your backend
       </p>
       <p>
         Edit{" "}
-        <code className="text-sm font-bold font-mono bg-slate-200 dark:bg-slate-800 px-1 py-0.5 rounded-md">
+        <code className="rounded-md bg-slate-200 px-1 py-0.5 font-bold font-mono text-sm dark:bg-slate-800">
           app/page.tsx
         </code>{" "}
         to change your frontend
       </p>
       <p>
         See the{" "}
-        <Link href="/server" className="underline hover:no-underline">
+        <Link className="underline hover:no-underline" href="/server">
           /server route
         </Link>{" "}
         for an example of loading data in a server component
       </p>
       <div className="flex flex-col">
-        <p className="text-lg font-bold">Useful resources:</p>
+        <p className="font-bold text-lg">Useful resources:</p>
         <div className="flex gap-2">
-          <div className="flex flex-col gap-2 w-1/2">
+          <div className="flex w-1/2 flex-col gap-2">
             <ResourceCard
-              title="Convex docs"
               description="Read comprehensive documentation for all Convex features."
               href="https://docs.convex.dev/home"
+              title="Convex docs"
             />
             <ResourceCard
-              title="Stack articles"
               description="Learn about best practices, use cases, and more from a growing
             collection of articles, videos, and walkthroughs."
               href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html"
+              title="Stack articles"
             />
           </div>
-          <div className="flex flex-col gap-2 w-1/2">
+          <div className="flex w-1/2 flex-col gap-2">
             <ResourceCard
-              title="Templates"
               description="Browse our collection of templates to get started quickly."
               href="https://www.convex.dev/templates"
+              title="Templates"
             />
             <ResourceCard
-              title="Discord"
               description="Join our developer community to ask questions, trade tips & tricks,
             and show off your projects."
               href="https://www.convex.dev/community"
+              title="Discord"
             />
           </div>
         </div>
@@ -158,8 +156,8 @@ function ResourceCard({
   href: string;
 }) {
   return (
-    <div className="flex flex-col gap-2 bg-slate-200 dark:bg-slate-800 p-4 rounded-md h-28 overflow-auto">
-      <a href={href} className="text-sm underline hover:no-underline">
+    <div className="flex h-28 flex-col gap-2 overflow-auto rounded-md bg-slate-200 p-4 dark:bg-slate-800">
+      <a className="text-sm underline hover:no-underline" href={href}>
         {title}
       </a>
       <p className="text-xs">{description}</p>
