@@ -1,17 +1,19 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @custom-variant dark (&:is(.dark *));
 
+/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 2px);
-  --radius-2xl: calc(var(--radius) + 4px);
+  --radius-xs: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 
   --color-system-success: var(--system-success);
   --color-system-info: var(--system-info);
@@ -97,9 +99,11 @@
 
 @layer base {
   * {
+    /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
     @apply border-neutral-300 outline-neutral-400/50;
   }
   body {
+    /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
     @apply bg-neutral-50 text-neutral-900;
   }
 }
