@@ -42,13 +42,13 @@
 :root {
   --radius: 0.5rem;
 
-  --system-success: oklch(82.56% 0.133 164.80);
+  --system-success: oklch(82.56% 0.133 164.8);
   --system-info: oklch(56.39% 0.085 257.07);
   --system-warning: oklch(76.62% 0.163 70.72);
   --system-danger: oklch(62.76% 0.209 25.58);
   --system-muted: oklch(71.37% 0.019 261.32);
-  --system-dark: oklch(0.00% 0.000 0);
-  --system-white: oklch(100.00% 0.000 0);
+  --system-dark: oklch(0.00% 0 0);
+  --system-white: oklch(100.00% 0 0);
 
   --neutral-50: oklch(97.87% 0.002 247.84);
   --neutral-100: oklch(94.21% 0.003 247.86);
@@ -63,33 +63,33 @@
 
   --background-1: oklch(95.87% 0.012 106.62);
   --background-2: oklch(90.79% 0.036 297.99);
-  --background-3: oklch(98.08% 0.010 181.42);
+  --background-3: oklch(98.08% 0.01 181.42);
   --background-4: oklch(96.19% 0.018 272.31);
   --background-5: oklch(97.99% 0.015 70.89);
 }
 
 .dark {
-  --system-success: oklch(82.56% 0.133 164.80);
+  --system-success: oklch(82.56% 0.133 164.8);
   --system-info: oklch(56.39% 0.085 257.07);
   --system-warning: oklch(76.62% 0.163 70.72);
   --system-danger: oklch(62.76% 0.209 25.58);
   --system-muted: oklch(71.37% 0.019 261.32);
-  --system-dark: oklch(100.00% 0.000 0);
+  --system-dark: oklch(100.00% 0 0);
   --system-white: oklch(25.55% 0.002 247.92);
 
   --neutral-50: oklch(19.91% 0.002 197.03);
-  --neutral-100: oklch(20.90% 0.000 0);
-  --neutral-200: oklch(27.68% 0.000 0);
-  --neutral-300: oklch(32.50% 0.000 0);
+  --neutral-100: oklch(20.90% 0 0);
+  --neutral-200: oklch(27.68% 0 0);
+  --neutral-300: oklch(32.50% 0 0);
   --neutral-400: oklch(73.71% 0.008 260.73);
-  --neutral-500: oklch(55.21% 0.000 0);
+  --neutral-500: oklch(55.21% 0 0);
   --neutral-600: oklch(71.37% 0.019 261.32);
   --neutral-700: oklch(35.21% 0.004 264.52);
   --neutral-800: oklch(22.15% 0.002 247.94);
   --neutral-900: oklch(96.70% 0.003 264.54);
 
   --background-1: oklch(22.49% 0.008 297.21);
-  --background-2: oklch(23.27% 0.017 295.20);
+  --background-2: oklch(23.27% 0.017 295.2);
   --background-3: oklch(20.44% 0.006 178.94);
   --background-4: oklch(19.49% 0.007 258.37);
   --background-5: oklch(16.92% 0.003 67.65);
