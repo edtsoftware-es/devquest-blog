@@ -173,4 +173,4 @@
 
 - **General**
   - Todas las operaciones de escritura deben verificar autenticación (`userId` válido).
-  - Las queries que devuelven datos sensibles (ej. emails de usuarios) deben restringirse a administradores.
+  - Las queries que devuelven datos sensibles (ej. emails de usuarios) deben restringirse a administradores
