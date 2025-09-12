@@ -13,6 +13,7 @@ export default function Home() {
         Convex + Next.js + Convex Auth
         <SignOutButton />
       </header>
+      <DiscordSignIn/>
       <main className="p-8 flex flex-col gap-8">
         <h1 className="text-4xl font-bold text-center">
           Convex + Next.js + Convex Auth
@@ -21,6 +22,14 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+function DiscordSignIn() {
+  const { signIn } = useAuthActions()
+
+  return (
+    <button onClick={() => void signIn('discord')}>Discord</button>
+  )
 }
 
 function SignOutButton() {

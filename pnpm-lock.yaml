@@ -5,9 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@auth/core':
+    specifier: ^0.40.0
+    version: 0.40.0
   '@convex-dev/auth':
     specifier: ^0.0.81
-    version: 0.0.81(@auth/core@0.37.4)(convex@1.27.0)(react@19.1.1)
+    version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0)(react@19.1.1)
   '@radix-ui/react-slot':
     specifier: ^1.2.3
     version: 1.2.3(@types/react@19.1.12)(react@19.1.1)
@@ -75,8 +78,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@auth/core@0.37.4:
-    resolution: {integrity: sha512-HOXJwXWXQRhbBDHlMU0K/6FT1v+wjtzdKhsNg0ZN7/gne6XPsIrjZ4daMcFnbq0Z/vsAbYBinQhhua0d77v7qw==}
+  /@auth/core@0.40.0:
+    resolution: {integrity: sha512-n53uJE0RH5SqZ7N1xZoMKekbHfQgjd0sAEyUbE+IYJnmuQkbvuZnXItCU7d+i7Fj8VGOgqvNO7Mw4YfBTlZeQw==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -90,13 +93,13 @@ packages:
         optional: true
     dependencies:
       '@panva/hkdf': 1.2.1
-      jose: 5.10.0
+      jose: 6.1.0
       oauth4webapi: 3.8.1
       preact: 10.24.3
       preact-render-to-string: 6.5.11(preact@10.24.3)
     dev: false
 
-  /@convex-dev/auth@0.0.81(@auth/core@0.37.4)(convex@1.27.0)(react@19.1.1):
+  /@convex-dev/auth@0.0.81(@auth/core@0.40.0)(convex@1.27.0)(react@19.1.1):
     resolution: {integrity: sha512-k9/+Q2w+GXNsCWGSpB87cqIhRWRukTadZxfyG3Df7dGusO/uy+pFlUeqf4I64Jkdn5zt+6ktEdDgoe6jdyuVJw==}
     hasBin: true
     peerDependencies:
@@ -107,7 +110,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@auth/core': 0.37.4
+      '@auth/core': 0.40.0
       arctic: 1.9.2
       convex: 1.27.0(react@19.1.1)
       cookie: 1.0.2
@@ -2598,6 +2601,10 @@ packages:
 
   /jose@5.10.0:
     resolution: {integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg==}
+    dev: false
+
+  /jose@6.1.0:
+    resolution: {integrity: sha512-TTQJyoEoKcC1lscpVDCSsVgYzUDg/0Bt3WE//WiTPK6uOCQC2KZS4MpugbMWt/zyjkopgZoXhZuCi00gLudfUA==}
     dev: false
 
   /json-buffer@3.0.1:
