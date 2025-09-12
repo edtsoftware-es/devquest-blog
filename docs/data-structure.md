@@ -37,14 +37,16 @@
 
 - `id` (string, autogenerado)
 - `title` (string)
+- `image` (string)
+- `duration` (number opcional por defecto null)
 - `slug` (string)
 - `content` (string largo / rich text)
+- `excerpt` (string corto / medio)
 - `authorId` (string, referencia a `users.id`)
-- `categoryId` (string, referencia a `categories.id`)
 - `tags` (lista de strings)
 - `likesCount` (number, default: 0)
 - `commentsCount` (number, default: 0)
-- `status` (string: `"draft" | "published" | "archived"`)
+- `published` (boolean: true | false)
 - `createdAt` (datetime)
 - `updatedAt` (datetime)
 
@@ -124,17 +126,13 @@
 
 ### Posts
 
-- **On post create**
-  - Insertar en tabla `posts`.
-  - Inicializar `likesCount = 0`, `commentsCount = 0`.
-
-- **On post update**
-  - Actualizar campos editados.
-  - Actualizar `updatedAt`.
-
 - **On post delete**
   - Eliminar el post.
   - Eliminar en cascada sus `comments` y `likes`.
+
+  - **Posts**
+  - Solo el autor del post puede editarlo.
+  - Solo el autor o un usuario con `role = "admin"` puede eliminarlo.
 
 ---
 
@@ -155,9 +153,7 @@
 
 ## Seguridad
 
-- **Posts**
-  - Solo el autor del post puede editarlo.
-  - Solo el autor o un usuario con `role = "admin"` puede eliminarlo.
+
 
 - **Comments**
   - Solo el autor del comentario puede editarlo.
