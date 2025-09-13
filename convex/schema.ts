@@ -35,10 +35,12 @@ const applicationTables = {
   comments: defineTable({
     postId: v.id("posts"),
     authorId: v.id("users"),
+    parentId: v.optional(v.id("comments")),
     content: v.string(),
   })
     .index("by_post", ["postId"])
-    .index("by_author", ["authorId"]),
+    .index("by_author", ["authorId"])
+    .index("by_parent", ["parentId"]),
 
   likes: defineTable({
     postId: v.id("posts"),

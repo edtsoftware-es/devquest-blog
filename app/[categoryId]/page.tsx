@@ -18,6 +18,7 @@ export default async function CategoryPage({
   const posts = await fetchQuery(api.posts.getPostsByCategoryId, {
     categoryId: category._id,
   });
+
   return (
     <div>
       CategoryPage {categoryId} {JSON.stringify(category)}{" "}
