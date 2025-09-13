@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 export default function DesignSystem() {
   return (
     <>
-      <header className="sticky top-0 z-10 flex flex-row items-center justify-between border-neutral-200 border-b bg-neutral-50 px-4 py-2 font-semibold text-lg">
+      <header className="sticky top-0 z-10 flex flex-row items-center justify-between border-b bg-background px-4 py-2 font-semibold text-lg">
         Design System
         <ModeToggle />
       </header>
@@ -37,10 +37,10 @@ export default function DesignSystem() {
           </Button>
 
           <div className="flex gap-4">
-            <Button size="icon">
+            <Button aria-label="Previous page" size="icon">
               <ArrowLeft aria-hidden="true" />
             </Button>
-            <Button size="icon" variant="secondary">
+            <Button aria-label="Next page" size="icon" variant="secondary">
               <ArrowRight aria-hidden="true" />
             </Button>
           </div>

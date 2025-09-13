@@ -51,6 +51,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.2.2
         version: 2.2.2
+      '@faker-js/faker':
+        specifier: ^9.4.0
+        version: 9.9.0
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.13
@@ -552,6 +555,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@faker-js/faker@9.9.0':
+    resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@floating-ui/core@1.7.3':
     resolution: {integrity: sha512-sGnvb5dmrJaKEZ+LDIpguvdX3bDlEllmv4/ClQ9awcmCZrlx5jQyyMWFM5kBI+EyNOCDDiKk8il0zeuX3Zlg/w==}
@@ -3176,6 +3183,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.4':
     optional: true
+
+  '@faker-js/faker@9.9.0': {}
 
   '@floating-ui/core@1.7.3':
     dependencies:
