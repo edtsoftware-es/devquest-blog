@@ -7,6 +7,22 @@ export const getCommentsByPostId = query({
     postId: v.id("posts"),
     paginationOpts: v.optional(paginationOptsValidator),
   },
+  returns: v.object({
+    page: v.array(
+      v.object({
+        _id: v.id("comments"),
+        _creationTime: v.number(),
+        postId: v.id("posts"),
+        authorId: v.id("users"),
+        parentId: v.optional(v.id("comments")),
+        content: v.string(),
+        deletedAt: v.optional(v.number()),
+        likesCount: v.number(),
+      })
+    ),
+    isDone: v.boolean(),
+    continueCursor: v.union(v.string(), v.null()),
+  }),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("comments")

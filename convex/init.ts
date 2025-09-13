@@ -31,7 +31,6 @@ async function createUsers(
       image: faker.image.avatar(),
       email: faker.internet.email(),
       emailVerificationTime: Date.now(),
-      isAnonymous: false,
     });
     userIds.push(userId);
   }
@@ -89,6 +88,10 @@ async function createPosts(
       () => faker.lorem.word()
     );
 
+    const published = faker.datatype.boolean({
+      probability: POST_PUBLISHED_PROBABILITY,
+    });
+
     const postId = await ctx.db.insert("posts", {
       title,
       image: faker.image.url({ width: 800, height: 400 }),
@@ -101,10 +104,11 @@ async function createPosts(
       tags,
       likesCount: 0,
       commentsCount: 0,
-      published: faker.datatype.boolean({
-        probability: POST_PUBLISHED_PROBABILITY,
-      }),
+      published,
       updatedAt: Date.now(),
+      publishedAt: published ? Date.now() : undefined,
+      deletedAt: undefined,
+      viewCount: faker.number.int({ min: 0, max: 1000 }),
     });
     postIds.push(postId);
   }
@@ -140,6 +144,8 @@ async function createComments(
       authorId,
       parentId,
       content: faker.lorem.paragraph(),
+      deletedAt: undefined,
+      likesCount: 0,
     });
     commentsCreated++;
 
@@ -170,6 +176,7 @@ async function createLikes(
     if (!likedPosts.has(likeKey)) {
       await ctx.db.insert("likes", {
         postId,
+        commentId: undefined,
         userId,
       });
       likedPosts.add(likeKey);

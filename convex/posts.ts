@@ -6,6 +6,32 @@ export const getPublishedPosts = query({
   args: {
     paginationOpts: v.optional(paginationOptsValidator),
   },
+  returns: v.object({
+    page: v.array(
+      v.object({
+        _id: v.id("posts"),
+        _creationTime: v.number(),
+        title: v.string(),
+        image: v.string(),
+        duration: v.number(),
+        slug: v.string(),
+        categoryId: v.id("categories"),
+        content: v.string(),
+        excerpt: v.string(),
+        authorId: v.id("users"),
+        tags: v.array(v.string()),
+        likesCount: v.number(),
+        commentsCount: v.number(),
+        published: v.boolean(),
+        updatedAt: v.number(),
+        publishedAt: v.union(v.number(), v.null()),
+        deletedAt: v.union(v.number(), v.null()),
+        viewCount: v.number(),
+      })
+    ),
+    isDone: v.boolean(),
+    continueCursor: v.union(v.string(), v.null()),
+  }),
   handler: async (ctx, args) => {
     const posts = await ctx.db
       .query("posts")
@@ -21,6 +47,29 @@ export const getPostBySlug = query({
   args: {
     slug: v.string(),
   },
+  returns: v.union(
+    v.object({
+      _id: v.id("posts"),
+      _creationTime: v.number(),
+      title: v.string(),
+      image: v.string(),
+      duration: v.number(),
+      slug: v.string(),
+      categoryId: v.id("categories"),
+      content: v.string(),
+      excerpt: v.string(),
+      authorId: v.id("users"),
+      tags: v.array(v.string()),
+      likesCount: v.number(),
+      commentsCount: v.number(),
+      published: v.boolean(),
+      updatedAt: v.number(),
+      publishedAt: v.union(v.number(), v.null()),
+      deletedAt: v.union(v.number(), v.null()),
+      viewCount: v.number(),
+    }),
+    v.null()
+  ),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
@@ -34,6 +83,32 @@ export const getPostsByCategoryId = query({
     categoryId: v.id("categories"),
     paginationOpts: v.optional(paginationOptsValidator),
   },
+  returns: v.object({
+    page: v.array(
+      v.object({
+        _id: v.id("posts"),
+        _creationTime: v.number(),
+        title: v.string(),
+        image: v.string(),
+        duration: v.number(),
+        slug: v.string(),
+        categoryId: v.id("categories"),
+        content: v.string(),
+        excerpt: v.string(),
+        authorId: v.id("users"),
+        tags: v.array(v.string()),
+        likesCount: v.number(),
+        commentsCount: v.number(),
+        published: v.boolean(),
+        updatedAt: v.number(),
+        publishedAt: v.union(v.number(), v.null()),
+        deletedAt: v.union(v.number(), v.null()),
+        viewCount: v.number(),
+      })
+    ),
+    isDone: v.boolean(),
+    continueCursor: v.union(v.string(), v.null()),
+  }),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
