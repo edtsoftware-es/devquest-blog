@@ -6,6 +6,41 @@
 
 /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @theme inline {
+  /* shadcn */
+  --color-background: var(--neutral-50);
+  --color-foreground: var(--neutral-900);
+  --color-card: var(--system-white);
+  --color-card-foreground: var(--neutral-900);
+  --color-popover: var(--system-white);
+  --color-popover-foreground: var(--neutral-900);
+  --color-primary: var(--system-white);
+  --color-primary-foreground: var(--neutral-900);
+  --color-secondary: var(--neutral-900);
+  --color-secondary-foreground: var(--system-white);
+  --color-muted: var(--neutral-50);
+  --color-muted-foreground: var(--neutral-500);
+  --color-accent: var(--neutral-50);
+  --color-accent-foreground: var(--neutral-900);
+  --color-destructive: var(--system-danger);
+  --color-destructive-foreground: var(--system-danger);
+  --color-border: var(--neutral-200);
+  --color-input: var(--neutral-200);
+  --color-ring: var(--neutral-400);
+  --color-chart-1: var(--background-1);
+  --color-chart-2: var(--background-2);
+  --color-chart-3: var(--background-3);
+  --color-chart-4: var(--background-4);
+  --color-chart-5: var(--background-5);
+  --color-sidebar: var(--neutral-50);
+  --color-sidebar-foreground: var(--neutral-900);
+  --color-sidebar-primary: var(--system-white);
+  --color-sidebar-primary-foreground: var(--neutral-900);
+  --color-sidebar-accent: var(--neutral-50);
+  --color-sidebar-accent-foreground: var(--neutral-900);
+  --color-sidebar-border: var(--neutral-200);
+  --color-sidebar-ring: var(--neutral-400);
+
+  /* custom */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -100,10 +135,10 @@
 @layer base {
   * {
     /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
-    @apply border-neutral-300 outline-neutral-400/50;
+    @apply border-border outline-ring/50;
   }
   body {
     /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
-    @apply bg-neutral-50 text-neutral-900;
+    @apply bg-background text-foreground;
   }
 }
