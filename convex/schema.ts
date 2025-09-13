@@ -8,6 +8,7 @@ const applicationTables = {
     image: v.string(),
     duration: v.optional(v.number()),
     slug: v.string(),
+    categoryId: v.id("categories"),
     content: v.string(),
     excerpt: v.string(),
     authorId: v.id("users"),
@@ -20,7 +21,16 @@ const applicationTables = {
     .index("by_author", ["authorId"])
     .index("by_slug", ["slug"])
     .index("by_published", ["published"])
-    .index("by_tags", ["tags"]),
+    .index("by_tags", ["tags"])
+    .index("by_category", ["categoryId"]),
+
+  categories: defineTable({
+    name: v.string(),
+    slug: v.string(),
+    description: v.optional(v.string()),
+  })
+    .index("by_slug", ["slug"])
+    .index("by_name", ["name"]),
 
   comments: defineTable({
     postId: v.id("posts"),
