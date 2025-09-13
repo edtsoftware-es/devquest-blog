@@ -13,12 +13,12 @@ const buttonVariants = cva(
           "border border-neutral-200 bg-system-white text-neutral-900 hover:bg-system-white/90 hover:shadow-xs",
         secondary:
           "bg-neutral-900 text-system-white hover:bg-neutral-900/90 hover:shadow-xs",
-        destructive:
-          "bg-system-danger text-white shadow-xs hover:bg-system-danger/90 focus-visible:ring-system-danger/20 dark:bg-system-danger/60 dark:focus-visible:ring-system-danger/40",
         outline:
           "border border-neutral-200 bg-transparent text-neutral-600 hover:shadow-xs",
         ghost: "bg-transparent text-neutral-600 hover:text-neutral-900",
         link: "text-neutral-600 hover:text-neutral-900",
+        destructive:
+          "bg-system-danger text-white shadow-xs hover:bg-system-danger/90 focus-visible:ring-system-danger/20",
       },
       size: {
         default: "h-14 px-7 py-4",
