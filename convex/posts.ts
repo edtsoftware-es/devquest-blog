@@ -19,3 +19,28 @@ export const getPublishedPosts = query({
     return posts;
   },
 });
+
+export const getPostBySlug = query({
+  args: {
+    slug: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("posts")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .unique();
+  },
+});
+
+export const getPostsByCategoryId = query({
+  args: {
+    categoryId: v.id("categories"),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("posts")
+      .withIndex("by_category", (q) => q.eq("categoryId", args.categoryId))
+      .order("desc")
+      .take(LIMIT);
+  },
+});
