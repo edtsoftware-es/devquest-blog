@@ -18,6 +18,7 @@ async function getLoggedInUser(ctx: GenericQueryCtx<DataModel>) {
 
 export const hasUserLikedPost = query({
   args: { postId: v.id("posts") },
+  returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
@@ -37,6 +38,10 @@ export const hasUserLikedPost = query({
 
 export const toggleLike = mutation({
   args: { postId: v.id("posts") },
+  returns: v.object({
+    liked: v.boolean(),
+    likesCount: v.number(),
+  }),
   handler: async (ctx, args) => {
     const user = await getLoggedInUser(ctx);
     const post = await ctx.db.get(args.postId);
@@ -61,6 +66,7 @@ export const toggleLike = mutation({
     }
     await ctx.db.insert("likes", {
       postId: args.postId,
+      commentId: undefined,
       userId: user._id,
     });
     await ctx.db.patch(args.postId, {

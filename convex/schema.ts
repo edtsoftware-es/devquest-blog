@@ -6,7 +6,7 @@ const applicationTables = {
   posts: defineTable({
     title: v.string(),
     image: v.string(),
-    duration: v.optional(v.number()),
+    duration: v.number(),
     slug: v.string(),
     categoryId: v.id("categories"),
     content: v.string(),
@@ -17,17 +17,29 @@ const applicationTables = {
     commentsCount: v.number(),
     published: v.boolean(),
     updatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+    deletedAt: v.optional(v.number()),
+    viewCount: v.number(),
   })
     .index("by_author", ["authorId"])
     .index("by_slug", ["slug"])
     .index("by_published", ["published"])
     .index("by_tags", ["tags"])
-    .index("by_category", ["categoryId"]),
+    .index("by_category", ["categoryId"])
+    .index("by_published_and_updated", ["published", "updatedAt"])
+    .index("by_category_and_published", ["categoryId", "published"])
+    .index("by_published_at", ["publishedAt"])
+    .index("by_view_count", ["viewCount"])
+    .index("by_not_deleted", ["deletedAt"])
+    .searchIndex("search_posts", {
+      searchField: "content",
+      filterFields: ["published", "categoryId", "authorId", "deletedAt"],
+    }),
 
   categories: defineTable({
     name: v.string(),
     slug: v.string(),
-    description: v.optional(v.string()),
+    description: v.string(),
   })
     .index("by_slug", ["slug"])
     .index("by_name", ["name"]),
@@ -37,18 +49,25 @@ const applicationTables = {
     authorId: v.id("users"),
     parentId: v.optional(v.id("comments")),
     content: v.string(),
+    deletedAt: v.optional(v.number()),
+    likesCount: v.number(),
   })
     .index("by_post", ["postId"])
     .index("by_author", ["authorId"])
-    .index("by_parent", ["parentId"]),
+    .index("by_parent", ["parentId"])
+    .index("by_post_and_parent", ["postId", "parentId"])
+    .index("by_not_deleted", ["deletedAt"]),
 
   likes: defineTable({
-    postId: v.id("posts"),
+    postId: v.optional(v.id("posts")),
+    commentId: v.optional(v.id("comments")),
     userId: v.id("users"),
   })
     .index("by_post", ["postId"])
+    .index("by_comment", ["commentId"])
     .index("by_user", ["userId"])
-    .index("by_post_and_user", ["postId", "userId"]),
+    .index("by_post_and_user", ["postId", "userId"])
+    .index("by_comment_and_user", ["commentId", "userId"]),
 };
 
 export default defineSchema({
