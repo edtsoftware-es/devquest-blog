@@ -6,7 +6,7 @@
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
-    "predev": "convex dev --until-success && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
+    "predev": "convex dev --until-success   && convex dev --once --run-sh \"node setup.mjs --once\" && convex dashboard",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",
+    "@faker-js/faker": "^9.4.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
