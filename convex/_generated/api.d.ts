@@ -17,6 +17,7 @@ import type * as auth from "../auth.js";
 import type * as categories from "../categories.js";
 import type * as comments from "../comments.js";
 import type * as http from "../http.js";
+import type * as likes from "../likes.js";
 import type * as posts from "../posts.js";
 
 /**
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   categories: typeof categories;
   comments: typeof comments;
   http: typeof http;
+  likes: typeof likes;
   posts: typeof posts;
 }>;
 export declare const api: FilterApi<
