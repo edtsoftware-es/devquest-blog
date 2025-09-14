@@ -21,7 +21,7 @@ export default function DesignSystem() {
       </header>
       <main className="flex flex-col gap-16 p-8">
         <section className="flex flex-col gap-4">
-          <h2 className="mb-4 font-bold text-4xl">BUTTONS</h2>
+          <h2 className="mb-4 text-heading-2">BUTTONS</h2>
 
           <Button className="w-fit rounded-full" size="sm">
             <Gamepad2 aria-hidden="true" />
@@ -111,7 +111,7 @@ export default function DesignSystem() {
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="mb-4 font-bold text-4xl">BADGES</h2>
+          <h2 className="mb-4 text-heading-2">BADGES</h2>
 
           <div className="flex items-center gap-x-2">
             <Badge variant="highlight">
@@ -129,10 +129,7 @@ export default function DesignSystem() {
             <Badge className="bg-background-3">DevOps</Badge>
           </div>
 
-          <div className="flex items-center gap-x-2">
-            <h3 className="font-bold text-3xl">Trends</h3>
-            <Badge variant="secondary">85</Badge>
-          </div>
+          <Badge variant="secondary">85</Badge>
 
           <Button className="w-fit pl-4" size="xs">
             Technology
@@ -152,6 +149,43 @@ export default function DesignSystem() {
           </div>
 
           <Badge variant="destructive">Error</Badge>
+        </section>
+
+        <section className="flex flex-col gap-4">
+          <h2 className="mb-4 text-heading-2">TYPOGRAPHY</h2>
+
+          <div className="flex gap-x-40">
+            <div>
+              <p className="mb-6 text-body-1">Displays</p>
+              <p className="text-display-1">Display 1</p>
+              <p className="text-display-2">Display 2</p>
+              <p className="text-display-3">Display 3</p>
+              <p className="text-display-4">Display 4</p>
+              <p className="text-display-5">Display 5</p>
+              <p className="text-display-6">Display 6</p>
+            </div>
+            <div>
+              <p className="mb-6 text-body-1">Headings</p>
+              <p className="text-heading-1">Heading 1</p>
+              <p className="text-heading-2">Heading 2</p>
+              <p className="text-heading-3">Heading 3</p>
+              <p className="text-heading-4">Heading 4</p>
+              <p className="text-heading-5">Heading 5</p>
+              <p className="text-heading-6">Heading 6</p>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <p className="mb-6 text-body-1">Body</p>
+            <p className="text-body-1">Body 1 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-2">Body 2 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-3">Body 3 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-4">Body 4 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-5">Body 5 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-6">Body 6 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-7">Body 7 Lorem ipsum dolor sit amet</p>
+            <p className="text-body-8">Body 8 Lorem ipsum dolor sit amet</p>
+          </div>
         </section>
       </main>
     </>
