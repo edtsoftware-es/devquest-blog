@@ -22,3 +22,19 @@ export const getCategoryBySlug = query({
       .unique();
   },
 });
+
+export const getAllCategories = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id("categories"),
+      _creationTime: v.number(),
+      name: v.string(),
+      slug: v.string(),
+      description: v.string(),
+    })
+  ),
+  handler: async (ctx) => {
+    return await ctx.db.query("categories").collect();
+  },
+});
