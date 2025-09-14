@@ -2,6 +2,7 @@ import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
 import { LikeButton } from "./like-button";
+
 export default async function PostPage({
   params,
 }: {
