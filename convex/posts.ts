@@ -24,8 +24,8 @@ export const getPublishedPosts = query({
         commentsCount: v.number(),
         published: v.boolean(),
         updatedAt: v.number(),
-        publishedAt: v.union(v.number(), v.null()),
-        deletedAt: v.union(v.number(), v.null()),
+        publishedAt: v.optional(v.number()),
+        deletedAt: v.optional(v.number()),
         viewCount: v.number(),
       })
     ),
@@ -64,8 +64,8 @@ export const getPostBySlug = query({
       commentsCount: v.number(),
       published: v.boolean(),
       updatedAt: v.number(),
-      publishedAt: v.union(v.number(), v.null()),
-      deletedAt: v.union(v.number(), v.null()),
+      publishedAt: v.optional(v.number()),
+      deletedAt: v.optional(v.number()),
       viewCount: v.number(),
     }),
     v.null()
@@ -101,8 +101,8 @@ export const getPostsByCategoryId = query({
         commentsCount: v.number(),
         published: v.boolean(),
         updatedAt: v.number(),
-        publishedAt: v.union(v.number(), v.null()),
-        deletedAt: v.union(v.number(), v.null()),
+        publishedAt: v.optional(v.number()),
+        deletedAt: v.optional(v.number()),
         viewCount: v.number(),
       })
     ),
