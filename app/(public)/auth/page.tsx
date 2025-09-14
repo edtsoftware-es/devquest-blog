@@ -1,4 +1,4 @@
-import { SignInOptions } from "./__components/signin-options";
+import { SignInOptions } from "./components/signin-options";
 
 export default function AuthPage() {
   return (

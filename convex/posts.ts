@@ -2,6 +2,24 @@ import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 
+const WORDS_PER_MINUTE = 200;
+
+export function calculateReadingDuration(content: string): number {
+  const cleanContent = content
+    .replace(/<[^>]*>/g, "")
+    .replace(/[#*_`~[\]()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const wordCount = cleanContent
+    .split(" ")
+    .filter((word) => word.length > 0).length;
+
+  const duration = Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+
+  return duration;
+}
+
 export const getPublishedPosts = query({
   args: {
     paginationOpts: v.optional(paginationOptsValidator),
