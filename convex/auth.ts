@@ -11,4 +11,12 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
       clientSecret: process.env.DISCORD_AUTH_CLIENT_SECRET ?? "",
     }),
   ],
+  callbacks: {
+    async afterUserCreatedOrUpdated(ctx, args) {
+      await ctx.db.insert("userProfiles", {
+        userId: args.userId,
+        role: "user",
+      });
+    },
+  },
 });
