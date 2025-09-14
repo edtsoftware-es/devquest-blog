@@ -23,7 +23,7 @@ export function calculateReadingDuration(content: string): number {
   return duration;
 }
 
-async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
+export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
   const userProfile = await ctx.db
     .query("userProfiles")
     .withIndex("by_user", (q) => q.eq("userId", userId))
