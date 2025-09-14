@@ -1,25 +1,23 @@
 "use client";
 
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 export function SignOutButton() {
   const { signOut } = useAuthActions();
   const router = useRouter();
 
   const handleSignOut = async () => {
-    try {
-      await signOut();
-      router.replace("/auth");
-    } catch {
-      // no-op; optionally surface a toast
-    }
+    await signOut();
+    router.replace("/auth");
   };
 
   return (
     <div className="mt-10 flex w-full justify-end">
-      <Button type="button" onClick={handleSignOut}>Cerrar sesión</Button>
+      <Button onClick={handleSignOut} type="button">
+        Cerrar sesión
+      </Button>
     </div>
   );
 }
