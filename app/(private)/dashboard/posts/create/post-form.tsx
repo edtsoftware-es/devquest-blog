@@ -126,7 +126,7 @@ export function PostForm({ categories }: PostFormProps) {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      await createPost({
+      void createPost({
         title: data.title,
         image: data.image,
         slug: data.slug,
@@ -136,9 +136,6 @@ export function PostForm({ categories }: PostFormProps) {
         tags: tagsArray,
         published: data.published,
       });
-
-      toast.success("Post creado exitosamente");
-
       router.push("/dashboard");
     } catch {
       toast.error("Error al crear el post");
