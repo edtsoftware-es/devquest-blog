@@ -16,6 +16,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+import { MinimalTiptapEditor } from "@/components/ui/minimal-tiptap";
 import {
   Select,
   SelectContent,
@@ -28,12 +30,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { Category } from "@/types";
-  
-import { MinimalTiptapEditor } from "@/components/ui/minimal-tiptap";
 
 const TITLE_MAX_LENGTH = 200;
 const SLUG_MAX_LENGTH = 100;
 const EXCERPT_MAX_LENGTH = 500;
+const WORD_SPLIT_REGEX = /\s+/;
+const WORDS_PER_MINUTE = 200;
 
 const postSchema = z.object({
   title: z
@@ -64,39 +66,44 @@ type PostFormProps = {
 export function PostForm({ categories }: PostFormProps) {
   const router = useRouter();
 
-const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
-  (localStore, args) => {
-    const existingPosts = localStore.getQuery(api.posts.getPostsByUserRole, {});
-    if (existingPosts !== undefined) {
-      const now = Date.now();
-      const duration = Math.ceil(args.content.split(/\s+/).length / 200);
-      const tempPost = {
-        _id: `temp_${now}` as Id<"posts">,
-        _creationTime: now,
-        title: args.title,
-        image: args.image,
-        duration,
-        slug: args.slug,
-        categoryId: args.categoryId,
-        content: args.content,
-        excerpt: args.excerpt,
-        authorId: "temp-author" as Id<"users">,
-        tags: args.tags,
-        likesCount: 0,
-        commentsCount: 0,
-        published: args.published,
-        updatedAt: now,
-        publishedAt: args.published ? now : undefined,
-        deletedAt: undefined,
-        viewCount: 0,
-      };
-      localStore.setQuery(api.posts.getPostsByUserRole, {}, [
-        tempPost,
-        ...existingPosts,
-      ]);
+  const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
+    (localStore, args) => {
+      const existingPosts = localStore.getQuery(
+        api.posts.getPostsByUserRole,
+        {}
+      );
+      if (existingPosts !== undefined) {
+        const now = Date.now();
+        const duration = Math.ceil(
+          args.content.split(WORD_SPLIT_REGEX).length / WORDS_PER_MINUTE
+        );
+        const tempPost = {
+          _id: `temp_${now}` as Id<"posts">,
+          _creationTime: now,
+          title: args.title,
+          image: args.image,
+          duration,
+          slug: args.slug,
+          categoryId: args.categoryId,
+          content: args.content,
+          excerpt: args.excerpt,
+          authorId: "temp-author" as Id<"users">,
+          tags: args.tags,
+          likesCount: 0,
+          commentsCount: 0,
+          published: args.published,
+          updatedAt: now,
+          publishedAt: args.published ? now : undefined,
+          deletedAt: undefined,
+          viewCount: 0,
+        };
+        localStore.setQuery(api.posts.getPostsByUserRole, {}, [
+          tempPost,
+          ...existingPosts,
+        ]);
+      }
     }
-  }
-);
+  );
   const form = useForm<PostFormData>({
     // @ts-expect-error - Zod version compatibility issue
     resolver: zodResolver(postSchema),
@@ -114,7 +121,6 @@ const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
 
   const onSubmit = async (data: PostFormData) => {
     try {
-
       const tagsArray = data.tags
         .split(",")
         .map((tag) => tag.trim())
@@ -136,7 +142,8 @@ const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
       router.push("/dashboard");
     } catch {
       toast.error("Error al crear el post");
-    }   };
+    }
+  };
 
   const generateSlug = (title: string) => {
     return title
@@ -296,15 +303,16 @@ const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
                 <FormControl>
                   <div className="rounded-lg border">
                     <MinimalTiptapEditor
-             autofocus={false} onChange={field.onChange} value={field.value}
-             className="w-full"
-             editable={true}
-                 editorClassName="focus:outline-hidden"
-                 editorContentClassName="p-4 sm:p-6 min-h-[300px] sm:min-h-[400px]"
-                   output="html"
-                placeholder="Escribe el contenido de tu post aquí..."
-      
-    />
+                      autofocus={false}
+                      className="w-full"
+                      editable={true}
+                      editorClassName="focus:outline-hidden"
+                      editorContentClassName="p-4 sm:p-6 min-h-[300px] sm:min-h-[400px]"
+                      onChange={field.onChange}
+                      output="html"
+                      placeholder="Escribe el contenido de tu post aquí..."
+                      value={field.value}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
