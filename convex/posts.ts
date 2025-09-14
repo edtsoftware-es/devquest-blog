@@ -5,6 +5,24 @@ import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
 import { query } from "./_generated/server";
 
+const WORDS_PER_MINUTE = 200;
+
+export function calculateReadingDuration(content: string): number {
+  const cleanContent = content
+    .replace(/<[^>]*>/g, "")
+    .replace(/[#*_`~[\]()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const wordCount = cleanContent
+    .split(" ")
+    .filter((word) => word.length > 0).length;
+
+  const duration = Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+
+  return duration;
+}
+
 async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
   const userProfile = await ctx.db
     .query("userProfiles")

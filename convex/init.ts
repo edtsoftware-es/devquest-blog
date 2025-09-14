@@ -3,6 +3,7 @@ import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { internalMutation } from "./_generated/server";
+import { calculateReadingDuration } from "./posts";
 
 const DEFAULT_USERS_COUNT = 10;
 const DEFAULT_CATEGORIES_COUNT = 5;
@@ -78,6 +79,8 @@ async function createPosts(
   const postIds: Id<"posts">[] = [];
   for (let i = 0; i < count; i++) {
     const title = faker.lorem.sentence({ min: 3, max: 8 });
+    const content = faker.lorem.paragraphs({ min: 4, max: 40 }, "\n\n");
+    const duration = calculateReadingDuration(content);
     const slug = title
       .toLowerCase()
       .replace(/[^\w\s-]/g, "")
@@ -95,10 +98,10 @@ async function createPosts(
     const postId = await ctx.db.insert("posts", {
       title,
       image: faker.image.url({ width: 800, height: 400 }),
-      duration: faker.number.int({ min: 2, max: 15 }),
+      duration,
       slug,
       categoryId: faker.helpers.arrayElement(categoryIds),
-      content: faker.lorem.paragraphs({ min: 3, max: 8 }, "\n\n"),
+      content,
       excerpt: faker.lorem.paragraph(),
       authorId: faker.helpers.arrayElement(userIds),
       tags,
