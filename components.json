@@ -18,5 +18,7 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "registries": {}
+  "registries": {
+    "@tiptap": "https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/{name}.json"
+  }
 }
