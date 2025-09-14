@@ -3,6 +3,10 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const applicationTables = {
+  userProfiles: defineTable({
+    userId: v.id("users"),
+    role: v.union(v.literal("admin"), v.literal("user")),
+  }).index("by_user", ["userId"]),
   posts: defineTable({
     title: v.string(),
     image: v.string(),
