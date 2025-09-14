@@ -2,8 +2,8 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
-import type { QueryCtx } from "./_generated/server";
-import { query } from "./_generated/server";
+import type { MutationCtx, QueryCtx } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -36,7 +36,7 @@ async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
   return userProfile;
 }
 
-async function ensureUserIsAuthenticated(ctx: QueryCtx) {
+async function ensureUserIsAuthenticated(ctx: QueryCtx | MutationCtx) {
   const userId = await getAuthUserId(ctx);
   if (!userId) {
     throw new Error("Usuario no autenticado");
@@ -189,5 +189,123 @@ export const getPostsByUserRole = query({
       .withIndex("by_author", (q) => q.eq("authorId", userId))
       .order("desc")
       .take(10);
+  },
+});
+
+export const createPost = mutation({
+  args: {
+    title: v.string(),
+    image: v.string(),
+    slug: v.string(),
+    categoryId: v.id("categories"),
+    content: v.string(),
+    excerpt: v.string(),
+    tags: v.array(v.string()),
+    published: v.boolean(),
+  },
+  returns: v.id("posts"),
+  handler: async (ctx, args) => {
+    const userId = await ensureUserIsAuthenticated(ctx);
+    const userProfile = await getUserProfile(ctx, userId);
+
+    if (userProfile.role !== "admin" && userProfile.role !== "user") {
+      throw new Error(
+        "Acceso denegado: se requiere rol de usuario o administrador"
+      );
+    }
+
+    const duration = calculateReadingDuration(args.content);
+    const now = Date.now();
+
+    return await ctx.db.insert("posts", {
+      title: args.title,
+      image: args.image,
+      duration,
+      slug: args.slug,
+      categoryId: args.categoryId,
+      content: args.content,
+      excerpt: args.excerpt,
+      authorId: userId,
+      tags: args.tags,
+      likesCount: 0,
+      commentsCount: 0,
+      published: args.published,
+      updatedAt: now,
+      publishedAt: args.published ? now : undefined,
+      viewCount: 0,
+    });
+  },
+});
+
+export const updatePost = mutation({
+  args: {
+    postId: v.id("posts"),
+    title: v.string(),
+    image: v.string(),
+    slug: v.string(),
+    categoryId: v.id("categories"),
+    content: v.string(),
+    excerpt: v.string(),
+    tags: v.array(v.string()),
+    published: v.boolean(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const userId = await ensureUserIsAuthenticated(ctx);
+    const userProfile = await getUserProfile(ctx, userId);
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      throw new Error("Post no encontrado");
+    }
+
+    if (userProfile.role !== "admin" && post.authorId !== userId) {
+      throw new Error(
+        "Acceso denegado: solo el autor o un administrador pueden editar este post"
+      );
+    }
+
+    const duration = calculateReadingDuration(args.content);
+    const now = Date.now();
+
+    await ctx.db.patch(args.postId, {
+      title: args.title,
+      image: args.image,
+      duration,
+      slug: args.slug,
+      categoryId: args.categoryId,
+      content: args.content,
+      excerpt: args.excerpt,
+      tags: args.tags,
+      published: args.published,
+      updatedAt: now,
+      publishedAt: args.published && !post.published ? now : post.publishedAt,
+    });
+
+    return null;
+  },
+});
+
+export const getPostById = query({
+  args: {
+    postId: v.id("posts"),
+  },
+  returns: v.union(PostType, v.null()),
+  handler: async (ctx, args) => {
+    const userId = await ensureUserIsAuthenticated(ctx);
+    const userProfile = await getUserProfile(ctx, userId);
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      return null;
+    }
+
+    if (userProfile.role !== "admin" && post.authorId !== userId) {
+      throw new Error(
+        "Acceso denegado: solo el autor o un administrador pueden ver este post"
+      );
+    }
+
+    return post;
   },
 });
