@@ -6,7 +6,7 @@ const applicationTables = {
   userProfiles: defineTable({
     userId: v.id("users"),
     role: v.union(v.literal("admin"), v.literal("user")),
-  }),
+  }).index("by_user", ["userId"]),
   posts: defineTable({
     title: v.string(),
     image: v.string(),
