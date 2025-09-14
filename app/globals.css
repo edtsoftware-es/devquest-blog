@@ -74,6 +74,50 @@
   --color-background-3: var(--background-3);
   --color-background-4: var(--background-4);
   --color-background-5: var(--background-5);
+
+  /* DISPLAYS */
+  --font-size-display-1: 5rem;
+  --font-size-display-2: 4.5rem;
+  --font-size-display-3: 4rem;
+  --font-size-display-4: 3.5rem;
+  --font-size-display-5: 3rem;
+  --font-size-display-6: 2.5rem;
+
+  --line-height-display-1: 1.2;
+  --line-height-display-2: 1.2;
+  --line-height-display-3: 1.2;
+  --line-height-display-4: 1.2;
+  --line-height-display-5: 1.2;
+  --line-height-display-6: 1.2;
+
+  --font-weight-display-1: 600;
+  --font-weight-display-2: 600;
+  --font-weight-display-3: 600;
+  --font-weight-display-4: 600;
+  --font-weight-display-5: 600;
+  --font-weight-display-6: 600;
+
+  /* HEADINGS */
+  --font-size-heading-1: 3.75rem;
+  --font-size-heading-2: 3rem;
+  --font-size-heading-3: 2.375rem;
+  --font-size-heading-4: 1.9375rem;
+  --font-size-heading-5: 1.5625rem;
+  --font-size-heading-6: 1.125rem;
+
+  --line-height-heading-1: 1.2;
+  --line-height-heading-2: 1.2;
+  --line-height-heading-3: 1.2;
+  --line-height-heading-4: 1.2;
+  --line-height-heading-5: 1.2;
+  --line-height-heading-6: 1.2;
+
+  --font-weight-heading-1: 600;
+  --font-weight-heading-2: 600;
+  --font-weight-heading-3: 600;
+  --font-weight-heading-4: 600;
+  --font-weight-heading-5: 600;
+  --font-weight-heading-6: 600;
 }
 
 :root {
@@ -140,5 +184,71 @@
   body {
     /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* DISPLAYS */
+  .text-display-1 {
+    font-size: var(--font-size-display-1);
+    line-height: var(--line-height-display-1);
+    font-weight: var(--font-weight-display-1);
+  }
+  .text-display-2 {
+    font-size: var(--font-size-display-2);
+    line-height: var(--line-height-display-2);
+    font-weight: var(--font-weight-display-2);
+  }
+  .text-display-3 {
+    font-size: var(--font-size-display-3);
+    line-height: var(--line-height-display-3);
+    font-weight: var(--font-weight-display-3);
+  }
+  .text-display-4 {
+    font-size: var(--font-size-display-4);
+    line-height: var(--line-height-display-4);
+    font-weight: var(--font-weight-display-4);
+  }
+  .text-display-5 {
+    font-size: var(--font-size-display-5);
+    line-height: var(--line-height-display-5);
+    font-weight: var(--font-weight-display-5);
+  }
+  .text-display-6 {
+    font-size: var(--font-size-display-6);
+    line-height: var(--line-height-display-6);
+    font-weight: var(--font-weight-display-6);
+  }
+
+  /* HEADINGS */
+  .text-heading-1 {
+    font-size: var(--font-size-heading-1);
+    line-height: var(--line-height-heading-1);
+    font-weight: var(--font-weight-heading-1);
+  }
+  .text-heading-2 {
+    font-size: var(--font-size-heading-2);
+    line-height: var(--line-height-heading-2);
+    font-weight: var(--font-weight-heading-2);
+  }
+  .text-heading-3 {
+    font-size: var(--font-size-heading-3);
+    line-height: var(--line-height-heading-3);
+    font-weight: var(--font-weight-heading-3);
+  }
+  .text-heading-4 {
+    font-size: var(--font-size-heading-4);
+    line-height: var(--line-height-heading-4);
+    font-weight: var(--font-weight-heading-4);
+  }
+  .text-heading-5 {
+    font-size: var(--font-size-heading-5);
+    line-height: var(--line-height-heading-5);
+    font-weight: var(--font-weight-heading-5);
+  }
+  .text-heading-6 {
+    font-size: var(--font-size-heading-6);
+    line-height: var(--line-height-heading-6);
+    font-weight: var(--font-weight-heading-6);
   }
 }
