@@ -17,8 +17,10 @@ import {
   StandardCardDescription,
   StandardCardFooter,
   StandardCardHeader,
+  StandardCardImage,
   StandardCardPublishedAt,
   StandardCardReadingTime,
+  StandardCardShell,
   StandardCardStats,
   StandardCardTitle,
 } from "@/components/cards/standard-card";
@@ -206,48 +208,70 @@ export default function DesignSystem() {
         <section className="flex flex-col gap-4">
           <h2 className="mb-4 text-heading-2">CARDS</h2>
 
+          <h3 className="mb-2 text-heading-4">Standard Card - PLP</h3>
           <StandardCard>
-            <div className="flex h-full w-full flex-col gap-y-6 p-6 sm:p-8">
-              <div className="flex h-full max-w-169 flex-col justify-between gap-y-3">
-                <StandardCardHeader>
-                  <StandardCardCategories
-                    categories={[
-                      { _id: "1", slug: "technology", name: "Technology" },
-                      { _id: "2", slug: "react", name: "React" },
-                    ]}
-                    className="hidden sm:block"
-                  />
-                  <StandardCardTitle>
-                    Frontend Development
-                    <StandardCardReadingTime>6 mins</StandardCardReadingTime>
-                  </StandardCardTitle>
-                </StandardCardHeader>
-                <StandardCardContent className="sm:mr-8">
-                  <StandardCardDescription>
-                    <p className="text-body-7 text-neutral-600">
-                      When brushstrokes inspire hemlines and canvases shape
-                      silhouettes, the result is a striking fusion of visual art
-                      and fashion design.
-                    </p>
-                  </StandardCardDescription>
-                  <StandardCardFooter>
-                    <StandardCardAuthor>
-                      <Avatar className="size-10">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>AF</AvatarFallback>
-                      </Avatar>
-                      <StandardCardAuthorName>
-                        Albert Flores
-                        <StandardCardPublishedAt>
-                          Jun 13, 2025
-                        </StandardCardPublishedAt>
-                      </StandardCardAuthorName>
-                    </StandardCardAuthor>
-                    <StandardCardStats commentsCount={98} viewsCount={162} />
-                  </StandardCardFooter>
-                </StandardCardContent>
-              </div>
-            </div>
+            <StandardCardImage>
+              <div className="h-full w-full rounded-[1rem] bg-green-500" />
+              <StandardCardCategories
+                categories={[
+                  { _id: "1", slug: "technology", name: "Technology" },
+                  { _id: "2", slug: "react", name: "React" },
+                ]}
+                className="absolute bottom-4 left-4 z-10 sm:hidden"
+              />
+            </StandardCardImage>
+            <StandardCardShell>
+              <StandardCardHeader>
+                <StandardCardCategories
+                  categories={[
+                    { _id: "1", slug: "technology", name: "Technology" },
+                    { _id: "2", slug: "react", name: "React" },
+                  ]}
+                  className="hidden sm:flex"
+                />
+                <StandardCardTitle>
+                  Frontend Development
+                  <StandardCardReadingTime>6 mins</StandardCardReadingTime>
+                </StandardCardTitle>
+              </StandardCardHeader>
+              <StandardCardContent>
+                <StandardCardDescription>
+                  <p className="text-body-7 text-neutral-600">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum. Lorem ipsum dolor sit
+                    amet, consectetur adipiscing elit. Sed do eiusmod tempor
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi
+                    ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                    reprehenderit in voluptate velit esse cillum dolore eu
+                    fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id
+                    est laborum.
+                  </p>
+                </StandardCardDescription>
+                <StandardCardFooter>
+                  <StandardCardAuthor>
+                    <Avatar className="size-8 xs:size-10">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>AF</AvatarFallback>
+                    </Avatar>
+                    <StandardCardAuthorName>
+                      Jivs Jivs
+                      <StandardCardPublishedAt>
+                        Sep 13, 2025
+                      </StandardCardPublishedAt>
+                    </StandardCardAuthorName>
+                  </StandardCardAuthor>
+                  <StandardCardStats commentsCount={33} viewsCount={300} />
+                </StandardCardFooter>
+              </StandardCardContent>
+            </StandardCardShell>
           </StandardCard>
         </section>
       </main>

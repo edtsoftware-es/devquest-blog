@@ -5,6 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
+@theme {
+  --breakpoint-xs: 35rem; /* 560px */
+}
+
+/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @theme inline {
   /* SHADCN */
   --color-background: var(--neutral-50);

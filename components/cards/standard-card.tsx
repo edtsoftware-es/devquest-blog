@@ -1,24 +1,16 @@
 import { ArrowRight, Eye, MessageSquare } from "lucide-react";
-import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 
-export type StandardCardProps = {
-  children?: ReactNode;
+type StandardCardProps = {
   variant?: "default" | "compact";
-  onAction?: () => void;
-  actionLabel?: string;
-  disabled?: boolean;
 };
 
-export function StandardCard({
-  children,
+function StandardCard({
   variant = "default",
-  onAction,
-  actionLabel = "Ver detalles",
-  disabled = false,
   className,
+  children,
   ...props
 }: React.ComponentProps<"article"> & StandardCardProps) {
   return (
@@ -30,40 +22,34 @@ export function StandardCard({
       )}
       {...props}
     >
-      <div
-        className={cn(
-          "h-63 rounded-[1rem] bg-blue-500 lg:h-90 lg:min-w-90",
-          variant === "compact" && "lg:h-86"
-        )}
-      />
-      <StandardCardShell
-        actionLabel={actionLabel}
-        disabled={disabled}
-        onAction={onAction}
-        variant={variant}
-      >
-        {children}
-      </StandardCardShell>
+      {children}
     </article>
   );
 }
 
-type StandardCardShellProps = {
-  variant?: "default" | "compact";
-  onAction?: () => void;
-  actionLabel?: string;
-  disabled?: boolean;
-};
+function StandardCardImage({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-63 rounded-[1rem] bg-neutral-200 lg:h-80 lg:min-w-80",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
 
 function StandardCardShell({
   className,
   children,
-  variant,
-  actionLabel = "Ver detalles",
-  disabled = false,
-  onAction,
   ...props
-}: React.ComponentProps<"div"> & StandardCardShellProps) {
+}: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -72,7 +58,11 @@ function StandardCardShell({
       )}
       {...props}
     >
-      {children}
+      <div className="flex h-full w-full flex-col gap-y-6 p-6 xs:p-8">
+        <div className="flex h-full flex-col justify-between gap-y-3">
+          {children}
+        </div>
+      </div>
 
       {/* Corner decorations */}
       <div className="absolute right-0 bottom-[53px] z-10 size-6">
@@ -89,13 +79,7 @@ function StandardCardShell({
         <div className="absolute size-full bg-primary" />
         <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background">
           <div className="absolute right-0 bottom-0">
-            <Button
-              aria-label={actionLabel}
-              disabled={disabled}
-              onClick={onAction}
-              size="icon"
-              type="button"
-            >
+            <Button size="icon" type="button">
               <ArrowRight aria-hidden="true" />
             </Button>
           </div>
@@ -105,23 +89,18 @@ function StandardCardShell({
   );
 }
 
-export function StandardCardHeader({
+function StandardCardHeader({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn("flex max-w-169 flex-col gap-y-3", className)}
-      {...props}
-    />
-  );
+  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
 }
 
 type StandardCardCategoriesProps = {
   categories: { _id: string; slug: string; name: string }[];
 };
 
-export function StandardCardCategories({
+function StandardCardCategories({
   categories,
   className,
   ...props
@@ -137,14 +116,14 @@ export function StandardCardCategories({
   );
 }
 
-export function StandardCardTitle({
+function StandardCardTitle({
   className,
   ...props
 }: React.ComponentProps<"h6">) {
   return (
     <h6
       className={cn(
-        "font-semibold text-[1.125rem] text-neutral-900 leading-[1.2] sm:text-[1.5625rem] lg:text-[1.9375rem]",
+        "font-semibold text-[1.125rem] text-neutral-900 xs:text-[1.5625rem] leading-[1.2] lg:text-[1.9375rem]",
         className
       )}
       {...props}
@@ -152,13 +131,13 @@ export function StandardCardTitle({
   );
 }
 
-export function StandardCardReadingTime({
+function StandardCardReadingTime({
   children,
   ...props
 }: React.ComponentProps<"span">) {
   return (
     <span
-      className="ml-1.5 font-medium text-[0.75rem] text-neutral-600 leading-[1.2] sm:text-[0.875rem] lg:text-[1rem]"
+      className="ml-1.5 font-medium text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] lg:text-[1rem]"
       {...props}
     >
       • {children}
@@ -166,14 +145,14 @@ export function StandardCardReadingTime({
   );
 }
 
-export function StandardCardContent({
+function StandardCardContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
-        "mr-10 flex h-full max-w-169 flex-col justify-between gap-y-3",
+        "mr-12 flex h-full flex-col justify-between gap-y-3",
         className
       )}
       {...props}
@@ -181,19 +160,19 @@ export function StandardCardContent({
   );
 }
 
-export function StandardCardDescription({
+function StandardCardDescription({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("line-clamp-8 max-h-42 overflow-hidden", className)}
+      className={cn("line-clamp-5 max-h-42 overflow-hidden", className)}
       {...props}
     />
   );
 }
 
-export function StandardCardFooter({
+function StandardCardFooter({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -205,7 +184,7 @@ export function StandardCardFooter({
   );
 }
 
-export function StandardCardAuthor({
+function StandardCardAuthor({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -214,13 +193,11 @@ export function StandardCardAuthor({
   );
 }
 
-export function StandardCardAuthorName({
-  ...props
-}: React.ComponentProps<"span">) {
+function StandardCardAuthorName({ ...props }: React.ComponentProps<"span">) {
   return <span className="text-body-7 text-neutral-900" {...props} />;
 }
 
-export function StandardCardPublishedAt({
+function StandardCardPublishedAt({
   children,
   ...props
 }: React.ComponentProps<"span">) {
@@ -236,7 +213,7 @@ type StandardCardStatsProps = {
   viewsCount?: number;
 };
 
-export function StandardCardStats({
+function StandardCardStats({
   commentsCount = 0,
   viewsCount = 0,
 }: StandardCardStatsProps) {
@@ -253,3 +230,20 @@ export function StandardCardStats({
     </div>
   );
 }
+
+export {
+  StandardCard,
+  StandardCardImage,
+  StandardCardShell,
+  StandardCardHeader,
+  StandardCardCategories,
+  StandardCardTitle,
+  StandardCardReadingTime,
+  StandardCardContent,
+  StandardCardDescription,
+  StandardCardFooter,
+  StandardCardAuthor,
+  StandardCardAuthorName,
+  StandardCardPublishedAt,
+  StandardCardStats,
+};
