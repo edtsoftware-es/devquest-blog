@@ -8,7 +8,21 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
+import {
+  StandardCard,
+  StandardCardAuthor,
+  StandardCardAuthorName,
+  StandardCardCategories,
+  StandardCardContent,
+  StandardCardFooter,
+  StandardCardHeader,
+  StandardCardPublishedAt,
+  StandardCardReadingTime,
+  StandardCardStats,
+  StandardCardTitle,
+} from "@/components/cards/standard-card";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -19,7 +33,7 @@ export default function DesignSystem() {
         Design System
         <ModeToggle />
       </header>
-      <main className="flex flex-col gap-16 p-8">
+      <main className="flex flex-col gap-16 p-4 sm:p-8">
         <section className="flex flex-col gap-4">
           <h2 className="mb-4 text-heading-2">BUTTONS</h2>
 
@@ -45,7 +59,7 @@ export default function DesignSystem() {
             </Button>
           </div>
 
-          <div className="flex gap-1.5">
+          <div className="flex flex-wrap gap-1.5">
             <Button
               aria-label="Previous page"
               className="border-none bg-neutral-100 hover:bg-neutral-900 hover:text-system-white"
@@ -97,7 +111,7 @@ export default function DesignSystem() {
             <Bookmark className="size-4" />
           </Button>
 
-          <div className="flex gap-x-10">
+          <div className="flex flex-wrap gap-10">
             <Button>
               Explore Now
               <ArrowUpRight aria-hidden="true" />
@@ -120,7 +134,7 @@ export default function DesignSystem() {
             <Badge variant="highlight">New</Badge>
           </div>
 
-          <div className="flex items-center gap-x-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge>2024 - 2025</Badge>
             <Badge className="bg-background-1">Frontend</Badge>
             <Badge className="bg-background-2">Backend</Badge>
@@ -151,12 +165,12 @@ export default function DesignSystem() {
           <Badge variant="destructive">Error</Badge>
         </section>
 
-        <section className="flex flex-col gap-4">
-          <h2 className="mb-4 text-heading-2">TYPOGRAPHY</h2>
+        <section className="flex flex-col gap-10">
+          <h2 className="text-heading-2">TYPOGRAPHY</h2>
 
-          <div className="flex gap-x-40">
+          <div className="flex flex-wrap gap-x-40 gap-y-10">
             <div>
-              <p className="mb-6 text-body-1">Displays</p>
+              <h3 className="mb-6 text-body-1">Displays</h3>
               <p className="text-display-1">Display 1</p>
               <p className="text-display-2">Display 2</p>
               <p className="text-display-3">Display 3</p>
@@ -165,7 +179,7 @@ export default function DesignSystem() {
               <p className="text-display-6">Display 6</p>
             </div>
             <div>
-              <p className="mb-6 text-body-1">Headings</p>
+              <h3 className="mb-6 text-body-1">Headings</h3>
               <p className="text-heading-1">Heading 1</p>
               <p className="text-heading-2">Heading 2</p>
               <p className="text-heading-3">Heading 3</p>
@@ -175,8 +189,8 @@ export default function DesignSystem() {
             </div>
           </div>
 
-          <div className="mt-10">
-            <p className="mb-6 text-body-1">Body</p>
+          <div>
+            <h3 className="mb-6 text-body-1">Body</h3>
             <p className="text-body-1">Body 1 Lorem ipsum dolor sit amet</p>
             <p className="text-body-2">Body 2 Lorem ipsum dolor sit amet</p>
             <p className="text-body-3">Body 3 Lorem ipsum dolor sit amet</p>
@@ -186,6 +200,51 @@ export default function DesignSystem() {
             <p className="text-body-7">Body 7 Lorem ipsum dolor sit amet</p>
             <p className="text-body-8">Body 8 Lorem ipsum dolor sit amet</p>
           </div>
+        </section>
+
+        <section className="flex flex-col gap-4">
+          <h2 className="mb-4 text-heading-2">CARDS</h2>
+
+          <StandardCard>
+            <div className="flex size-full flex-col gap-y-6 p-6">
+              <div className="flex max-w-169 flex-col justify-between gap-y-3">
+                <StandardCardHeader>
+                  <StandardCardCategories
+                    categories={[
+                      { _id: "1", slug: "technology", name: "Technology" },
+                      { _id: "2", slug: "react", name: "React" },
+                    ]}
+                  />
+                  <StandardCardTitle>
+                    Frontend Development
+                    <StandardCardReadingTime>6 mins</StandardCardReadingTime>
+                  </StandardCardTitle>
+                </StandardCardHeader>
+                <StandardCardContent>
+                  <p className="text-body-7 text-neutral-600">
+                    When brushstrokes inspire hemlines and canvases shape
+                    silhouettes, the result is a striking fusion of visual art
+                    and fashion design.
+                  </p>
+                  <StandardCardFooter>
+                    <StandardCardAuthor>
+                      <Avatar className="size-10">
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>AF</AvatarFallback>
+                      </Avatar>
+                      <StandardCardAuthorName>
+                        Albert Flores
+                        <StandardCardPublishedAt>
+                          Jun 13, 2025
+                        </StandardCardPublishedAt>
+                      </StandardCardAuthorName>
+                    </StandardCardAuthor>
+                    <StandardCardStats commentsCount={98} viewsCount={162} />
+                  </StandardCardFooter>
+                </StandardCardContent>
+              </div>
+            </div>
+          </StandardCard>
         </section>
       </main>
     </>
