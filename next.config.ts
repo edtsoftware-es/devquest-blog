@@ -2,14 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  typescript:{
+  typescript: {
     ignoreBuildErrors: true,
   },
   experimental: {
-    staleTimes:{
+    staleTimes: {
       dynamic: 30,
-      static: 60 * 5
-    }
+      static: 60 * 5,
+    },
+    reactCompiler: true,
   },
   images: {
     remotePatterns: [
@@ -17,10 +18,8 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.discordapp.com",
       },
-      
-      
     ],
-  }
+  },
 };
 
 export default nextConfig;
