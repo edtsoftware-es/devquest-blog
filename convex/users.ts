@@ -1,6 +1,7 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { AuthErrors } from "./lib/errors";
 import { getUserProfile } from "./posts";
 
 export const getUserRole = query({
@@ -9,7 +10,7 @@ export const getUserRole = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Usuario no autenticado");
+      throw AuthErrors.userNotAuthenticated();
     }
     const userProfile = await getUserProfile(ctx, userId);
     return userProfile.role;
@@ -28,12 +29,12 @@ export const getCurrentUser = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Usuario no autenticado");
+      throw AuthErrors.userNotAuthenticated();
     }
 
     const user = await ctx.db.get(userId);
     if (!user) {
-      throw new Error("Usuario no encontrado");
+      throw AuthErrors.userNotFound();
     }
 
     const userProfile = await getUserProfile(ctx, userId);
@@ -53,7 +54,7 @@ export const changeRole = mutation({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Usuario no autenticado");
+      throw AuthErrors.userNotAuthenticated();
     }
     const userProfile = await getUserProfile(ctx, userId);
     const nuevoRol = userProfile.role === "admin" ? "user" : "admin";
