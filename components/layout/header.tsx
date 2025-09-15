@@ -39,6 +39,7 @@ export default async function Header() {
             <ul className="flex gap-10">
               <li>
                 <Button
+                  asChild
                   className="h-auto p-0 font-light text-neutral-900"
                   variant="link"
                 >
@@ -50,6 +51,7 @@ export default async function Header() {
               </li>
               <li>
                 <Button
+                  asChild
                   className="h-auto p-0 font-light text-neutral-900"
                   variant="link"
                 >
@@ -64,12 +66,18 @@ export default async function Header() {
         <section className="flex items-center gap-4">
           <Button className="h-auto p-0 text-neutral-900" variant="link">
             <SearchIcon size={16} />
-            <Link href="/search">Buscar</Link>
+            <span>Buscar</span>
           </Button>
           <ModeToggle />
-          <Button className="h-auto p-0 text-neutral-900" variant="link">
-            <User2Icon size={16} />
-            <Link href="/profile">Perfil</Link>
+          <Button
+            asChild
+            className="h-auto p-0 text-neutral-900"
+            variant="link"
+          >
+            <Link href="/profile">
+              <User2Icon size={16} />
+              <span className="ml-1">Perfil</span>
+            </Link>
           </Button>
         </section>
       </div>
@@ -90,7 +98,7 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         {categories.map((category: Category) => (
-          <DropdownMenuItem key={category._id}>
+          <DropdownMenuItem asChild key={category._id}>
             <Link href={`/categories/${category.slug}`}>{category.name}</Link>
           </DropdownMenuItem>
         ))}
