@@ -61,9 +61,11 @@ type PostFormData = z.infer<typeof postSchema>;
 
 type PostFormProps = {
   categories: Category[];
+  post?: any;
+  mode?: "create" | "edit";
 };
 
-export function PostForm({ categories }: PostFormProps) {
+export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
   const router = useRouter();
 
   const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
@@ -88,6 +90,7 @@ export function PostForm({ categories }: PostFormProps) {
           content: args.content,
           excerpt: args.excerpt,
           authorId: "temp-author" as Id<"users">,
+          authorName: "Usuario",
           tags: args.tags,
           likesCount: 0,
           commentsCount: 0,
@@ -104,41 +107,88 @@ export function PostForm({ categories }: PostFormProps) {
       }
     }
   );
+
+  const updatePost = useMutation(api.posts.updatePost).withOptimisticUpdate(
+    (localStore, args) => {
+      const existingPosts = localStore.getQuery(
+        api.posts.getPostsByUserRole,
+        {}
+      );
+      if (existingPosts !== undefined) {
+        const updatedPosts = existingPosts.map((existingPost) => {
+          if (existingPost._id === args.postId) {
+            const now = Date.now();
+            return {
+              ...existingPost,
+              title: args.title,
+              image: args.image,
+              slug: args.slug,
+              categoryId: args.categoryId,
+              content: args.content,
+              excerpt: args.excerpt,
+              tags: args.tags,
+              published: args.published,
+              updatedAt: now,
+              publishedAt: args.published && !existingPost.published ? now : existingPost.publishedAt,
+            };
+          }
+          return existingPost;
+        });
+        localStore.setQuery(api.posts.getPostsByUserRole, {}, updatedPosts);
+      }
+    }
+  );
   const form = useForm<PostFormData>({
     // @ts-expect-error - Zod version compatibility issue
     resolver: zodResolver(postSchema),
     defaultValues: {
-      title: "",
-      image: "",
-      slug: "",
-      categoryId: "",
-      content: "",
-      excerpt: "",
-      tags: "",
-      published: false,
+      title: post?.title || "",
+      image: post?.image || "",
+      slug: post?.slug || "",
+      categoryId: post?.categoryId || "",
+      content: post?.content || "",
+      excerpt: post?.excerpt || "",
+      tags: post?.tags?.join(", ") || "",
+      published: post?.published || false,
     },
   });
 
-  const onSubmit = async (data: PostFormData) => {
+  const onSubmit = (data: PostFormData) => {
     try {
       const tagsArray = data.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      void createPost({
-        title: data.title,
-        image: data.image,
-        slug: data.slug,
-        categoryId: data.categoryId as Id<"categories">,
-        content: data.content,
-        excerpt: data.excerpt,
-        tags: tagsArray,
-        published: data.published,
-      });
+      if (mode === "edit" && post) {
+        void updatePost({
+          postId: post._id,
+          title: data.title,
+          image: data.image,
+          slug: data.slug,
+          categoryId: data.categoryId as Id<"categories">,
+          content: data.content,
+          excerpt: data.excerpt,
+          tags: tagsArray,
+          published: data.published,
+        });
+        toast.success("Post actualizado correctamente");
+      } else {
+        void createPost({
+          title: data.title,
+          image: data.image,
+          slug: data.slug,
+          categoryId: data.categoryId as Id<"categories">,
+          content: data.content,
+          excerpt: data.excerpt,
+          tags: tagsArray,
+          published: data.published,
+        });
+        toast.success("Post creado correctamente");
+      }
       router.push("/dashboard");
     } catch {
-      toast.error("Error al crear el post");
+      toast.error(`Error al ${mode === "edit" ? "actualizar" : "crear"} el post`);
     }
   };
 
@@ -160,20 +210,24 @@ export function PostForm({ categories }: PostFormProps) {
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h1 className="font-bold text-3xl text-gray-900 dark:text-white">
-          Crear Nuevo Post
+        <h1 className="font-medium text-2xl text-foreground">
+          {mode === "edit" ? "Editar Post" : "Crear Nuevo Post"}
         </h1>
-        <p className="mt-2 text-gray-600 text-sm dark:text-gray-400">
-          Completa todos los campos para crear un nuevo post
+        <p className="mt-2 text-muted-foreground text-sm">
+          {mode === "edit" 
+            ? "Modifica los campos que desees cambiar" 
+            : "Completa todos los campos para crear un nuevo post"
+          }
         </p>
       </div>
 
-      <Form {...form}>
-        <form
-          className="space-y-6 sm:space-y-8"
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
+      <div className="rounded-lg border bg-card p-6">
+        <Form {...form}>
+          <form
+            className="space-y-6"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <FormField
               control={form.control}
               name="title"
@@ -227,7 +281,7 @@ export function PostForm({ categories }: PostFormProps) {
             )}
           />
 
-          <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <FormField
               control={form.control}
               name="categoryId"
@@ -294,57 +348,48 @@ export function PostForm({ categories }: PostFormProps) {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-medium text-base">
-                  Contenido
-                </FormLabel>
+                <FormLabel>Contenido</FormLabel>
                 <FormControl>
-                  <div className="rounded-lg border">
-                    <MinimalTiptapEditor
-                      autofocus={false}
-                      className="w-full"
-                      editable={true}
-                      editorClassName="focus:outline-hidden"
-                      editorContentClassName="p-4 sm:p-6 min-h-[300px] sm:min-h-[400px]"
-                      onChange={field.onChange}
-                      output="html"
-                      placeholder="Escribe el contenido de tu post aquí..."
-                      value={field.value}
-                    />
-                  </div>
+                  <MinimalTiptapEditor
+                    autofocus={false}
+                    className="w-full"
+                    editable={true}
+                    editorClassName="focus:outline-hidden"
+                    editorContentClassName="p-4 min-h-[300px]"
+                    onChange={field.onChange}
+                    output="html"
+                    placeholder="Escribe el contenido de tu post aquí..."
+                    value={field.value}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <div className="rounded-lg border">
-            <FormField
-              control={form.control}
-              name="published"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between">
-                  <div className="space-y-0.5">
-                    <FormLabel className="font-medium text-base">
-                      Publicar
-                    </FormLabel>
-                    <div className="text-gray-600 text-sm dark:text-gray-400">
-                      Marca esta casilla para publicar el post inmediatamente
-                    </div>
+          <FormField
+            control={form.control}
+            name="published"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border bg-card p-4">
+                <div className="space-y-0.5">
+                  <FormLabel>Publicar</FormLabel>
+                  <div className="text-muted-foreground text-sm">
+                    Marca esta casilla para publicar el post inmediatamente
                   </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:justify-end">
+          <div className="flex gap-3 pt-4">
             <Button
-              className="w-full sm:w-auto"
               disabled={form.formState.isSubmitting}
               onClick={() => router.back()}
               type="button"
@@ -353,15 +398,18 @@ export function PostForm({ categories }: PostFormProps) {
               Cancelar
             </Button>
             <Button
-              className="w-full sm:w-auto"
               disabled={form.formState.isSubmitting}
               type="submit"
             >
-              {form.formState.isSubmitting ? "Creando..." : "Crear Post"}
+              {form.formState.isSubmitting 
+                ? (mode === "edit" ? "Actualizando..." : "Creando...") 
+                : (mode === "edit" ? "Actualizar Post" : "Crear Post")
+              }
             </Button>
           </div>
         </form>
       </Form>
+      </div>
     </div>
   );
 }

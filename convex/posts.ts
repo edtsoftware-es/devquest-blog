@@ -65,6 +65,28 @@ const PostType = v.object({
   viewCount: v.number(),
 });
 
+const PostWithAuthorType = v.object({
+  _id: v.id("posts"),
+  _creationTime: v.number(),
+  title: v.string(),
+  image: v.string(),
+  duration: v.number(),
+  slug: v.string(),
+  categoryId: v.id("categories"),
+  content: v.string(),
+  excerpt: v.string(),
+  authorId: v.id("users"),
+  authorName: v.string(),
+  tags: v.array(v.string()),
+  likesCount: v.number(),
+  commentsCount: v.number(),
+  published: v.boolean(),
+  updatedAt: v.number(),
+  publishedAt: v.optional(v.number()),
+  deletedAt: v.optional(v.number()),
+  viewCount: v.number(),
+});
+
 export const getPublishedPosts = query({
   args: {
     paginationOpts: v.optional(paginationOptsValidator),
@@ -173,22 +195,59 @@ export const getUserPosts = query({
   },
 });
 
+export const getPostById = query({
+  args: { postId: v.id("posts") },
+  returns: v.union(PostType, v.null()),
+  handler: async (ctx, args) => {
+    const userId = await ensureUserIsAuthenticated(ctx);
+    const userProfile = await getUserProfile(ctx, userId);
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      return null;
+    }
+
+    if (userProfile.role !== "admin" && post.authorId !== userId) {
+      throw new Error("Acceso denegado: no tienes permisos para editar este post");
+    }
+
+    return post;
+  },
+});
+
 export const getPostsByUserRole = query({
   args: {},
-  returns: v.array(PostType),
+  returns: v.array(PostWithAuthorType),
   handler: async (ctx) => {
     const userId = await ensureUserIsAuthenticated(ctx);
     const userProfile = await getUserProfile(ctx, userId);
 
     if (userProfile.role === "admin") {
-      return await ctx.db.query("posts").order("desc").take(10);
+      const posts = await ctx.db.query("posts").order("desc").collect();
+
+      const postsWithAuthors = await Promise.all(
+        posts.map(async (post) => {
+          const author = await ctx.db.get(post.authorId);
+          return {
+            ...post,
+            authorName: author?.name || "Usuario desconocido",
+          };
+        })
+      );
+
+      return postsWithAuthors;
     }
 
-    return await ctx.db
+    const posts = await ctx.db
       .query("posts")
       .withIndex("by_author", (q) => q.eq("authorId", userId))
       .order("desc")
-      .take(10);
+      .collect();
+
+    return posts.map((post) => ({
+      ...post,
+      authorName: "",
+    }));
   },
 });
 
@@ -286,26 +345,65 @@ export const updatePost = mutation({
   },
 });
 
-export const getPostById = query({
+export const deletePost = mutation({
   args: {
     postId: v.id("posts"),
   },
-  returns: v.union(PostType, v.null()),
+  returns: v.null(),
   handler: async (ctx, args) => {
     const userId = await ensureUserIsAuthenticated(ctx);
     const userProfile = await getUserProfile(ctx, userId);
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
+      throw new Error("Post no encontrado");
+    }
+
+    if (userProfile.role === "admin") {
+      await ctx.db.delete(args.postId);
       return null;
+    }
+
+    if (post.authorId !== userId) {
+      throw new Error(
+        "Acceso denegado: solo puedes eliminar tus propios posts"
+      );
+    }
+
+  await ctx.db.delete(args.postId);
+  return null;
+},
+});
+
+export const togglePostPublished = mutation({
+  args: {
+    postId: v.id("posts"),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const userId = await ensureUserIsAuthenticated(ctx);
+    const userProfile = await getUserProfile(ctx, userId);
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      throw new Error("Post no encontrado");
     }
 
     if (userProfile.role !== "admin" && post.authorId !== userId) {
       throw new Error(
-        "Acceso denegado: solo el autor o un administrador pueden ver este post"
+        "Acceso denegado: solo puedes cambiar el estado de tus propios posts"
       );
     }
 
-    return post;
+    const now = Date.now();
+    const newPublishedState = !post.published;
+
+    await ctx.db.patch(args.postId, {
+      published: newPublishedState,
+      updatedAt: now,
+      publishedAt: newPublishedState ? now : undefined,
+    });
+
+    return null;
   },
 });
