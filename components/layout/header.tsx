@@ -18,7 +18,7 @@ export default async function Header() {
 
   return (
     <header className="flex w-full items-center justify-center px-7">
-      <div className="mt-7 flex h-20 w-full max-w-6xl items-center justify-between rounded-2xl bg-neutral-200 px-7">
+      <div className="mt-7 flex h-20 w-full max-w-6xl items-center justify-between rounded-2xl bg-primary px-7">
         <section className="flex items-center gap-9">
           <div className="flex items-center">
             <Image
