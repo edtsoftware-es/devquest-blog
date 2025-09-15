@@ -3,9 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import ConvexClientProvider from "@/components/ConvexClientProvider";
+import Header from "@/components/layout/header";
 import { ThemeProvider } from "@/components/theme-provider";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,8 +44,10 @@ export default function RootLayout({
             enableSystem
           >
             <ConvexClientProvider>
-              <TooltipProvider>{children}</TooltipProvider>
-
+              <TooltipProvider>
+                <Header />
+                {children}
+              </TooltipProvider>
             </ConvexClientProvider>
             <Toaster />
           </ThemeProvider>
