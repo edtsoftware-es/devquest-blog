@@ -22,7 +22,20 @@ export function StandardCard({
   ...props
 }: React.ComponentProps<"article"> & StandardCardProps) {
   return (
-    <article className={cn("relative max-w-200", className)} {...props}>
+    <article
+      className={cn(
+        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_auto] lg:grid-rows-1 lg:gap-3.5",
+        variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_auto]",
+        className
+      )}
+      {...props}
+    >
+      <div
+        className={cn(
+          "h-63 rounded-[1rem] bg-blue-500 lg:h-90 lg:min-w-90",
+          variant === "compact" && "lg:h-86"
+        )}
+      />
       <StandardCardShell
         actionLabel={actionLabel}
         disabled={disabled}
@@ -53,7 +66,10 @@ function StandardCardShell({
 }: React.ComponentProps<"div"> & StandardCardShellProps) {
   return (
     <div
-      className={cn("size-full rounded-[1rem] border bg-primary", className)}
+      className={cn(
+        "flex h-full w-full rounded-[1rem] border bg-primary",
+        className
+      )}
       {...props}
     >
       {children}
@@ -127,7 +143,10 @@ export function StandardCardTitle({
 }: React.ComponentProps<"h6">) {
   return (
     <h6
-      className={cn("text-heading-6 text-neutral-900", className)}
+      className={cn(
+        "font-semibold text-[1.125rem] text-neutral-900 leading-[1.2] sm:text-[1.5625rem] lg:text-[1.9375rem]",
+        className
+      )}
       {...props}
     />
   );
@@ -138,7 +157,10 @@ export function StandardCardReadingTime({
   ...props
 }: React.ComponentProps<"span">) {
   return (
-    <span className="ml-1.5 text-body-8 text-neutral-600" {...props}>
+    <span
+      className="ml-1.5 font-medium text-[0.75rem] text-neutral-600 leading-[1.2] sm:text-[0.875rem] lg:text-[1rem]"
+      {...props}
+    >
       • {children}
     </span>
   );
@@ -150,7 +172,22 @@ export function StandardCardContent({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("mr-10 flex max-w-169 flex-col gap-y-3", className)}
+      className={cn(
+        "mr-10 flex h-full max-w-169 flex-col justify-between gap-y-3",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+export function StandardCardDescription({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("line-clamp-8 max-h-42 overflow-hidden", className)}
       {...props}
     />
   );

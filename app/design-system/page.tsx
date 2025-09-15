@@ -14,6 +14,7 @@ import {
   StandardCardAuthorName,
   StandardCardCategories,
   StandardCardContent,
+  StandardCardDescription,
   StandardCardFooter,
   StandardCardHeader,
   StandardCardPublishedAt,
@@ -206,26 +207,29 @@ export default function DesignSystem() {
           <h2 className="mb-4 text-heading-2">CARDS</h2>
 
           <StandardCard>
-            <div className="flex size-full flex-col gap-y-6 p-6">
-              <div className="flex max-w-169 flex-col justify-between gap-y-3">
+            <div className="flex h-full w-full flex-col gap-y-6 p-6 sm:p-8">
+              <div className="flex h-full max-w-169 flex-col justify-between gap-y-3">
                 <StandardCardHeader>
                   <StandardCardCategories
                     categories={[
                       { _id: "1", slug: "technology", name: "Technology" },
                       { _id: "2", slug: "react", name: "React" },
                     ]}
+                    className="hidden sm:block"
                   />
                   <StandardCardTitle>
                     Frontend Development
                     <StandardCardReadingTime>6 mins</StandardCardReadingTime>
                   </StandardCardTitle>
                 </StandardCardHeader>
-                <StandardCardContent>
-                  <p className="text-body-7 text-neutral-600">
-                    When brushstrokes inspire hemlines and canvases shape
-                    silhouettes, the result is a striking fusion of visual art
-                    and fashion design.
-                  </p>
+                <StandardCardContent className="sm:mr-8">
+                  <StandardCardDescription>
+                    <p className="text-body-7 text-neutral-600">
+                      When brushstrokes inspire hemlines and canvases shape
+                      silhouettes, the result is a striking fusion of visual art
+                      and fashion design.
+                    </p>
+                  </StandardCardDescription>
                   <StandardCardFooter>
                     <StandardCardAuthor>
                       <Avatar className="size-10">
