@@ -139,12 +139,16 @@ function StandardCardTitle({
 }
 
 function StandardCardReadingTime({
+  className,
   children,
   ...props
 }: React.ComponentProps<"span">) {
   return (
     <span
-      className="ml-1.5 font-medium text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] lg:text-[1rem]"
+      className={cn(
+        "ml-1.5 font-medium text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] lg:text-[1rem]",
+        className
+      )}
       {...props}
     >
       • {children}
@@ -200,16 +204,28 @@ function StandardCardAuthor({
   );
 }
 
-function StandardCardAuthorName({ ...props }: React.ComponentProps<"span">) {
-  return <span className="text-body-7 text-neutral-900" {...props} />;
+function StandardCardAuthorName({
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      className={cn("text-body-7 text-neutral-900", className)}
+      {...props}
+    />
+  );
 }
 
 function StandardCardPublishedAt({
+  className,
   children,
   ...props
 }: React.ComponentProps<"span">) {
   return (
-    <span className="ml-1.5 text-body-7 text-neutral-600" {...props}>
+    <span
+      className={cn("ml-1.5 text-body-7 text-neutral-600", className)}
+      {...props}
+    >
       • {children}
     </span>
   );
@@ -223,9 +239,12 @@ type StandardCardStatsProps = {
 function StandardCardStats({
   commentsCount = 0,
   viewsCount = 0,
-}: StandardCardStatsProps) {
+  className,
+}: React.ComponentProps<"div"> & StandardCardStatsProps) {
   return (
-    <div className="flex items-center gap-x-4 text-neutral-600">
+    <div
+      className={cn("flex items-center gap-x-4 text-neutral-600", className)}
+    >
       <div className="flex items-center gap-x-1">
         <MessageSquare className="size-4" />
         <span className="text-body-8 text-neutral-600">{commentsCount}</span>
