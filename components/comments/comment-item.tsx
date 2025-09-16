@@ -28,12 +28,15 @@ import { cn } from "@/lib/utils";
 import { CommentForm } from "./comment-form";
 import type { CommentTree, UserProfile } from "./types";
 
+const PRIORITY_COMMENTS_LIMIT = 5;
+const MAX_COMMENT_LENGTH = 1000;
+const CHARACTER_WARNING_THRESHOLD = 100;
+
 type CommentItemProps = {
   comment: CommentTree;
   postId: Id<"posts">;
   currentUser?: UserProfile | null;
   level: number;
-  slug?: string;
   index: number;
 };
 
@@ -42,107 +45,16 @@ export function CommentItem({
   postId,
   currentUser,
   level,
-  slug,
   index,
 }: CommentItemProps) {
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const updateComment = useMutation(api.comments.updateComment);
 
-  const updateComment = useMutation(api.comments.updateComment).withOptimisticUpdate(
-    (localStore, args) => {
-      // Update comment content optimistically
-      const existingComments = localStore.getQuery(api.comments.getCommentsWithAuthors, {
-        postId,
-      });
-      
-      if (existingComments) {
-        const updatedComments = existingComments.page.map(comment => 
-          comment._id === args.commentId 
-            ? { ...comment, content: args.content }
-            : comment
-        );
-        
-        localStore.setQuery(
-          api.comments.getCommentsWithAuthors,
-          { postId },
-          {
-            ...existingComments,
-            page: updatedComments,
-          }
-        );
-      }
-    }
-  );
-
-  const deleteComment = useMutation(api.comments.deleteComment).withOptimisticUpdate(
-    (localStore, args) => {
-      // Mark comment and all its replies as deleted optimistically
-      const existingComments = localStore.getQuery(api.comments.getCommentsWithAuthors, {
-        postId,
-      });
-      
-      if (existingComments) {
-        const markCommentAndRepliesAsDeleted = (commentId: string, comments: any[]): any[] => {
-          return comments.map(comment => {
-            if (comment._id === commentId) {
-              // Mark this comment as deleted
-              return { ...comment, deletedAt: Date.now() };
-            } else if (comment.parentId === commentId) {
-              // Mark replies as deleted and recursively mark their replies
-              const updatedComment = { ...comment, deletedAt: Date.now() };
-              return {
-                ...updatedComment,
-                replies: markCommentAndRepliesAsDeleted(comment._id, comment.replies || [])
-              };
-            } else if (comment.replies && comment.replies.length > 0) {
-              // Recursively check replies
-              return {
-                ...comment,
-                replies: markCommentAndRepliesAsDeleted(commentId, comment.replies)
-              };
-            }
-            return comment;
-          });
-        };
-
-        const updatedComments = markCommentAndRepliesAsDeleted(args.commentId, existingComments.page);
-        
-        localStore.setQuery(
-          api.comments.getCommentsWithAuthors,
-          { postId },
-          {
-            ...existingComments,
-            page: updatedComments,
-          }
-        );
-      }
-
-      // Update post comment count optimistically (we'll estimate the count)
-      if (slug) {
-        const existingPost = localStore.getQuery(api.posts.getPostBySlug, {
-          slug,
-        });
-        
-        if (existingPost) {
-          // Estimate: assume at least 1 comment deleted (the main comment)
-          // The actual count will be corrected when the server responds
-          localStore.setQuery(
-            api.posts.getPostBySlug,
-            { slug },
-            {
-              ...existingPost,
-              commentsCount: Math.max(0, existingPost.commentsCount - 1),
-            }
-          );
-        }
-      }
-    }
-  );
-
+  const deleteComment = useMutation(api.comments.deleteComment);
   const isOwner = currentUser?._id === comment.authorId;
-  const isDeleted = !!comment.deletedAt;
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -154,14 +66,13 @@ export function CommentItem({
 
   const handleEditSubmit = async (content: string) => {
     try {
-      void updateComment({
+      await updateComment({
         commentId: comment._id,
         content: content.trim(),
       });
       setIsEditing(false);
       toast.success("Comment updated!");
-    } catch (error) {
-      console.error("Failed to update comment:", error);
+    } catch (_error) {
       toast.error("Failed to update comment");
     }
   };
@@ -169,14 +80,13 @@ export function CommentItem({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      void deleteComment({
+      await deleteComment({
         commentId: comment._id,
       });
       setShowDeleteDialog(false);
-      toast.success("Comment deleted"); 
+      toast.success("Comment deleted");
       setIsDeleting(false);
-    } catch (error) {
-      console.error("Failed to delete comment:", error);
+    } catch (_error) {
       toast.error("Failed to delete comment");
       setIsDeleting(false);
     }
@@ -186,27 +96,24 @@ export function CommentItem({
     setShowReplyForm(false);
   };
 
-  // Don't render deleted comments at all
-  if (isDeleted) {
-    return null;
-  }
-
   return (
     <div className="space-y-3">
-      <Card className={cn(
-        "transition-colors", 
-        level > 0 && "bg-muted/20",
-        isOwner && "ring-1 ring-primary/20 bg-primary/5"
-      )}>
+      <Card
+        className={cn(
+          "transition-colors",
+          level > 0 && "bg-muted/20",
+          isOwner && "bg-primary/5 ring-1 ring-primary/20"
+        )}
+      >
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
             {/* Avatar */}
             <Avatar className="size-8 shrink-0">
-              <AvatarImage 
-                alt={comment.authorName} 
+              <AvatarImage
+                alt={comment.authorName}
+                decoding={index < PRIORITY_COMMENTS_LIMIT ? "sync" : "async"}
+                loading={index < PRIORITY_COMMENTS_LIMIT ? "eager" : "lazy"}
                 src={comment.authorImage}
-                decoding={index < 5 ? "sync" : "async"}
-                loading={index < 5 ? "eager" : "lazy"}
               />
               <AvatarFallback className="bg-primary/10 font-medium text-primary text-xs">
                 {comment.authorName.charAt(0).toUpperCase()}
@@ -352,8 +259,8 @@ function EditCommentForm({
       return;
     }
 
-    if (trimmedContent.length > 1000) {
-      toast.error("Comment cannot exceed 1000 characters");
+    if (trimmedContent.length > MAX_COMMENT_LENGTH) {
+      toast.error(`Comment cannot exceed ${MAX_COMMENT_LENGTH} characters`);
       return;
     }
 
@@ -365,7 +272,7 @@ function EditCommentForm({
     }
   };
 
-  const remainingChars = 1000 - content.length;
+  const remainingChars = MAX_COMMENT_LENGTH - content.length;
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit}>
@@ -379,7 +286,13 @@ function EditCommentForm({
           value={content}
         />
         <div className="mt-1 text-right text-muted-foreground text-xs">
-          <span className={remainingChars < 100 ? "text-destructive" : ""}>
+          <span
+            className={
+              remainingChars < CHARACTER_WARNING_THRESHOLD
+                ? "text-destructive"
+                : ""
+            }
+          >
             {remainingChars} characters remaining
           </span>
         </div>

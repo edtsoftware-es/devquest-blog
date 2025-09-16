@@ -4,8 +4,16 @@ import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { Calendar, Clock, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { api } from "@/convex/_generated/api";
+import type { api } from "@/convex/_generated/api";
 import { LikeButton } from "./like-button";
+
+const formatDate = (timestamp: number) => {
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+};
 
 type PostDisplayProps = {
   preloadedPost: Preloaded<typeof api.posts.getPostBySlug>;
@@ -14,11 +22,11 @@ type PostDisplayProps = {
   slug: string;
 };
 
-export function PostDisplay({ 
-  preloadedPost, 
-  preloadedCategory, 
+export function PostDisplay({
+  preloadedPost,
+  preloadedCategory,
   preloadedHasLiked,
-  slug 
+  slug,
 }: PostDisplayProps) {
   const post = usePreloadedQuery(preloadedPost);
   const category = usePreloadedQuery(preloadedCategory);
@@ -26,14 +34,6 @@ export function PostDisplay({
   if (!post) {
     return null;
   }
-
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   return (
     <article className="space-y-6">
@@ -87,11 +87,11 @@ export function PostDisplay({
           <img
             alt={post.title}
             className="aspect-video h-auto w-full object-cover"
+            decoding="sync"
             height={450}
+            loading="eager"
             src={post.image}
             width={800}
-            decoding="sync"
-            loading="eager"
           />
         </div>
       )}
@@ -103,31 +103,6 @@ export function PostDisplay({
             // biome-ignore lint/security/noDangerouslySetInnerHtml: Post content is from trusted source
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
-        </CardContent>
-      </Card>
-
-      <Card className="border-none shadow-none">
-        <CardContent className="flex flex-col items-start gap-4 px-0 py-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <LikeButton
-              likesCount={post.likesCount}
-              postId={post._id}
-              preloadedHasLiked={preloadedHasLiked}
-              showCount={true}
-              slug={slug}
-            />
-            <div className="flex items-center gap-2 text-muted-foreground text-sm">
-              <span>
-                {post.commentsCount}{" "}
-                {post.commentsCount === 1 ? "comment" : "comments"}
-              </span>
-            </div>
-          </div>
-
-          <div className="text-muted-foreground text-sm">
-            {post.viewCount.toLocaleString()}{" "}
-            {post.viewCount === 1 ? "view" : "views"}
-          </div>
         </CardContent>
       </Card>
     </article>

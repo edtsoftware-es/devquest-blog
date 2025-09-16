@@ -10,14 +10,12 @@ type CommentsSectionProps = {
   postId: Id<"posts">;
   preloadedComments: Preloaded<typeof api.comments.getCommentsWithAuthors>;
   preloadedUser: Preloaded<typeof api.users.getCurrentUserOptional>;
-  slug?: string;
 };
 
 export function CommentsSection({
   postId,
   preloadedComments,
   preloadedUser,
-  slug,
 }: CommentsSectionProps) {
   return (
     <div className="mt-12">
@@ -26,7 +24,6 @@ export function CommentsSection({
           postId={postId}
           preloadedComments={preloadedComments}
           preloadedUser={preloadedUser}
-          slug={slug}
         />
       </CommentsErrorBoundary>
     </div>

@@ -1,36 +1,32 @@
 "use client";
 
 import { type Preloaded, usePreloadedQuery } from "convex/react";
+import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronDown, ChevronUp, MessageSquare } from "lucide-react";
 import type { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { CommentForm } from "./comment-form";
 import { CommentTree } from "./comment-tree";
-import type { UserProfile } from "./types";
 import { buildCommentTree } from "./utils";
 
 type CommentsContainerProps = {
   postId: Id<"posts">;
   preloadedComments: Preloaded<typeof api.comments.getCommentsWithAuthors>;
   preloadedUser: Preloaded<typeof api.users.getCurrentUserOptional>;
-  slug?: string;
 };
 
 export function CommentsContainer({
   postId,
   preloadedComments,
   preloadedUser,
-  slug,
 }: CommentsContainerProps) {
   const [showComments, setShowComments] = useState(true);
   const [showCommentForm, setShowCommentForm] = useState(false);
 
   const commentsData = usePreloadedQuery(preloadedComments);
-  
-  // User is null if not authenticated, UserProfile if authenticated
+
   const user = usePreloadedQuery(preloadedUser);
 
   const comments = commentsData.page;
@@ -111,7 +107,6 @@ export function CommentsContainer({
                   currentUser={user}
                   postId={postId}
                   showLimit={5}
-                  slug={slug}
                 />
               </div>
             ) : (
