@@ -9,6 +9,16 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {
+  CompactCard,
+  CompactCardContent,
+  CompactCardFooter,
+  CompactCardImage,
+  CompactCardPublishedAt,
+  CompactCardReadingTime,
+  CompactCardStats,
+  CompactCardTitle,
+} from "@/components/cards/compact-card";
+import {
   StandardCard,
   StandardCardAuthor,
   StandardCardAuthorName,
@@ -266,6 +276,59 @@ export default function DesignSystem() {
             </StandardCardContent>
           </StandardCardShell>
         </StandardCard>
+
+        <h3 className="mb-2 text-heading-4">
+          Compact Card - HOME & Recommended
+        </h3>
+        <CompactCard className="border-none bg-background">
+          <CompactCardImage>
+            <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
+          </CompactCardImage>
+          <CompactCardContent>
+            <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
+            <CompactCardFooter>
+              <CompactCardPublishedAt>
+                Oct 5, 2024
+                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
+              </CompactCardPublishedAt>
+            </CompactCardFooter>
+          </CompactCardContent>
+        </CompactCard>
+
+        <CompactCard className="bg-background">
+          <CompactCardImage>
+            <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
+          </CompactCardImage>
+          <CompactCardContent>
+            <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
+            <CompactCardFooter>
+              <CompactCardPublishedAt>
+                Oct 5, 2024
+                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
+              </CompactCardPublishedAt>
+            </CompactCardFooter>
+            <CompactCardStats
+              className="xs:flex hidden"
+              commentsCount={12}
+              viewsCount={150}
+            />
+          </CompactCardContent>
+        </CompactCard>
+
+        <CompactCard variant="reverse">
+          <CompactCardImage>
+            <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
+          </CompactCardImage>
+          <CompactCardContent className="mr-0">
+            <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
+            <CompactCardFooter className="mr-0">
+              <CompactCardPublishedAt>
+                Oct 5, 2024
+                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
+              </CompactCardPublishedAt>
+            </CompactCardFooter>
+          </CompactCardContent>
+        </CompactCard>
       </section>
     </main>
   );
