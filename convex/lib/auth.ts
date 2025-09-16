@@ -1,3 +1,4 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import type { MutationCtx, QueryCtx } from "../_generated/server";
 import { AuthErrors } from "./errors";
 
@@ -18,11 +19,11 @@ export const getCurrentUser = async (ctx: QueryCtx | MutationCtx) => {
  * @throws {AppError} If user is not authenticated or profile not found
  */
 export const getCurrentUserProfile = async (ctx: QueryCtx | MutationCtx) => {
-  const identity = await getCurrentUser(ctx);
+  const userId = await getAuthUserId(ctx);
 
   const userProfile = await ctx.db
     .query("userProfiles")
-    .withIndex("by_user", (q) => q.eq("userId", identity.subject as any))
+    .withIndex("by_user", (q) => q.eq("userId", userId as any))
     .unique();
 
   if (!userProfile) {
