@@ -20,6 +20,8 @@ import type * as http from "../http.js";
 import type * as init from "../init.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_errors from "../lib/errors.js";
+import type * as lib_types from "../lib/types.js";
+import type * as lib_validators from "../lib/validators.js";
 import type * as likes from "../likes.js";
 import type * as posts from "../posts.js";
 import type * as users from "../users.js";
@@ -40,6 +42,8 @@ declare const fullApi: ApiFromModules<{
   init: typeof init;
   "lib/auth": typeof lib_auth;
   "lib/errors": typeof lib_errors;
+  "lib/types": typeof lib_types;
+  "lib/validators": typeof lib_validators;
   likes: typeof likes;
   posts: typeof posts;
   users: typeof users;
