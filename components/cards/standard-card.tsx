@@ -105,10 +105,17 @@ function StandardCardCategories({
   className,
   ...props
 }: React.ComponentProps<"div"> & StandardCardCategoriesProps) {
+  const MAX_BACKGROUND_VARIANTS = 5;
   return (
-    <div className={cn("flex items-center gap-x-2", className)} {...props}>
+    <div
+      className={cn("flex flex-wrap-reverse items-center gap-2", className)}
+      {...props}
+    >
       {categories.map(({ _id, name }, index) => (
-        <Badge className={`bg-background-${index + 1}`} key={_id}>
+        <Badge
+          className={`bg-background-${(index % MAX_BACKGROUND_VARIANTS) + 1}`}
+          key={_id}
+        >
           {name}
         </Badge>
       ))}
