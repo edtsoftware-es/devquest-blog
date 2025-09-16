@@ -1,6 +1,6 @@
 import { paginationOptsValidator } from "convex/server";
-import { v } from "convex/values";
 import type { GenericValidator } from "convex/values";
+import { v } from "convex/values";
 
 const optionalCursor = v.union(v.string(), v.null());
 
@@ -40,7 +40,7 @@ export const CategoryValidator = v.object({
   description: v.string(),
 });
 
-export const CommentValidator = v.object({
+export const CommentFields = {
   _id: v.id("comments"),
   _creationTime: v.number(),
   postId: v.id("posts"),
@@ -49,7 +49,30 @@ export const CommentValidator = v.object({
   content: v.string(),
   deletedAt: v.optional(v.number()),
   likesCount: v.number(),
+} as const;
+
+export const CommentValidator = v.object(CommentFields);
+
+export const CommentWithAuthorValidator = v.object({
+  ...CommentFields,
+  authorName: v.string(),
+  authorImage: v.optional(v.string()),
 });
+
+export const CommentInputFields = {
+  postId: v.id("posts"),
+  content: v.string(),
+  parentId: v.optional(v.id("comments")),
+} as const;
+
+export const CommentInputValidator = v.object(CommentInputFields);
+
+export const CommentUpdateFields = {
+  commentId: v.id("comments"),
+  content: v.string(),
+} as const;
+
+export const CommentUpdateValidator = v.object(CommentUpdateFields);
 
 export const UserWithRoleValidator = v.object({
   _id: v.id("users"),
@@ -81,9 +104,9 @@ export const PostUpdateValidator = v.object(PostUpdateFields);
 
 export const optionalPaginationOpts = v.optional(paginationOptsValidator);
 
-export const createPaginatedResultValidator = <
-  TItem extends GenericValidator,
->(itemValidator: TItem) =>
+export const createPaginatedResultValidator = <TItem extends GenericValidator>(
+  itemValidator: TItem
+) =>
   v.object({
     page: v.array(itemValidator),
     isDone: v.boolean(),
