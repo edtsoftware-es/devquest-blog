@@ -1,10 +1,17 @@
-import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserProfile, requireAdmin, requireUser } from "./lib/auth";
 import { AuthErrors, PostErrors } from "./lib/errors";
+import {
+  createPaginatedResultValidator,
+  optionalPaginationOpts,
+  PostInputFields,
+  PostUpdateFields,
+  PostValidator,
+  PostWithAuthorValidator,
+} from "./lib/validators";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -37,60 +44,11 @@ export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
   return userProfile;
 }
 
-const PostType = v.object({
-  _id: v.id("posts"),
-  _creationTime: v.number(),
-  title: v.string(),
-  image: v.string(),
-  duration: v.number(),
-  slug: v.string(),
-  categoryId: v.id("categories"),
-  content: v.string(),
-  excerpt: v.string(),
-  authorId: v.id("users"),
-  tags: v.array(v.string()),
-  likesCount: v.number(),
-  commentsCount: v.number(),
-  published: v.boolean(),
-  updatedAt: v.number(),
-  publishedAt: v.optional(v.number()),
-  deletedAt: v.optional(v.number()),
-  viewCount: v.number(),
-});
-
-const PostWithAuthorType = v.object({
-  _id: v.id("posts"),
-  _creationTime: v.number(),
-  title: v.string(),
-  image: v.string(),
-  duration: v.number(),
-  slug: v.string(),
-  categoryId: v.id("categories"),
-  content: v.string(),
-  excerpt: v.string(),
-  authorId: v.id("users"),
-  authorName: v.string(),
-  tags: v.array(v.string()),
-  likesCount: v.number(),
-  commentsCount: v.number(),
-  published: v.boolean(),
-  updatedAt: v.number(),
-  publishedAt: v.optional(v.number()),
-  deletedAt: v.optional(v.number()),
-  viewCount: v.number(),
-});
-
 export const getPublishedPosts = query({
   args: {
-    paginationOpts: v.optional(paginationOptsValidator),
+    paginationOpts: optionalPaginationOpts,
   },
-  returns: v.object({
-    page: v.array(PostType),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-    pageStatus: v.optional(v.union(v.string(), v.null())),
-    splitCursor: v.optional(v.union(v.string(), v.null())),
-  }),
+  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     const posts = await ctx.db
       .query("posts")
@@ -106,7 +64,7 @@ export const getPostBySlug = query({
   args: {
     slug: v.string(),
   },
-  returns: v.union(PostType, v.null()),
+  returns: v.union(PostValidator, v.null()),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
@@ -118,14 +76,9 @@ export const getPostBySlug = query({
 export const getPostsByCategoryId = query({
   args: {
     categoryId: v.id("categories"),
-    paginationOpts: v.optional(paginationOptsValidator),
+    paginationOpts: optionalPaginationOpts,
   },
-  returns: v.object({
-    page: v.array(PostType),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-    pageStatus: v.optional(v.union(v.string(), v.null())),
-  }),
+  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
@@ -137,15 +90,9 @@ export const getPostsByCategoryId = query({
 
 export const getAdminPosts = query({
   args: {
-    paginationOpts: v.optional(paginationOptsValidator),
+    paginationOpts: optionalPaginationOpts,
   },
-  returns: v.object({
-    page: v.array(PostType),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-    pageStatus: v.optional(v.union(v.string(), v.null())),
-    splitCursor: v.optional(v.union(v.string(), v.null())),
-  }),
+  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
 
@@ -158,15 +105,9 @@ export const getAdminPosts = query({
 
 export const getUserPosts = query({
   args: {
-    paginationOpts: v.optional(paginationOptsValidator),
+    paginationOpts: optionalPaginationOpts,
   },
-  returns: v.object({
-    page: v.array(PostType),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-    pageStatus: v.optional(v.union(v.string(), v.null())),
-    splitCursor: v.optional(v.union(v.string(), v.null())),
-  }),
+  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     const userProfile = await requireUser(ctx);
     const userId = userProfile.userId;
@@ -181,7 +122,7 @@ export const getUserPosts = query({
 
 export const getPostById = query({
   args: { postId: v.id("posts") },
-  returns: v.union(PostType, v.null()),
+  returns: v.union(PostValidator, v.null()),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);
     const userId = userProfile.userId;
@@ -201,7 +142,7 @@ export const getPostById = query({
 
 export const getPostsByUserRole = query({
   args: {},
-  returns: v.array(PostWithAuthorType),
+  returns: v.array(PostWithAuthorValidator),
   handler: async (ctx) => {
     const userProfile = await getCurrentUserProfile(ctx);
 
@@ -236,16 +177,7 @@ export const getPostsByUserRole = query({
 });
 
 export const createPost = mutation({
-  args: {
-    title: v.string(),
-    image: v.string(),
-    slug: v.string(),
-    categoryId: v.id("categories"),
-    content: v.string(),
-    excerpt: v.string(),
-    tags: v.array(v.string()),
-    published: v.boolean(),
-  },
+  args: PostInputFields,
   returns: v.id("posts"),
   handler: async (ctx, args) => {
     const userProfile = await requireUser(ctx);
@@ -275,17 +207,7 @@ export const createPost = mutation({
 });
 
 export const updatePost = mutation({
-  args: {
-    postId: v.id("posts"),
-    title: v.string(),
-    image: v.string(),
-    slug: v.string(),
-    categoryId: v.id("categories"),
-    content: v.string(),
-    excerpt: v.string(),
-    tags: v.array(v.string()),
-    published: v.boolean(),
-  },
+  args: PostUpdateFields,
   returns: v.null(),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);

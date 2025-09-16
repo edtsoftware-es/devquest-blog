@@ -2,6 +2,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
+import { UserWithRoleValidator } from "./lib/validators";
 import { getUserProfile } from "./posts";
 
 export const getUserRole = query({
@@ -19,13 +20,7 @@ export const getUserRole = query({
 
 export const getCurrentUser = query({
   args: {},
-  returns: v.object({
-    _id: v.id("users"),
-    name: v.optional(v.string()),
-    email: v.optional(v.string()),
-    image: v.optional(v.string()),
-    role: v.string(),
-  }),
+  returns: UserWithRoleValidator,
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {

@@ -1,20 +1,12 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import { CategoryValidator } from "./lib/validators";
 
 export const getCategoryBySlug = query({
   args: {
     slug: v.string(),
   },
-  returns: v.union(
-    v.object({
-      _id: v.id("categories"),
-      _creationTime: v.number(),
-      name: v.string(),
-      slug: v.string(),
-      description: v.string(),
-    }),
-    v.null()
-  ),
+  returns: v.union(CategoryValidator, v.null()),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("categories")
@@ -25,15 +17,7 @@ export const getCategoryBySlug = query({
 
 export const getAllCategories = query({
   args: {},
-  returns: v.array(
-    v.object({
-      _id: v.id("categories"),
-      _creationTime: v.number(),
-      name: v.string(),
-      slug: v.string(),
-      description: v.string(),
-    })
-  ),
+  returns: v.array(CategoryValidator),
   handler: async (ctx) => {
     return await ctx.db.query("categories").collect();
   },

@@ -1,30 +1,17 @@
-import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { query } from "./_generated/server";
+import {
+  CommentValidator,
+  createPaginatedResultValidator,
+  optionalPaginationOpts,
+} from "./lib/validators";
 
 export const getCommentsByPostId = query({
   args: {
     postId: v.id("posts"),
-    paginationOpts: v.optional(paginationOptsValidator),
+    paginationOpts: optionalPaginationOpts,
   },
-  returns: v.object({
-    page: v.array(
-      v.object({
-        _id: v.id("comments"),
-        _creationTime: v.number(),
-        postId: v.id("posts"),
-        authorId: v.id("users"),
-        parentId: v.optional(v.id("comments")),
-        content: v.string(),
-        deletedAt: v.optional(v.number()),
-        likesCount: v.number(),
-      })
-    ),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-    pageStatus: v.optional(v.union(v.string(), v.null())),
-    splitCursor: v.optional(v.union(v.string(), v.null())),
-  }),
+  returns: createPaginatedResultValidator(CommentValidator),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("comments")
