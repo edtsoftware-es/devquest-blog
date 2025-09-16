@@ -9,6 +9,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {
+  AuthorCard,
+  AuthorCardDescription,
+  AuthorCardImage,
+  AuthorCardName,
+} from "@/components/cards/author-card";
+import {
   CompactCard,
   CompactCardContent,
   CompactCardFooter,
@@ -329,6 +335,31 @@ export default function DesignSystem() {
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
+
+        <h3 className="mb-2 text-heading-4">Author Card - PDP & Author Page</h3>
+        <AuthorCard>
+          <AuthorCardImage>
+            <div className="h-full w-full rounded-full bg-green-500" />
+          </AuthorCardImage>
+          <AuthorCardName>Jivs Jivs</AuthorCardName>
+          <AuthorCardDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+            quis lorem vitae neque luctus malesuada. Sed ac ipsum sit amet sem
+            maximus porta vel ut nunc.
+          </AuthorCardDescription>
+        </AuthorCard>
+
+        <AuthorCard className="max-w-136 gap-y-3 border-none bg-background">
+          <AuthorCardImage className="mb-3">
+            <div className="h-full w-full rounded-full bg-green-500" />
+          </AuthorCardImage>
+          <AuthorCardName className="text-[2.375rem]">Jivs Jivs</AuthorCardName>
+          <AuthorCardDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
+            quis lorem vitae neque luctus malesuada. Sed ac ipsum sit amet sem
+            maximus porta vel ut nunc.
+          </AuthorCardDescription>
+        </AuthorCard>
       </section>
     </main>
   );
