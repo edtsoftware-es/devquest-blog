@@ -1,5 +1,5 @@
 import { fetchQuery } from "convex/nextjs";
-import { MenuIcon, SearchIcon, User2Icon, UserCircle } from "lucide-react";
+import { MenuIcon, SearchIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
@@ -21,6 +21,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
+import { UserDropDownMenu } from "../user-dropdown-menu";
 
 export default async function Header() {
   const categories = await fetchQuery(api.categories.getAllCategories, {});
@@ -79,7 +80,7 @@ export default async function Header() {
         <div className="flex items-center md:hidden">
           <MobileMenu />
         </div>
-        <section className="flex w-full items-center justify-between gap-4 md:w-auto">
+        <section className="flex h-3/5 w-full items-center justify-between gap-4 md:w-auto md:border-neutral-300 md:border-l-2 md:pl-4">
           <div className="flex items-center md:hidden">
             <Image
               alt="Convex Logo"
@@ -107,16 +108,9 @@ export default async function Header() {
           <div className="hidden items-center md:flex">
             <ModeToggle />
           </div>
-          <Button
-            asChild
-            className="hidden h-auto p-0 text-neutral-900 md:flex"
-            variant="link"
-          >
-            <Link href="/profile">
-              <User2Icon size={16} />
-              <span className="ml-1">Perfil</span>
-            </Link>
-          </Button>
+          <div className="hidden items-center md:flex">
+            <UserDropDownMenu />
+          </div>
         </section>
       </div>
     </header>
@@ -210,9 +204,7 @@ function MobileMenu() {
         <div className="flex w-full items-center justify-between border-t-1 p-4">
           <ModeToggle />
           <SheetClose asChild>
-            <Link className="h-full" href="/profile">
-              <UserCircle className="h-9" size={24} />
-            </Link>
+            <UserDropDownMenu />
           </SheetClose>
         </div>
       </SheetContent>

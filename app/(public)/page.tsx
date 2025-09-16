@@ -1,5 +1,4 @@
 import { fetchQuery } from "convex/nextjs";
-import { SignOutButton } from "@/components/sign-out-button";
 import { api } from "@/convex/_generated/api";
 
 export default async function Home() {
@@ -10,7 +9,6 @@ export default async function Home() {
       {posts.page.map((post) => {
         return <p key={post._id}>{JSON.stringify(post)}</p>;
       })}
-      <SignOutButton />
     </main>
   );
 }
