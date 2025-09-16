@@ -1,7 +1,8 @@
-import { mutation, query } from "./_generated/server";
-import { v } from "convex/values";
-import { getUserProfile } from "./posts";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
+import { AuthErrors } from "./lib/errors";
+import { getUserProfile } from "./posts";
 
 export const getUserRole = query({
   args: {},
@@ -9,10 +10,42 @@ export const getUserRole = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Usuario no autenticado");
+      throw AuthErrors.userNotAuthenticated();
     }
     const userProfile = await getUserProfile(ctx, userId);
     return userProfile.role;
+  },
+});
+
+export const getCurrentUser = query({
+  args: {},
+  returns: v.object({
+    _id: v.id("users"),
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    image: v.optional(v.string()),
+    role: v.string(),
+  }),
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw AuthErrors.userNotAuthenticated();
+    }
+
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
+
+    const userProfile = await getUserProfile(ctx, userId);
+
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      role: userProfile.role,
+    };
   },
 });
 
@@ -21,11 +54,11 @@ export const changeRole = mutation({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
-      throw new Error("Usuario no autenticado");
+      throw AuthErrors.userNotAuthenticated();
     }
-  const userProfile = await getUserProfile(ctx, userId);
-  const nuevoRol = userProfile.role === "admin" ? "user" : "admin";
-  await ctx.db.patch(userProfile._id, { role: nuevoRol });
-  return null;
+    const userProfile = await getUserProfile(ctx, userId);
+    const nuevoRol = userProfile.role === "admin" ? "user" : "admin";
+    await ctx.db.patch(userProfile._id, { role: nuevoRol });
+    return null;
   },
 });
