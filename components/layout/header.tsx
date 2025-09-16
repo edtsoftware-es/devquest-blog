@@ -96,7 +96,9 @@ export default async function Header() {
             />
           </div>
           <Button
+            aria-label="Buscar contenido"
             className="h-auto p-0 pr-4 xs:pr-8 text-neutral-900 md:pr-0"
+            type="button"
             variant="link"
           >
             <SearchIcon size={16} />
@@ -127,6 +129,7 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
       <DropdownMenuTrigger asChild>
         <Button
           className="h-auto p-0 font-light text-neutral-900"
+          type="button"
           variant="link"
         >
           Categorías
@@ -146,8 +149,15 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
 function MobileMenu() {
   return (
     <Sheet>
-      <SheetTrigger>
-        <MenuIcon className="cursor-pointer text-neutral-900" size={24} />
+      <SheetTrigger asChild>
+        <Button
+          aria-label="Abrir menú de navegación"
+          size="icon"
+          type="button"
+          variant="ghost"
+        >
+          <MenuIcon className="text-neutral-900" size={24} />
+        </Button>
       </SheetTrigger>
       <SheetContent className="flex flex-col justify-between">
         <SheetHeader className="sr-only">
