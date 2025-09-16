@@ -10,7 +10,6 @@ type StandardCardProps = {
 function StandardCard({
   variant = "default",
   className,
-  children,
   ...props
 }: React.ComponentProps<"article"> & StandardCardProps) {
   return (
@@ -21,15 +20,12 @@ function StandardCard({
         className
       )}
       {...props}
-    >
-      {children}
-    </article>
+    />
   );
 }
 
 function StandardCardImage({
   className,
-  children,
   ...props
 }: React.ComponentProps<"div">) {
   return (
@@ -39,9 +35,7 @@ function StandardCardImage({
         className
       )}
       {...props}
-    >
-      {children}
-    </div>
+    />
   );
 }
 

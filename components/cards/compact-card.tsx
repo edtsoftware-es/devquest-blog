@@ -8,7 +8,6 @@ type CompactCardProps = {
 function CompactCard({
   variant = "default",
   className,
-  children,
   ...props
 }: React.ComponentProps<"article"> & CompactCardProps) {
   return (
@@ -19,9 +18,7 @@ function CompactCard({
         className
       )}
       {...props}
-    >
-      {children}
-    </article>
+    />
   );
 }
 
