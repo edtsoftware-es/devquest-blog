@@ -24,9 +24,9 @@ function AuthorCardImage({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function AuthorCardName({ className, ...props }: React.ComponentProps<"h6">) {
+function AuthorCardName({ className, ...props }: React.ComponentProps<"h2">) {
   return (
-    <h6
+    <h2
       className={cn(
         "line-clamp-2 text-center font-semibold text-[1.5625rem] text-neutral-900 leading-[1.2]",
         className
