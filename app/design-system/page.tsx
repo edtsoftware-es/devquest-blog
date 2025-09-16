@@ -39,6 +39,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function DesignSystem() {
+  console.log("test");
   return (
     <main className="flex flex-col gap-16 p-4 sm:p-8">
       <section className="flex flex-col gap-4">
