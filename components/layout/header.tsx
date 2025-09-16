@@ -1,5 +1,5 @@
 import { fetchQuery } from "convex/nextjs";
-import { SearchIcon, User2Icon } from "lucide-react";
+import { MenuIcon, SearchIcon, User2Icon, UserCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
@@ -12,14 +12,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 
 export default async function Header() {
   const categories = await fetchQuery(api.categories.getAllCategories, {});
 
   return (
-    <header className="flex w-full items-center justify-center px-7">
-      <div className="mt-7 flex h-20 w-full max-w-6xl items-center justify-between rounded-2xl bg-primary px-7">
-        <section className="flex items-center gap-9">
+    <header className="flex w-full items-center justify-center px-3 md:px-7">
+      <div className="mt-7 flex h-20 w-full max-w-6xl flex-row-reverse items-center justify-between rounded-2xl bg-primary px-3 md:flex-row md:px-7">
+        <section className="hidden items-center gap-9 md:flex">
           <div className="flex items-center">
             <Image
               alt="Convex Logo"
@@ -55,7 +64,11 @@ export default async function Header() {
                   className="h-auto p-0 font-light text-neutral-900"
                   variant="link"
                 >
-                  <Link href="https://cursos.devtalles.com/" target="_blank">
+                  <Link
+                    href="https://cursos.devtalles.com/"
+                    rel="noopener"
+                    target="_blank"
+                  >
                     Cursos
                   </Link>
                 </Button>
@@ -63,15 +76,40 @@ export default async function Header() {
             </ul>
           </nav>
         </section>
-        <section className="flex items-center gap-4">
-          <Button className="h-auto p-0 text-neutral-900" variant="link">
+        <div className="flex items-center md:hidden">
+          <MobileMenu />
+        </div>
+        <section className="flex w-full items-center justify-between gap-4 md:w-auto">
+          <div className="flex items-center md:hidden">
+            <Image
+              alt="Convex Logo"
+              height={32}
+              src="/devi-laptop.svg"
+              width={32}
+            />
+            <Image
+              alt="DevQuest Logo"
+              className="ml-3 inline-block pt-[1px]"
+              height={100}
+              src="/logo-white.svg"
+              width={100}
+            />
+          </div>
+          <Button
+            aria-label="Buscar contenido"
+            className="h-auto p-0 pr-4 xs:pr-8 text-neutral-900 md:pr-0"
+            type="button"
+            variant="link"
+          >
             <SearchIcon size={16} />
             <span>Buscar</span>
           </Button>
-          <ModeToggle />
+          <div className="hidden items-center md:flex">
+            <ModeToggle />
+          </div>
           <Button
             asChild
-            className="h-auto p-0 text-neutral-900"
+            className="hidden h-auto p-0 text-neutral-900 md:flex"
             variant="link"
           >
             <Link href="/profile">
@@ -91,6 +129,7 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
       <DropdownMenuTrigger asChild>
         <Button
           className="h-auto p-0 font-light text-neutral-900"
+          type="button"
           variant="link"
         >
           Categorías
@@ -104,5 +143,79 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function MobileMenu() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          aria-label="Abrir menú de navegación"
+          size="icon"
+          type="button"
+          variant="ghost"
+        >
+          <MenuIcon className="text-neutral-900" size={24} />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="flex flex-col justify-between">
+        <SheetHeader className="sr-only">
+          <SheetTitle>Menú</SheetTitle>
+          <SheetDescription>Menú de navegación</SheetDescription>
+        </SheetHeader>
+        <nav className="flex flex-col pt-20">
+          <ul className="flex flex-col">
+            <li>
+              <SheetClose asChild>
+                <Button
+                  asChild
+                  className="w-full border-y-1 border-b-1 p-0 text-neutral-900"
+                  variant="link"
+                >
+                  <Link href="/">Inicio</Link>
+                </Button>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <Button
+                  asChild
+                  className="w-full border-b-1 p-0 text-neutral-900"
+                  variant="link"
+                >
+                  <Link href="/categories">Categorías</Link>
+                </Button>
+              </SheetClose>
+            </li>
+            <li>
+              <SheetClose asChild>
+                <Button
+                  asChild
+                  className="w-full border-b-1 p-0 text-neutral-900"
+                  variant="link"
+                >
+                  <Link
+                    href="https://cursos.devtalles.com/"
+                    rel="noopener"
+                    target="_blank"
+                  >
+                    Cursos
+                  </Link>
+                </Button>
+              </SheetClose>
+            </li>
+          </ul>
+        </nav>
+        <div className="flex w-full items-center justify-between border-t-1 p-4">
+          <ModeToggle />
+          <SheetClose asChild>
+            <Link className="h-full" href="/profile">
+              <UserCircle className="h-9" size={24} />
+            </Link>
+          </SheetClose>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
