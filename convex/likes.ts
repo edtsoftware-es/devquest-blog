@@ -3,15 +3,16 @@ import type { GenericQueryCtx } from "convex/server";
 import { v } from "convex/values";
 import type { DataModel } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
+import { AuthErrors, PostErrors } from "./lib/errors";
 
 async function getLoggedInUser(ctx: GenericQueryCtx<DataModel>) {
   const userId = await getAuthUserId(ctx);
   if (!userId) {
-    throw new Error("User not authenticated");
+    throw AuthErrors.userNotAuthenticated();
   }
   const user = await ctx.db.get(userId);
   if (!user) {
-    throw new Error("User not found");
+    throw AuthErrors.userNotFound();
   }
   return user;
 }
@@ -47,7 +48,7 @@ export const toggleLike = mutation({
     const post = await ctx.db.get(args.postId);
 
     if (!post) {
-      throw new Error("Post not found");
+      throw PostErrors.notFound();
     }
 
     const existingLike = await ctx.db

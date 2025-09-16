@@ -1,9 +1,10 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
-import type { MutationCtx, QueryCtx } from "./_generated/server";
+import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
+import { getCurrentUserProfile, requireAdmin, requireUser } from "./lib/auth";
+import { AuthErrors, PostErrors } from "./lib/errors";
 
 const WORDS_PER_MINUTE = 200;
 
@@ -30,18 +31,10 @@ export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
     .unique();
 
   if (!userProfile) {
-    throw new Error("Perfil de usuario no encontrado");
+    throw AuthErrors.profileNotFound();
   }
 
   return userProfile;
-}
-
-async function ensureUserIsAuthenticated(ctx: QueryCtx | MutationCtx) {
-  const userId = await getAuthUserId(ctx);
-  if (!userId) {
-    throw new Error("Usuario no autenticado");
-  }
-  return userId;
 }
 
 const PostType = v.object({
@@ -154,12 +147,7 @@ export const getAdminPosts = query({
     splitCursor: v.optional(v.union(v.string(), v.null())),
   }),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
-
-    if (userProfile.role !== "admin") {
-      throw new Error("Acceso denegado: se requiere rol de administrador");
-    }
+    await requireAdmin(ctx);
 
     return await ctx.db
       .query("posts")
@@ -180,12 +168,8 @@ export const getUserPosts = query({
     splitCursor: v.optional(v.union(v.string(), v.null())),
   }),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
-
-    if (userProfile.role !== "user") {
-      throw new Error("Acceso denegado: se requiere rol de usuario");
-    }
+    const userProfile = await requireUser(ctx);
+    const userId = userProfile.userId;
 
     return await ctx.db
       .query("posts")
@@ -199,8 +183,8 @@ export const getPostById = query({
   args: { postId: v.id("posts") },
   returns: v.union(PostType, v.null()),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
+    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = userProfile.userId;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
@@ -208,7 +192,7 @@ export const getPostById = query({
     }
 
     if (userProfile.role !== "admin" && post.authorId !== userId) {
-      throw new Error("Acceso denegado: no tienes permisos para editar este post");
+      throw PostErrors.cannotEdit();
     }
 
     return post;
@@ -219,8 +203,7 @@ export const getPostsByUserRole = query({
   args: {},
   returns: v.array(PostWithAuthorType),
   handler: async (ctx) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
+    const userProfile = await getCurrentUserProfile(ctx);
 
     if (userProfile.role === "admin") {
       const posts = await ctx.db.query("posts").order("desc").collect();
@@ -238,6 +221,7 @@ export const getPostsByUserRole = query({
       return postsWithAuthors;
     }
 
+    const userId = userProfile.userId;
     const posts = await ctx.db
       .query("posts")
       .withIndex("by_author", (q) => q.eq("authorId", userId))
@@ -264,14 +248,8 @@ export const createPost = mutation({
   },
   returns: v.id("posts"),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
-
-    if (userProfile.role !== "admin" && userProfile.role !== "user") {
-      throw new Error(
-        "Acceso denegado: se requiere rol de usuario o administrador"
-      );
-    }
+    const userProfile = await requireUser(ctx);
+    const userId = userProfile.userId;
 
     const duration = calculateReadingDuration(args.content);
     const now = Date.now();
@@ -310,18 +288,16 @@ export const updatePost = mutation({
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
+    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = userProfile.userId;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
-      throw new Error("Post no encontrado");
+      throw PostErrors.notFound();
     }
 
     if (userProfile.role !== "admin" && post.authorId !== userId) {
-      throw new Error(
-        "Acceso denegado: solo el autor o un administrador pueden editar este post"
-      );
+      throw PostErrors.cannotEdit();
     }
 
     const duration = calculateReadingDuration(args.content);
@@ -351,12 +327,12 @@ export const deletePost = mutation({
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
+    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = userProfile.userId;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
-      throw new Error("Post no encontrado");
+      throw PostErrors.notFound();
     }
 
     if (userProfile.role === "admin") {
@@ -365,14 +341,12 @@ export const deletePost = mutation({
     }
 
     if (post.authorId !== userId) {
-      throw new Error(
-        "Acceso denegado: solo puedes eliminar tus propios posts"
-      );
+      throw PostErrors.cannotDelete();
     }
 
-  await ctx.db.delete(args.postId);
-  return null;
-},
+    await ctx.db.delete(args.postId);
+    return null;
+  },
 });
 
 export const togglePostPublished = mutation({
@@ -381,18 +355,16 @@ export const togglePostPublished = mutation({
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = await ensureUserIsAuthenticated(ctx);
-    const userProfile = await getUserProfile(ctx, userId);
+    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = userProfile.userId;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
-      throw new Error("Post no encontrado");
+      throw PostErrors.notFound();
     }
 
     if (userProfile.role !== "admin" && post.authorId !== userId) {
-      throw new Error(
-        "Acceso denegado: solo puedes cambiar el estado de tus propios posts"
-      );
+      throw PostErrors.cannotEdit();
     }
 
     const now = Date.now();
