@@ -11,7 +11,7 @@ import Link from "next/link";
 import {
   AuthorCard,
   AuthorCardDescription,
-  AuthorCardImage,
+  AuthorCardImageContainer,
   AuthorCardName,
 } from "@/components/cards/author-card";
 import {
@@ -401,9 +401,9 @@ export default function DesignSystem() {
 
         <h3 className="mb-2 text-heading-4">Author Card - PDP & Author Page</h3>
         <AuthorCard>
-          <AuthorCardImage>
+          <AuthorCardImageContainer>
             <div className="h-full w-full rounded-full bg-green-500" />
-          </AuthorCardImage>
+          </AuthorCardImageContainer>
           <AuthorCardName>Jivs Jivs</AuthorCardName>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
@@ -413,9 +413,9 @@ export default function DesignSystem() {
         </AuthorCard>
 
         <AuthorCard className="max-w-136 gap-y-3 border-none bg-background">
-          <AuthorCardImage className="mb-3">
+          <AuthorCardImageContainer className="mb-3">
             <div className="h-full w-full rounded-full bg-green-500" />
-          </AuthorCardImage>
+          </AuthorCardImageContainer>
           <AuthorCardName className="text-[2.375rem]">Jivs Jivs</AuthorCardName>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
