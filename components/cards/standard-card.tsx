@@ -10,7 +10,6 @@ type StandardCardProps = {
 function StandardCard({
   variant = "default",
   className,
-  children,
   ...props
 }: React.ComponentProps<"article"> & StandardCardProps) {
   return (
@@ -21,15 +20,12 @@ function StandardCard({
         className
       )}
       {...props}
-    >
-      {children}
-    </article>
+    />
   );
 }
 
-function StandardCardImage({
+function StandardCardImageContainer({
   className,
-  children,
   ...props
 }: React.ComponentProps<"div">) {
   return (
@@ -39,9 +35,7 @@ function StandardCardImage({
         className
       )}
       {...props}
-    >
-      {children}
-    </div>
+    />
   );
 }
 
@@ -58,10 +52,8 @@ function StandardCardShell({
       )}
       {...props}
     >
-      <div className="flex h-full w-full flex-col gap-y-6 p-6 xs:p-8">
-        <div className="flex h-full flex-col justify-between gap-y-3">
-          {children}
-        </div>
+      <div className="flex h-full w-full flex-col gap-y-6 p-6 xs:p-8 pb-5 xs:pb-6">
+        <div className="flex h-full flex-col gap-y-3">{children}</div>
       </div>
 
       {/* Corner decorations */}
@@ -76,7 +68,7 @@ function StandardCardShell({
 
       {/* Footer button */}
       <div className="absolute right-0 bottom-0 h-[54px] w-[54px]">
-        <div className="absolute size-full bg-primary" />
+        <div className="absolute size-full bg-transparent" />
         <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background">
           <div className="absolute right-0 bottom-0">
             <Button size="icon" type="button">
@@ -89,13 +81,6 @@ function StandardCardShell({
   );
 }
 
-function StandardCardHeader({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
-}
-
 type StandardCardCategoriesProps = {
   categories: { _id: string; slug: string; name: string }[];
 };
@@ -103,12 +88,13 @@ type StandardCardCategoriesProps = {
 function StandardCardCategories({
   categories,
   className,
+  children,
   ...props
 }: React.ComponentProps<"div"> & StandardCardCategoriesProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div
-      className={cn("flex flex-wrap-reverse items-center gap-2", className)}
+      className={cn("flex flex-wrap-reverse items-center gap-1.5", className)}
       {...props}
     >
       {categories.map(({ _id, name }, index) => (
@@ -119,7 +105,27 @@ function StandardCardCategories({
           {name}
         </Badge>
       ))}
+      {children}
     </div>
+  );
+}
+
+function StandardCardContent({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
+}
+
+function StandardCardHeader({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex flex-wrap items-baseline gap-1.5", className)}
+      {...props}
+    />
   );
 }
 
@@ -130,7 +136,7 @@ function StandardCardTitle({
   return (
     <h6
       className={cn(
-        "font-semibold text-[1.125rem] text-neutral-900 xs:text-[1.5625rem] leading-[1.2] lg:text-[1.9375rem]",
+        "line-clamp-2 font-semibold text-[1.125rem] text-neutral-900 xs:text-[1.5625rem] leading-[1.2] lg:text-[1.9375rem]",
         className
       )}
       {...props}
@@ -146,7 +152,7 @@ function StandardCardReadingTime({
   return (
     <span
       className={cn(
-        "ml-1.5 font-medium text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] lg:text-[1rem]",
+        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
@@ -156,28 +162,16 @@ function StandardCardReadingTime({
   );
 }
 
-function StandardCardContent({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "mr-12 flex h-full flex-col justify-between gap-y-3",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
 function StandardCardDescription({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"p">) {
   return (
-    <div
-      className={cn("line-clamp-5 max-h-42 overflow-hidden", className)}
+    <p
+      className={cn(
+        "mr-12 line-clamp-5 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        className
+      )}
       {...props}
     />
   );
@@ -189,7 +183,22 @@ function StandardCardFooter({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("flex flex-wrap justify-between gap-3", className)}
+      className={cn(
+        "mt-auto mr-12 flex flex-wrap justify-between gap-3",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
+function StandardCardAuthorContainer({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex flex-wrap items-center gap-1.5", className)}
       {...props}
     />
   );
@@ -210,7 +219,10 @@ function StandardCardAuthorName({
 }: React.ComponentProps<"span">) {
   return (
     <span
-      className={cn("text-body-7 text-neutral-900", className)}
+      className={cn(
+        "font-medium xs:font-normal text-[0.75rem] text-neutral-900 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        className
+      )}
       {...props}
     />
   );
@@ -223,7 +235,10 @@ function StandardCardPublishedAt({
 }: React.ComponentProps<"span">) {
   return (
     <span
-      className={cn("ml-1.5 text-body-7 text-neutral-600", className)}
+      className={cn(
+        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        className
+      )}
       {...props}
     >
       • {children}
@@ -247,11 +262,15 @@ function StandardCardStats({
     >
       <div className="flex items-center gap-x-1">
         <MessageSquare className="size-4" />
-        <span className="text-body-8 text-neutral-600">{commentsCount}</span>
+        <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+          {commentsCount}
+        </span>
       </div>
       <div className="flex items-center gap-x-1">
         <Eye className="size-4" />
-        <span className="text-body-8 text-neutral-600">{viewsCount}</span>
+        <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+          {viewsCount}
+        </span>
       </div>
     </div>
   );
@@ -259,15 +278,16 @@ function StandardCardStats({
 
 export {
   StandardCard,
-  StandardCardImage,
+  StandardCardImageContainer,
   StandardCardShell,
-  StandardCardHeader,
   StandardCardCategories,
+  StandardCardContent,
+  StandardCardHeader,
   StandardCardTitle,
   StandardCardReadingTime,
-  StandardCardContent,
   StandardCardDescription,
   StandardCardFooter,
+  StandardCardAuthorContainer,
   StandardCardAuthor,
   StandardCardAuthorName,
   StandardCardPublishedAt,
