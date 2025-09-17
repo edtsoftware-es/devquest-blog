@@ -30,6 +30,7 @@ export const PostValidator = v.object(PostFields);
 export const PostWithAuthorValidator = v.object({
   ...PostFields,
   authorName: v.string(),
+  authorImage: v.optional(v.string()),
 });
 
 export const CategoryValidator = v.object({

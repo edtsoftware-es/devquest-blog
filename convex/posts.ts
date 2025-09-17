@@ -73,6 +73,31 @@ export const getPostBySlug = query({
   },
 });
 
+export const getPostBySlugWithAuthor = query({
+  args: {
+    slug: v.string(),
+  },
+  returns: v.union(PostWithAuthorValidator, v.null()),
+  handler: async (ctx, args) => {
+    const post = await ctx.db
+      .query("posts")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .unique();
+
+    if (!post) {
+      return null;
+    }
+
+    const author = await ctx.db.get(post.authorId);
+
+    return {
+      ...post,
+      authorName: author?.name || "Usuario desconocido",
+      authorImage: author?.image,
+    };
+  },
+});
+
 export const getPostsByCategoryId = query({
   args: {
     categoryId: v.id("categories"),

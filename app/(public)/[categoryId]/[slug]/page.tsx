@@ -13,41 +13,33 @@ export default async function PostPage({
   const { slug } = await params;
   const token = await convexAuthNextjsToken();
 
-  const post = await fetchQuery(api.posts.getPostBySlug, { slug });
+  const post = await fetchQuery(api.posts.getPostBySlugWithAuthor, { slug });
 
   if (!post?.published) {
     notFound();
   }
 
-  const [
-    preloadedPost,
-    preloadedCategory,
-    preloadedComments,
-    preloadedHasLiked,
-    preloadedUser,
-  ] = await Promise.all([
-    preloadQuery(api.posts.getPostBySlug, { slug }, { token }),
-    preloadQuery(
-      api.categories.getCategoryById,
-      { categoryId: post.categoryId },
-      { token }
-    ),
-    preloadQuery(
-      api.comments.getCommentsWithAuthors,
-      { postId: post._id },
-      { token }
-    ),
-    preloadQuery(api.likes.hasUserLikedPost, { postId: post._id }, { token }),
-    preloadQuery(api.users.getCurrentUserOptional, {}, { token }),
-  ]);
+  const [preloadedPost, preloadedCategory, preloadedComments, preloadedUser] =
+    await Promise.all([
+      preloadQuery(api.posts.getPostBySlugWithAuthor, { slug }, { token }),
+      preloadQuery(
+        api.categories.getCategoryById,
+        { categoryId: post.categoryId },
+        { token }
+      ),
+      preloadQuery(
+        api.comments.getCommentsWithAuthors,
+        { postId: post._id },
+        { token }
+      ),
+      preloadQuery(api.users.getCurrentUserOptional, {}, { token }),
+    ]);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
+    <div className="container mx-auto max-w-8xl py-10">
       <PostDisplay
         preloadedCategory={preloadedCategory}
-        preloadedHasLiked={preloadedHasLiked}
         preloadedPost={preloadedPost}
-        slug={slug}
       />
       <CommentsSection
         postId={post._id}
