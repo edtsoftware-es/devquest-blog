@@ -42,6 +42,12 @@ import {
   FeaturedCardTitle,
 } from "@/components/cards/featured-card";
 import {
+  HighlightCard,
+  HighlightCardCategories,
+  HighlightCardImageContainer,
+  HighlightCardTitle,
+} from "@/components/cards/highlight-card";
+import {
   StandardCard,
   StandardCardAuthor,
   StandardCardAuthorContainer,
@@ -237,7 +243,6 @@ export default function DesignSystem() {
         <h2 className="mb-4 text-heading-2">CARDS</h2>
 
         <h3 className="mb-2 text-heading-4">Featured Card - Home</h3>
-
         <FeaturedCard>
           <FeaturedCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
@@ -294,7 +299,7 @@ export default function DesignSystem() {
           </FeaturedCardShell>
         </FeaturedCard>
 
-        <h3 className="mb-2 text-heading-4">Standard Card - PLP</h3>
+        <h3 className="mt-4 mb-2 text-heading-4">Standard Card - PLP</h3>
         <StandardCard>
           <StandardCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
@@ -352,7 +357,21 @@ export default function DesignSystem() {
           </StandardCardShell>
         </StandardCard>
 
-        <h3 className="mb-2 text-heading-4">
+        <h3 className="mt-4 mb-2 text-heading-4">Highlight Card - Home</h3>
+        <HighlightCard>
+          <HighlightCardImageContainer>
+            <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
+            <HighlightCardCategories
+              categories={[
+                { _id: "1", slug: "technology", name: "Technology" },
+                { _id: "2", slug: "react", name: "React" },
+              ]}
+            />
+          </HighlightCardImageContainer>
+          <HighlightCardTitle>Understanding React Hooks</HighlightCardTitle>
+        </HighlightCard>
+
+        <h3 className="mt-4 mb-2 text-heading-4">
           Compact Card - HOME & Recommended
         </h3>
         <CompactCard className="border-none bg-background">
@@ -399,7 +418,9 @@ export default function DesignSystem() {
           </CompactCardContent>
         </CompactCard>
 
-        <h3 className="mb-2 text-heading-4">Author Card - PDP & Author Page</h3>
+        <h3 className="mt-4 mb-2 text-heading-4">
+          Author Card - PDP & Author Page
+        </h3>
         <AuthorCard>
           <AuthorCardImageContainer>
             <div className="h-full w-full rounded-full bg-green-500" />
