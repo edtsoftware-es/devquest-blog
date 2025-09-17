@@ -42,7 +42,7 @@ export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
       <CarouselContent className="w-full pl-6 lg:pl-0">
         {posts.map((post) => (
           <CarouselItem className="w-full" key={post._id}>
-            <HeroItem key={post._id} {...post} />
+            <HeroItem {...post} />
           </CarouselItem>
         ))}
       </CarouselContent>
