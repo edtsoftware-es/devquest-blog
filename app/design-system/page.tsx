@@ -18,7 +18,7 @@ import {
   CompactCard,
   CompactCardContent,
   CompactCardFooter,
-  CompactCardImage,
+  CompactCardImageContainer,
   CompactCardPublishedAt,
   CompactCardReadingTime,
   CompactCardStats,
@@ -356,31 +356,27 @@ export default function DesignSystem() {
           Compact Card - HOME & Recommended
         </h3>
         <CompactCard className="border-none bg-background">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent>
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
 
         <CompactCard className="bg-background">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent>
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
             <CompactCardStats
               className="xs:flex hidden"
@@ -391,16 +387,14 @@ export default function DesignSystem() {
         </CompactCard>
 
         <CompactCard variant="reverse">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent className="mr-0">
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter className="mr-0">
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
