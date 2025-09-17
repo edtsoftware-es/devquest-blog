@@ -1,14 +1,15 @@
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
+import Hero from "./components/hero";
+
+const MAX_DEFAULT_POSTS = 5;
 
 export default async function Home() {
-  const posts = await fetchQuery(api.posts.getPublishedPosts, {});
+  const posts = await fetchQuery(api.posts.getPublishedAuthorPosts, {});
+
   return (
-    <main>
-      <h1 className="font-bold text-3xl underline">Hello, DevQuest!</h1>
-      {posts.page.map((post) => {
-        return <p key={post._id}>{JSON.stringify(post)}</p>;
-      })}
+    <main className="flex w-full justify-center">
+      <Hero posts={posts.page.slice(0, MAX_DEFAULT_POSTS)} />
     </main>
   );
 }

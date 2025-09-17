@@ -42,8 +42,9 @@ function StandardCardImageContainer({
 function StandardCardShell({
   className,
   children,
+  hasButton = true,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { hasButton?: boolean }) {
   return (
     <div
       className={cn(
@@ -56,27 +57,30 @@ function StandardCardShell({
         <div className="flex h-full flex-col gap-y-3">{children}</div>
       </div>
 
-      {/* Corner decorations */}
-      <div className="absolute right-0 bottom-[53px] z-10 size-6">
-        <div className="absolute size-full bg-background" />
-        <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary" />
-      </div>
-      <div className="absolute right-[53px] bottom-0 z-10 size-6">
-        <div className="absolute size-full bg-background" />
-        <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary" />
-      </div>
-
-      {/* Footer button */}
-      <div className="absolute right-0 bottom-0 h-[54px] w-[54px]">
-        <div className="absolute size-full bg-transparent" />
-        <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background">
-          <div className="absolute right-0 bottom-0">
-            <Button size="icon" type="button">
-              <ArrowRight aria-hidden="true" />
-            </Button>
+      {hasButton && (
+        <>
+          <div className="absolute right-0 bottom-[53px] z-10 size-6">
+            <div className="absolute size-full bg-background" />
+            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary" />
           </div>
-        </div>
-      </div>
+          <div className="absolute right-[53px] bottom-0 z-10 size-6">
+            <div className="absolute size-full bg-background" />
+            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary" />
+          </div>
+
+          {/* Footer button */}
+          <div className="absolute right-0 bottom-0 h-[54px] w-[54px]">
+            <div className="absolute size-full bg-transparent" />
+            <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background">
+              <div className="absolute right-0 bottom-0">
+                <Button size="icon" type="button">
+                  <ArrowRight aria-hidden="true" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
