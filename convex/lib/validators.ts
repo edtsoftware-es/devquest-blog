@@ -1,6 +1,6 @@
 import { paginationOptsValidator } from "convex/server";
-import { v } from "convex/values";
 import type { GenericValidator } from "convex/values";
+import { v } from "convex/values";
 
 const optionalCursor = v.union(v.string(), v.null());
 
@@ -26,6 +26,12 @@ export const PostFields = {
 } as const;
 
 export const PostValidator = v.object(PostFields);
+
+export const PostWithAuthorDataValidator = v.object({
+  ...PostFields,
+  authorName: v.string(),
+  authorImage: v.string(),
+});
 
 export const PostWithAuthorValidator = v.object({
   ...PostFields,
@@ -81,9 +87,9 @@ export const PostUpdateValidator = v.object(PostUpdateFields);
 
 export const optionalPaginationOpts = v.optional(paginationOptsValidator);
 
-export const createPaginatedResultValidator = <
-  TItem extends GenericValidator,
->(itemValidator: TItem) =>
+export const createPaginatedResultValidator = <TItem extends GenericValidator>(
+  itemValidator: TItem
+) =>
   v.object({
     page: v.array(itemValidator),
     isDone: v.boolean(),

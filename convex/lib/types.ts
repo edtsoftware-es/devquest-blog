@@ -4,12 +4,14 @@ import type {
   CommentValidator,
   PostInputValidator,
   PostValidator,
+  PostWithAuthorDataValidator,
   PostWithAuthorValidator,
   UserWithRoleValidator,
 } from "./validators";
 
 export type Post = Infer<typeof PostValidator>;
 export type PostWithAuthor = Infer<typeof PostWithAuthorValidator>;
+export type PostWithAuthorData = Infer<typeof PostWithAuthorDataValidator>;
 export type Category = Infer<typeof CategoryValidator>;
 export type Comment = Infer<typeof CommentValidator>;
 export type UserWithRole = Infer<typeof UserWithRoleValidator>;
