@@ -11,29 +11,53 @@ import Link from "next/link";
 import {
   AuthorCard,
   AuthorCardDescription,
-  AuthorCardImage,
+  AuthorCardImageContainer,
   AuthorCardName,
 } from "@/components/cards/author-card";
 import {
   CompactCard,
   CompactCardContent,
   CompactCardFooter,
-  CompactCardImage,
+  CompactCardImageContainer,
   CompactCardPublishedAt,
   CompactCardReadingTime,
   CompactCardStats,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
 import {
+  FeaturedCard,
+  FeaturedCardAuthor,
+  FeaturedCardAuthorContainer,
+  FeaturedCardAuthorName,
+  FeaturedCardCategories,
+  FeaturedCardContent,
+  FeaturedCardDescription,
+  FeaturedCardFooter,
+  FeaturedCardHeader,
+  FeaturedCardImageContainer,
+  FeaturedCardPublishedAt,
+  FeaturedCardReadingTime,
+  FeaturedCardShell,
+  FeaturedCardStats,
+  FeaturedCardTitle,
+} from "@/components/cards/featured-card";
+import {
+  HighlightCard,
+  HighlightCardCategories,
+  HighlightCardImageContainer,
+  HighlightCardTitle,
+} from "@/components/cards/highlight-card";
+import {
   StandardCard,
   StandardCardAuthor,
+  StandardCardAuthorContainer,
   StandardCardAuthorName,
   StandardCardCategories,
   StandardCardContent,
   StandardCardDescription,
   StandardCardFooter,
   StandardCardHeader,
-  StandardCardImage,
+  StandardCardImageContainer,
   StandardCardPublishedAt,
   StandardCardReadingTime,
   StandardCardShell,
@@ -218,9 +242,66 @@ export default function DesignSystem() {
       <section className="flex flex-col gap-4">
         <h2 className="mb-4 text-heading-2">CARDS</h2>
 
-        <h3 className="mb-2 text-heading-4">Standard Card - PLP</h3>
+        <h3 className="mb-2 text-heading-4">Featured Card - Home</h3>
+        <FeaturedCard>
+          <FeaturedCardImageContainer>
+            <div className="h-full w-full rounded-[1rem] bg-green-500" />
+            <FeaturedCardCategories
+              categories={[
+                { _id: "1", slug: "technology", name: "Technology" },
+                { _id: "2", slug: "react", name: "React" },
+              ]}
+              className="absolute top-4 left-4 z-10 hidden lg:flex"
+            />
+          </FeaturedCardImageContainer>
+          <FeaturedCardShell>
+            <FeaturedCardCategories
+              categories={[
+                { _id: "1", slug: "technology", name: "Technology" },
+                { _id: "2", slug: "react", name: "React" },
+              ]}
+              className="flex lg:hidden"
+            >
+              <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
+                Sep 13, 2025
+              </FeaturedCardPublishedAt>
+              <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
+                5 mins
+              </FeaturedCardReadingTime>
+            </FeaturedCardCategories>
+            <FeaturedCardContent>
+              <FeaturedCardHeader>
+                <FeaturedCardTitle>Understanding React</FeaturedCardTitle>
+                <FeaturedCardReadingTime className="hidden lg:inline">
+                  5 mins
+                </FeaturedCardReadingTime>
+              </FeaturedCardHeader>
+              <FeaturedCardDescription>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </FeaturedCardDescription>
+            </FeaturedCardContent>
+            <FeaturedCardFooter>
+              <FeaturedCardAuthorContainer>
+                <FeaturedCardAuthor>
+                  <Avatar className="size-8 xs:size-10">
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>AF</AvatarFallback>
+                  </Avatar>
+                  <FeaturedCardAuthorName>Jivs Jivs</FeaturedCardAuthorName>
+                </FeaturedCardAuthor>
+                <FeaturedCardPublishedAt className="hidden lg:inline">
+                  Sep 13, 2025
+                </FeaturedCardPublishedAt>
+              </FeaturedCardAuthorContainer>
+              <FeaturedCardStats commentsCount={33} viewsCount={300} />
+            </FeaturedCardFooter>
+          </FeaturedCardShell>
+        </FeaturedCard>
+
+        <h3 className="mt-4 mb-2 text-heading-4">Standard Card - PLP</h3>
         <StandardCard>
-          <StandardCardImage>
+          <StandardCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
             <StandardCardCategories
               categories={[
@@ -229,89 +310,92 @@ export default function DesignSystem() {
               ]}
               className="absolute bottom-3 left-3 z-10 xs:hidden"
             />
-          </StandardCardImage>
+          </StandardCardImageContainer>
           <StandardCardShell>
-            <StandardCardHeader>
-              <StandardCardCategories
-                categories={[
-                  { _id: "1", slug: "technology", name: "Technology" },
-                  { _id: "2", slug: "react", name: "React" },
-                ]}
-                className="xs:flex hidden"
-              />
-              <StandardCardTitle>
-                Frontend Development
-                <StandardCardReadingTime>6 mins</StandardCardReadingTime>
-              </StandardCardTitle>
-            </StandardCardHeader>
+            <StandardCardCategories
+              categories={[
+                { _id: "1", slug: "technology", name: "Technology" },
+                { _id: "2", slug: "react", name: "React" },
+              ]}
+              className="xs:flex hidden"
+            />
             <StandardCardContent>
+              <StandardCardHeader>
+                <StandardCardTitle>Frontend Development</StandardCardTitle>
+                <StandardCardReadingTime>6 mins</StandardCardReadingTime>
+              </StandardCardHeader>
               <StandardCardDescription>
-                <p className="text-body-7 text-neutral-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum. Lorem ipsum dolor sit amet,
-                  consectetur adipiscing elit. Sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                  quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                  ea commodo consequat. Duis aute irure dolor in reprehenderit
-                  in voluptate velit esse cillum dolore eu fugiat nulla
-                  pariatur. Excepteur sint occaecat cupidatat non proident, sunt
-                  in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
               </StandardCardDescription>
-              <StandardCardFooter>
+            </StandardCardContent>
+            <StandardCardFooter>
+              <StandardCardAuthorContainer>
                 <StandardCardAuthor>
                   <Avatar className="size-8 xs:size-10">
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>AF</AvatarFallback>
                   </Avatar>
-                  <StandardCardAuthorName>
-                    Jivs Jivs
-                    <StandardCardPublishedAt>
-                      Sep 13, 2025
-                    </StandardCardPublishedAt>
-                  </StandardCardAuthorName>
+                  <StandardCardAuthorName>Jivs Jivs</StandardCardAuthorName>
                 </StandardCardAuthor>
-                <StandardCardStats commentsCount={33} viewsCount={300} />
-              </StandardCardFooter>
-            </StandardCardContent>
+                <StandardCardPublishedAt>Sep 13, 2025</StandardCardPublishedAt>
+              </StandardCardAuthorContainer>
+              <StandardCardStats commentsCount={33} viewsCount={300} />
+            </StandardCardFooter>
           </StandardCardShell>
         </StandardCard>
 
-        <h3 className="mb-2 text-heading-4">
+        <h3 className="mt-4 mb-2 text-heading-4">Highlight Card - Home</h3>
+        <HighlightCard>
+          <HighlightCardImageContainer>
+            <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
+            <HighlightCardCategories
+              categories={[
+                { _id: "1", slug: "technology", name: "Technology" },
+                { _id: "2", slug: "react", name: "React" },
+              ]}
+            />
+          </HighlightCardImageContainer>
+          <HighlightCardTitle>Understanding React Hooks</HighlightCardTitle>
+        </HighlightCard>
+
+        <h3 className="mt-4 mb-2 text-heading-4">
           Compact Card - HOME & Recommended
         </h3>
         <CompactCard className="border-none bg-background">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent>
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
 
         <CompactCard className="bg-background">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent>
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
             <CompactCardStats
               className="xs:flex hidden"
@@ -322,25 +406,25 @@ export default function DesignSystem() {
         </CompactCard>
 
         <CompactCard variant="reverse">
-          <CompactCardImage>
+          <CompactCardImageContainer>
             <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-          </CompactCardImage>
+          </CompactCardImageContainer>
           <CompactCardContent className="mr-0">
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter className="mr-0">
-              <CompactCardPublishedAt>
-                Oct 5, 2024
-                <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-              </CompactCardPublishedAt>
+              <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
+              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
 
-        <h3 className="mb-2 text-heading-4">Author Card - PDP & Author Page</h3>
+        <h3 className="mt-4 mb-2 text-heading-4">
+          Author Card - PDP & Author Page
+        </h3>
         <AuthorCard>
-          <AuthorCardImage>
+          <AuthorCardImageContainer>
             <div className="h-full w-full rounded-full bg-green-500" />
-          </AuthorCardImage>
+          </AuthorCardImageContainer>
           <AuthorCardName>Jivs Jivs</AuthorCardName>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
@@ -350,9 +434,9 @@ export default function DesignSystem() {
         </AuthorCard>
 
         <AuthorCard className="max-w-136 gap-y-3 border-none bg-background">
-          <AuthorCardImage className="mb-3">
+          <AuthorCardImageContainer className="mb-3">
             <div className="h-full w-full rounded-full bg-green-500" />
-          </AuthorCardImage>
+          </AuthorCardImageContainer>
           <AuthorCardName className="text-[2.375rem]">Jivs Jivs</AuthorCardName>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent

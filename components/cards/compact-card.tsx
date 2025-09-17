@@ -22,7 +22,7 @@ function CompactCard({
   );
 }
 
-function CompactCardImage({
+function CompactCardImageContainer({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -70,7 +70,7 @@ function CompactCardFooter({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("xs:mr-18 flex flex-wrap justify-between gap-3", className)}
+      className={cn("xs:mr-18 flex flex-wrap gap-1.5", className)}
       {...props}
     />
   );
@@ -99,7 +99,7 @@ function CompactCardReadingTime({
   return (
     <span
       className={cn(
-        "ml-1.5 font-medium text-[0.75rem] text-neutral-600 leading-[1.2]",
+        "font-medium text-[0.75rem] text-neutral-600 leading-[1.2]",
         className
       )}
       {...props}
@@ -128,11 +128,15 @@ function CompactCardStats({
     >
       <div className="flex items-center gap-x-1">
         <MessageSquare className="size-4" />
-        <span className="text-body-8 text-neutral-600">{commentsCount}</span>
+        <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+          {commentsCount}
+        </span>
       </div>
       <div className="flex items-center gap-x-1">
         <Eye className="size-4" />
-        <span className="text-body-8 text-neutral-600">{viewsCount}</span>
+        <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+          {viewsCount}
+        </span>
       </div>
     </div>
   );
@@ -140,7 +144,7 @@ function CompactCardStats({
 
 export {
   CompactCard,
-  CompactCardImage,
+  CompactCardImageContainer,
   CompactCardContent,
   CompactCardTitle,
   CompactCardFooter,

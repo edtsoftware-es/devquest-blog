@@ -12,7 +12,10 @@ function AuthorCard({ className, ...props }: React.ComponentProps<"article">) {
   );
 }
 
-function AuthorCardImage({ className, ...props }: React.ComponentProps<"div">) {
+function AuthorCardImageContainer({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(
@@ -51,4 +54,9 @@ function AuthorCardDescription({
   );
 }
 
-export { AuthorCard, AuthorCardImage, AuthorCardName, AuthorCardDescription };
+export {
+  AuthorCard,
+  AuthorCardImageContainer,
+  AuthorCardName,
+  AuthorCardDescription,
+};
