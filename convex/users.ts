@@ -44,6 +44,35 @@ export const getCurrentUser = query({
   },
 });
 
+export const getCurrentUserOptional = query({
+  args: {},
+  returns: v.union(UserWithRoleValidator, v.null()),
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      return null;
+    }
+
+    try {
+      const userProfile = await getUserProfile(ctx, userId);
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        role: userProfile.role,
+      };
+    } catch {
+      return null;
+    }
+  },
+});
+
 export const changeRole = mutation({
   returns: v.null(),
   handler: async (ctx) => {

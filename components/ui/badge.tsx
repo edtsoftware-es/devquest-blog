@@ -20,6 +20,7 @@ const badgeVariants = cva(
         highlight:
           "h-4 border-transparent bg-[#C7FFE9] px-1.5 py-0.5 text-[#0E7B4F] text-[10px] uppercase [&>svg]:size-2.5 [&>svg]:fill-[#0E0E0F] [&>svg]:text-[#0E0E0F]",
         destructive: "border-transparent bg-destructive text-white",
+        tag: "h-7 border-transparent bg-background-2 text-primary-foreground",
       },
     },
     defaultVariants: {

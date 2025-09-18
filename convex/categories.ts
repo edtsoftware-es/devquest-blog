@@ -22,3 +22,13 @@ export const getAllCategories = query({
     return await ctx.db.query("categories").collect();
   },
 });
+
+export const getCategoryById = query({
+  args: {
+    categoryId: v.id("categories"),
+  },
+  returns: v.union(CategoryValidator, v.null()),
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.categoryId);
+  },
+});

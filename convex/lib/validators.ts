@@ -36,6 +36,7 @@ export const PostWithAuthorDataValidator = v.object({
 export const PostWithAuthorValidator = v.object({
   ...PostFields,
   authorName: v.string(),
+  authorImage: v.optional(v.string()),
 });
 
 export const CategoryValidator = v.object({
@@ -46,7 +47,7 @@ export const CategoryValidator = v.object({
   description: v.string(),
 });
 
-export const CommentValidator = v.object({
+export const CommentFields = {
   _id: v.id("comments"),
   _creationTime: v.number(),
   postId: v.id("posts"),
@@ -55,7 +56,30 @@ export const CommentValidator = v.object({
   content: v.string(),
   deletedAt: v.optional(v.number()),
   likesCount: v.number(),
+} as const;
+
+export const CommentValidator = v.object(CommentFields);
+
+export const CommentWithAuthorValidator = v.object({
+  ...CommentFields,
+  authorName: v.string(),
+  authorImage: v.optional(v.string()),
 });
+
+export const CommentInputFields = {
+  postId: v.id("posts"),
+  content: v.string(),
+  parentId: v.optional(v.id("comments")),
+} as const;
+
+export const CommentInputValidator = v.object(CommentInputFields);
+
+export const CommentUpdateFields = {
+  commentId: v.id("comments"),
+  content: v.string(),
+} as const;
+
+export const CommentUpdateValidator = v.object(CommentUpdateFields);
 
 export const UserWithRoleValidator = v.object({
   _id: v.id("users"),
