@@ -10,6 +10,7 @@ import {
   PostInputFields,
   PostUpdateFields,
   PostValidator,
+  PostWithAuthorDataValidator,
   PostWithAuthorValidator,
 } from "./lib/validators";
 
@@ -58,6 +59,33 @@ export const getPublishedPosts = query({
       .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
 
     return posts;
+  },
+});
+
+export const getPublishedAuthorPosts = query({
+  args: {
+    paginationOpts: optionalPaginationOpts,
+  },
+  returns: createPaginatedResultValidator(PostWithAuthorDataValidator),
+  handler: async (ctx, args) => {
+    const posts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
+
+    const postsWithAuthors = await Promise.all(
+      posts.page.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: author?.image || "",
+        };
+      })
+    );
+
+    return { ...posts, page: postsWithAuthors };
   },
 });
 

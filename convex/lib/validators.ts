@@ -27,6 +27,12 @@ export const PostFields = {
 
 export const PostValidator = v.object(PostFields);
 
+export const PostWithAuthorDataValidator = v.object({
+  ...PostFields,
+  authorName: v.string(),
+  authorImage: v.string(),
+});
+
 export const PostWithAuthorValidator = v.object({
   ...PostFields,
   authorName: v.string(),
