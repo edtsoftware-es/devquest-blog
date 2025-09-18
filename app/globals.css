@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 
 /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @custom-variant dark (&:is(.dark *));

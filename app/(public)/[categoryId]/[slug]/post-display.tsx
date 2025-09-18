@@ -2,6 +2,21 @@
 
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { Clock, Eye, MessageCircle } from "lucide-react";
+import {
+  AuthorCard,
+  AuthorCardDescription,
+  AuthorCardImageContainer,
+  AuthorCardName,
+} from "@/components/cards/author-card";
+import {
+  CompactCard,
+  CompactCardContent,
+  CompactCardFooter,
+  CompactCardImageContainer,
+  CompactCardPublishedAt,
+  CompactCardReadingTime,
+  CompactCardTitle,
+} from "@/components/cards/compact-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -23,23 +38,18 @@ const formatDate = (timestamp: number) => {
 };
 
 type PostDisplayProps = {
-  preloadedPost: Preloaded<typeof api.posts.getPostBySlugWithAuthor>;
-  preloadedCategory: Preloaded<typeof api.categories.getCategoryById>;
+  preloadedPost: Preloaded<typeof api.posts.getPdpPost>;
 };
 
-export function PostDisplay({
-  preloadedPost,
-  preloadedCategory,
-}: PostDisplayProps) {
+export function PostDisplay({ preloadedPost }: PostDisplayProps) {
   const post = usePreloadedQuery(preloadedPost);
-  const category = usePreloadedQuery(preloadedCategory);
 
   if (!post) {
     return null;
   }
 
   return (
-    <article className="space-y-6">
+    <div className="space-y-6">
       <div className="mb-8">
         <Breadcrumb>
           <BreadcrumbList>
@@ -48,18 +58,19 @@ export function PostDisplay({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{category?.name}</BreadcrumbPage>
+              <BreadcrumbPage>{post.category.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
+      {/* Header del post */}
       <div className="border-none shadow-none">
         <div className="space-y-4 px-0 pb-4">
           <div className="flex items-center gap-6">
             {post.tags.length > 0 && (
               <div className="flex flex-wrap items-center gap-2">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: string) => (
                   <Badge className="text-xs" key={tag} variant="tag">
                     {tag}
                   </Badge>
@@ -71,18 +82,20 @@ export function PostDisplay({
               <span>{post.duration} min read</span>
             </div>
           </div>
-          <h1 className="w-[60%] text-heading-3">{post.title}</h1>
+          <h1 className="text-heading-3">{post.title}</h1>
 
           <div className="mt-[30px] flex flex-wrap items-center gap-4 text-muted-foreground text-sm">
             <div className="flex items-center gap-2">
               <Avatar className="size-10">
-                <AvatarImage src={post.authorImage} />
+                <AvatarImage src={post.author.image} />
                 <AvatarFallback>
-                  {post.authorName.charAt(0).toUpperCase()}
+                  {post.author.name?.charAt(0).toUpperCase() ||
+                    (post.author.role === "admin" ? "A" : "U")}
                 </AvatarFallback>
               </Avatar>
               <span className="text-body-7 text-neutral-900">
-                {post.authorName}
+                {post.author.name ||
+                  (post.author.role === "admin" ? "Administrador" : "Usuario")}
               </span>
             </div>
 
@@ -109,25 +122,120 @@ export function PostDisplay({
         </div>
       </div>
 
-      {post.image && (
-        <div className="overflow-hidden rounded-lg">
-          <img
-            alt={post.title}
-            className="aspect-video h-[450px] w-full object-cover"
-            src={post.image}
-          />
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="flex flex-col gap-8 lg:col-span-2">
+          {post.image && (
+            <div className="mb-8 overflow-hidden rounded-xl">
+              <img
+                alt={post.title}
+                className="aspect-video h-[300px] w-full rounded-xl object-cover sm:h-[400px] lg:h-[450px]"
+                src={post.image}
+              />
+            </div>
+          )}
+          <article className="border-none shadow-none">
+            <div>
+              <div
+                className="prose dark:prose-invert prose-img:w-full max-w-none prose-img:rounded-lg prose-img:object-cover"
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Post content is from trusted source
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
+            </div>
+          </article>
         </div>
-      )}
 
-      <div className="border-none shadow-none">
-        <div className="px-0 py-0">
-          <div
-            className="prose prose-lg dark:prose-invert max-w-none prose-code:rounded-md prose-pre:rounded-lg prose-blockquote:border-l-primary prose-code:bg-muted prose-pre:bg-muted prose-pre:p-4 prose-code:px-1.5 prose-code:py-0.5 prose-h1:font-bold prose-h2:font-semibold prose-h3:font-semibold prose-h4:font-medium prose-a:text-primary prose-blockquote:text-muted-foreground prose-code:text-sm prose-p:text-muted-foreground prose-headings:tracking-tight prose-a:no-underline hover:prose-a:underline"
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: Post content is from trusted source
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        </div>
+        <aside className="w-full space-y-14 lg:col-span-1">
+          <div>
+            <AuthorCard className="max-w-none">
+              <AuthorCardImageContainer>
+                <Avatar className="h-full w-full">
+                  <AvatarImage src={post.author.image} />
+                  <AvatarFallback>
+                    {post.author.name?.charAt(0).toUpperCase() ||
+                      (post.author.role === "admin" ? "A" : "U")}
+                  </AvatarFallback>
+                </Avatar>
+              </AuthorCardImageContainer>
+              <AuthorCardName>
+                {post.author.name ||
+                  (post.author.role === "admin" ? "Administrador" : "Usuario")}
+              </AuthorCardName>
+              <AuthorCardDescription>
+                {post.author.role === "admin"
+                  ? "Administrador del sistema"
+                  : "Usuario registrado"}
+              </AuthorCardDescription>
+            </AuthorCard>
+          </div>
+          <div className="space-y-14">
+            <div>
+              <div className="mb-6 flex items-center gap-2">
+                <svg
+                  fill="none"
+                  height="23"
+                  viewBox="0 0 24 23"
+                  width="24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
+                    fill="#F3F4F6"
+                  />
+                </svg>
+
+                <h5 className="text-heading-5">Tendencias semanales</h5>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {post.weeklyTrendingPosts.map((trendingPost) => (
+                  <CompactCard key={post._id} variant="reverse">
+                    <CompactCardImageContainer>
+                      <img
+                        alt={trendingPost.title}
+                        className="h-full w-full rounded-[0.625rem]"
+                        src={trendingPost.image}
+                      />
+                    </CompactCardImageContainer>
+                    <CompactCardContent className="mr-0">
+                      <CompactCardTitle>{trendingPost.title}</CompactCardTitle>
+                      <CompactCardFooter className="mr-0">
+                        <CompactCardPublishedAt>
+                          {post.publishedAt
+                            ? formatDate(post.publishedAt)
+                            : formatDate(post._creationTime)}
+                        </CompactCardPublishedAt>
+                        <CompactCardReadingTime>
+                          {post.duration} mins
+                        </CompactCardReadingTime>
+                      </CompactCardFooter>
+                    </CompactCardContent>
+                  </CompactCard>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div>
+                <div className="mb-6 flex items-center gap-2">
+                  <svg
+                    fill="none"
+                    height="23"
+                    viewBox="0 0 24 23"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
+                      fill="#F3F4F6"
+                    />
+                  </svg>
+
+                  <h5 className="text-heading-5">Popular tags</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
-    </article>
+      <hr className="my-10" />
+    </div>
   );
 }

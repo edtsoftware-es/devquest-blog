@@ -14,6 +14,7 @@ import {
 } from "./lib/validators";
 
 const WORDS_PER_MINUTE = 200;
+const WEEKLY_TRENDING_POSTS_LIMIT = 4;
 
 export function calculateReadingDuration(content: string): number {
   const cleanContent = content
@@ -94,6 +95,118 @@ export const getPostBySlugWithAuthor = query({
       ...post,
       authorName: author?.name || "Usuario desconocido",
       authorImage: author?.image,
+    };
+  },
+});
+
+export const getPdpPost = query({
+  args: {
+    slug: v.string(),
+  },
+  returns: v.union(
+    v.object({
+      _id: v.id("posts"),
+      _creationTime: v.number(),
+      title: v.string(),
+      image: v.string(),
+      duration: v.number(),
+      slug: v.string(),
+      categoryId: v.id("categories"),
+      content: v.string(),
+      excerpt: v.string(),
+      authorId: v.id("users"),
+      tags: v.array(v.string()),
+      likesCount: v.number(),
+      commentsCount: v.number(),
+      published: v.boolean(),
+      updatedAt: v.number(),
+      publishedAt: v.optional(v.number()),
+      deletedAt: v.optional(v.number()),
+      viewCount: v.number(),
+      author: v.object({
+        _id: v.id("users"),
+        _creationTime: v.number(),
+        name: v.optional(v.string()),
+        email: v.optional(v.string()),
+        phone: v.optional(v.string()),
+        image: v.optional(v.string()),
+        emailVerificationTime: v.optional(v.number()),
+        phoneVerificationTime: v.optional(v.number()),
+        isAnonymous: v.optional(v.boolean()),
+        role: v.union(v.literal("admin"), v.literal("user")),
+        userProfileId: v.optional(v.id("userProfiles")),
+      }),
+      category: v.object({
+        _id: v.id("categories"),
+        _creationTime: v.number(),
+        name: v.string(),
+        slug: v.string(),
+        description: v.string(),
+      }),
+      weeklyTrendingPosts: v.array(
+        v.object({
+          _id: v.id("posts"),
+          title: v.string(),
+          slug: v.string(),
+          _creationTime: v.number(),
+          duration: v.number(),
+          image: v.string(),
+        })
+      ),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, args) => {
+    const post = await ctx.db
+      .query("posts")
+      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
+      .unique();
+
+    if (!post) {
+      return null;
+    }
+
+    const author = await ctx.db.get(post.authorId);
+    const category = await ctx.db.get(post.categoryId);
+    const userProfile = await ctx.db
+      .query("userProfiles")
+      .withIndex("by_user", (q) => q.eq("userId", post.authorId))
+      .unique();
+
+    if (!author) {
+      return null;
+    }
+    if (!category) {
+      return null;
+    }
+
+    // Obtener los últimos 4 posts ordenados por fecha y con más vistas
+    const weeklyTrendingPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .take(WEEKLY_TRENDING_POSTS_LIMIT);
+
+    const trendingPostsWithDetails = weeklyTrendingPosts.map(
+      (trendingPost) => ({
+        _id: trendingPost._id,
+        title: trendingPost.title,
+        slug: trendingPost.slug,
+        _creationTime: trendingPost._creationTime,
+        duration: trendingPost.duration,
+        image: trendingPost.image,
+      })
+    );
+
+    return {
+      ...post,
+      author: {
+        ...author,
+        role: userProfile?.role || "user",
+        userProfileId: userProfile?._id,
+      },
+      category,
+      weeklyTrendingPosts: trendingPostsWithDetails,
     };
   },
 });
