@@ -20,13 +20,8 @@ export default async function PostPage({
     notFound();
   }
 
-  const [preloadedPost, preloadedComments, preloadedUser] = await Promise.all([
+  const [preloadedPost, preloadedUser] = await Promise.all([
     preloadQuery(api.posts.getPdpPost, { slug }, { token }),
-    preloadQuery(
-      api.comments.getCommentsWithAuthors,
-      { postId: post._id },
-      { token }
-    ),
     preloadQuery(api.users.getCurrentUserOptional, {}, { token }),
   ]);
 
@@ -37,8 +32,8 @@ export default async function PostPage({
         <div className="lg:col-span-2">
           <CommentsSection
             postId={post._id}
-            preloadedComments={preloadedComments}
             preloadedUser={preloadedUser}
+            totalComments={post.commentsCount}
           />
         </div>
       </div>

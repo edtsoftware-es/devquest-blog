@@ -11,6 +11,9 @@ dependencies:
   '@convex-dev/auth':
     specifier: ^0.0.81
     version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0)(react@19.1.1)
+  '@convex-dev/rate-limiter':
+    specifier: ^0.2.12
+    version: 0.2.12(convex@1.27.0)(react@19.1.1)
   '@hookform/resolvers':
     specifier: ^5.2.2
     version: 5.2.2(react-hook-form@7.62.0)
@@ -599,6 +602,19 @@ packages:
       path-to-regexp: 6.3.0
       react: 19.1.1
       server-only: 0.0.1
+    dev: false
+
+  /@convex-dev/rate-limiter@0.2.12(convex@1.27.0)(react@19.1.1):
+    resolution: {integrity: sha512-Z7YXDSPa28/8eqVJYUWQBwK9hTiJcXfWY2qZ44Im3VpuBFJZCqYjem7QWjvoTlBjVGqK7FKw26xRneei09hm2w==}
+    peerDependencies:
+      convex: ~1.16.5 || >=1.17.0 <1.35.0
+      react: ^18.3.1 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      convex: 1.27.0(react@19.1.1)
+      react: 19.1.1
     dev: false
 
   /@cspell/cspell-bundled-dicts@8.19.4:

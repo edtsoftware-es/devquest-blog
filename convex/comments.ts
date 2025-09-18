@@ -1,9 +1,9 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserProfile, requireUser } from "./lib/auth";
-import { AuthErrors, PostErrors } from "./lib/errors";
+import { PostErrors } from "./lib/errors";
 import {
   CommentInputFields,
   CommentUpdateFields,
@@ -12,6 +12,10 @@ import {
   createPaginatedResultValidator,
   optionalPaginationOpts,
 } from "./lib/validators";
+
+const MAX_RECENT_COMMENTS = 5;
+const MAX_RECENT_COMMENTS_TIME = 60_000;
+const MAX_COMMENT_LENGTH = 1000;
 
 export const getCommentsByPostId = query({
   args: {
@@ -32,16 +36,15 @@ export const getCommentsByPostId = query({
 export const getCommentsWithAuthors = query({
   args: {
     postId: v.id("posts"),
-    paginationOpts: optionalPaginationOpts,
+    paginationOpts: paginationOptsValidator,
   },
-  returns: createPaginatedResultValidator(CommentWithAuthorValidator),
   handler: async (ctx, args) => {
     const commentsPage = await ctx.db
       .query("comments")
       .withIndex("by_post", (q) => q.eq("postId", args.postId))
       .filter((q) => q.eq(q.field("deletedAt"), undefined))
       .order("desc")
-      .paginate(args.paginationOpts ?? { numItems: 50, cursor: null });
+      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
 
     const commentsWithAuthors = await Promise.all(
       commentsPage.page.map(async (comment) => {
@@ -77,12 +80,12 @@ export const createComment = mutation({
     const recentComments = await ctx.db
       .query("comments")
       .withIndex("by_author", (q) => q.eq("authorId", userId))
-      .filter(
-        (q) => q.gt(q.field("_creationTime"), Date.now() - 60_000)
+      .filter((q) =>
+        q.gt(q.field("_creationTime"), Date.now() - MAX_RECENT_COMMENTS_TIME)
       )
       .collect();
 
-    if (recentComments.length >= 5) {
+    if (recentComments.length >= MAX_RECENT_COMMENTS) {
       throw new Error(
         "Rate limit exceeded. Please wait before commenting again."
       );
@@ -105,7 +108,7 @@ export const createComment = mutation({
     if (trimmedContent.length === 0) {
       throw new Error("Comment content cannot be empty");
     }
-    if (trimmedContent.length > 1000) {
+    if (trimmedContent.length > MAX_COMMENT_LENGTH) {
       throw new Error("Comment content cannot exceed 1000 characters");
     }
 
@@ -118,7 +121,10 @@ export const createComment = mutation({
           q.and(
             q.eq(q.field("content"), trimmedContent),
             q.eq(q.field("parentId"), args.parentId),
-            q.gt(q.field("_creationTime"), Date.now() - 300_000)
+            q.gt(
+              q.field("_creationTime"),
+              Date.now() - MAX_RECENT_COMMENTS_TIME
+            )
           )
         )
         .first();
@@ -172,7 +178,7 @@ export const updateComment = mutation({
     if (trimmedContent.length === 0) {
       throw new Error("Comment content cannot be empty");
     }
-    if (trimmedContent.length > 1000) {
+    if (trimmedContent.length > MAX_COMMENT_LENGTH) {
       throw new Error("Comment content cannot exceed 1000 characters");
     }
 
@@ -209,7 +215,9 @@ export const deleteComment = mutation({
     }
 
     // Recursively delete all child comments (replies)
-    const deleteChildComments = async (parentId: Id<"comments">): Promise<number> => {
+    const deleteChildComments = async (
+      parentId: Id<"comments">
+    ): Promise<number> => {
       const childComments = await ctx.db
         .query("comments")
         .withIndex("by_parent", (q) => q.eq("parentId", parentId))
