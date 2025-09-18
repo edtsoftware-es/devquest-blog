@@ -71,9 +71,9 @@ export function CommentItem({
         content: content.trim(),
       });
       setIsEditing(false);
-      toast.success("Comment updated!");
+      toast.success("¡Comentario actualizado!");
     } catch (_error) {
-      toast.error("Failed to update comment");
+      toast.error("Error al actualizar el comentario");
     }
   };
 
@@ -84,10 +84,10 @@ export function CommentItem({
         commentId: comment._id,
       });
       setShowDeleteDialog(false);
-      toast.success("Comment deleted");
+      toast.success("Comentario eliminado");
       setIsDeleting(false);
     } catch (_error) {
-      toast.error("Failed to delete comment");
+      toast.error("Error al eliminar el comentario");
       setIsDeleting(false);
     }
   };
@@ -98,100 +98,98 @@ export function CommentItem({
 
   return (
     <div className="space-y-3">
-      <Card
+      <div
         className={cn(
-          "transition-colors",
+          "rounded-lg border bg-card p-4 transition-colors",
           level > 0 && "bg-muted/20",
           isOwner && "bg-primary/5 ring-1 ring-primary/20"
         )}
       >
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            {/* Avatar */}
-            <Avatar className="size-8 shrink-0">
-              <AvatarImage
-                alt={comment.authorName}
-                decoding={index < PRIORITY_COMMENTS_LIMIT ? "sync" : "async"}
-                loading={index < PRIORITY_COMMENTS_LIMIT ? "eager" : "lazy"}
-                src={comment.authorImage}
-              />
-              <AvatarFallback className="bg-primary/10 font-medium text-primary text-xs">
-                {comment.authorName.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+        <div className="flex items-start gap-3">
+          {/* Avatar */}
+          <Avatar className="size-8 shrink-0">
+            <AvatarImage
+              alt={comment.authorName}
+              decoding={index < PRIORITY_COMMENTS_LIMIT ? "sync" : "async"}
+              loading={index < PRIORITY_COMMENTS_LIMIT ? "eager" : "lazy"}
+              src={comment.authorImage}
+            />
+            <AvatarFallback className="bg-primary/10 font-medium text-primary text-xs">
+              {comment.authorName.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
 
-            <div className="min-w-0 flex-1 space-y-2">
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium">{comment.authorName}</span>
-                  <span className="text-muted-foreground">·</span>
-                  <time className="text-muted-foreground">
-                    {formatDistanceToNow(new Date(comment._creationTime), {
-                      addSuffix: true,
-                    })}
-                  </time>
-                </div>
-
-                {/* Actions Menu */}
-                {(isOwner || currentUser?.role === "admin") && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button className="size-8 p-0" size="sm" variant="ghost">
-                        <MoreHorizontal className="size-4" />
-                        <span className="sr-only">Comment options</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {isOwner && (
-                        <DropdownMenuItem onClick={handleEdit}>
-                          <Edit className="mr-2 size-4" />
-                          Edit
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuItem
-                        className="text-destructive"
-                        onClick={() => setShowDeleteDialog(true)}
-                      >
-                        <Trash2 className="mr-2 size-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
+          <div className="min-w-0 flex-1 space-y-2">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-medium text-foreground">{comment.authorName}</span>
+                <span className="text-muted-foreground">·</span>
+                <time className="text-muted-foreground text-xs">
+                  {formatDistanceToNow(new Date(comment._creationTime), {
+                    addSuffix: true,
+                  })}
+                </time>
               </div>
 
-              {/* Content */}
-              {isEditing ? (
-                <EditCommentForm
-                  initialContent={comment.content}
-                  onCancel={handleEditCancel}
-                  onSubmit={handleEditSubmit}
-                />
-              ) : (
-                <div className="prose prose-sm max-w-none text-foreground">
-                  <p className="whitespace-pre-wrap">{comment.content}</p>
-                </div>
-              )}
-
-              {/* Actions */}
-              {!isEditing && currentUser && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    className="h-auto gap-1 p-1 text-muted-foreground hover:text-foreground"
-                    onClick={() => setShowReplyForm(true)}
-                    size="sm"
-                    variant="ghost"
-                  >
-                    <Reply className="size-3" />
-                    <span className="text-xs">Reply</span>
-                  </Button>
-                </div>
+              {/* Actions Menu */}
+              {(isOwner || currentUser?.role === "admin") && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="size-8 p-0" size="sm" variant="ghost">
+                      <MoreHorizontal className="size-4" />
+                      <span className="sr-only">Opciones del comentario</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {isOwner && (
+                      <DropdownMenuItem onClick={handleEdit}>
+                        <Edit className="mr-2 size-4" />
+                        Editar
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem
+                      className="text-destructive"
+                      onClick={() => setShowDeleteDialog(true)}
+                    >
+                      <Trash2 className="mr-2 size-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </div>
+
+            {/* Content */}
+            {isEditing ? (
+              <EditCommentForm
+                initialContent={comment.content}
+                onCancel={handleEditCancel}
+                onSubmit={handleEditSubmit}
+              />
+            ) : (
+              <div className="prose prose-sm max-w-none text-foreground">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed">{comment.content}</p>
+              </div>
+            )}
+
+            {/* Actions */}
+            {!isEditing && currentUser && (
+              <div className="flex items-center gap-2">
+                <Button
+                  className="h-auto gap-1 p-1 text-muted-foreground hover:text-foreground"
+                  onClick={() => setShowReplyForm(true)}
+                  size="sm"
+                  variant="ghost"
+                >
+                  <Reply className="size-3" />
+                  <span className="text-xs">Responder</span>
+                </Button>
+              </div>
+            )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {showReplyForm && (
         <div className="ml-8 sm:ml-11">
@@ -200,7 +198,7 @@ export function CommentItem({
             onCancel={() => setShowReplyForm(false)}
             onSubmit={handleReplySubmit}
             parentId={comment._id}
-            placeholder={`Reply to ${comment.authorName}...`}
+            placeholder={`Responder a ${comment.authorName}...`}
             postId={postId}
           />
         </div>
@@ -208,10 +206,9 @@ export function CommentItem({
       <Dialog onOpenChange={setShowDeleteDialog} open={showDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Comment</DialogTitle>
+            <DialogTitle>Eliminar comentario</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this comment? This action cannot
-              be undone.
+              ¿Estás seguro de que quieres eliminar este comentario? Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -220,14 +217,14 @@ export function CommentItem({
               onClick={() => setShowDeleteDialog(false)}
               variant="outline"
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               disabled={isDeleting}
               onClick={handleDelete}
               variant="destructive"
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? "Eliminando..." : "Eliminar"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -255,12 +252,12 @@ function EditCommentForm({
     const trimmedContent = content.trim();
 
     if (!trimmedContent) {
-      toast.error("Comment cannot be empty");
+      toast.error("El comentario no puede estar vacío");
       return;
     }
 
     if (trimmedContent.length > MAX_COMMENT_LENGTH) {
-      toast.error(`Comment cannot exceed ${MAX_COMMENT_LENGTH} characters`);
+      toast.error(`El comentario no puede exceder ${MAX_COMMENT_LENGTH} caracteres`);
       return;
     }
 
@@ -293,7 +290,7 @@ function EditCommentForm({
                 : ""
             }
           >
-            {remainingChars} characters remaining
+            {remainingChars} caracteres restantes
           </span>
         </div>
       </div>
@@ -306,7 +303,7 @@ function EditCommentForm({
           size="sm"
           type="submit"
         >
-          {isSubmitting ? "Saving..." : "Save"}
+          {isSubmitting ? "Guardando..." : "Guardar"}
         </Button>
         <Button
           disabled={isSubmitting}
@@ -315,7 +312,7 @@ function EditCommentForm({
           type="button"
           variant="ghost"
         >
-          Cancel
+          Cancelar
         </Button>
       </div>
     </form>

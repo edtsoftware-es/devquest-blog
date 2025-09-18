@@ -33,11 +33,15 @@ export default async function PostPage({
   return (
     <div className="container mx-auto max-w-8xl py-10">
       <PostDisplay preloadedPost={preloadedPost} />
-      <CommentsSection
-        postId={post._id}
-        preloadedComments={preloadedComments}
-        preloadedUser={preloadedUser}
-      />
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <CommentsSection
+            postId={post._id}
+            preloadedComments={preloadedComments}
+            preloadedUser={preloadedUser}
+          />
+        </div>
+      </div>
     </div>
   );
 }

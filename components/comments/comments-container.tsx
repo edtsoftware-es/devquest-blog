@@ -37,87 +37,81 @@ export function CommentsContainer({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="size-5" />
-            Comments ({comments.length})
-          </CardTitle>
-          <Button
-            className="gap-1"
-            onClick={() => setShowComments(!showComments)}
-            size="sm"
-            variant="ghost"
-          >
-            {showComments ? (
-              <>
-                <ChevronUp className="size-4" />
-                Hide
-              </>
-            ) : (
-              <>
-                <ChevronDown className="size-4" />
-                Show
-              </>
-            )}
-          </Button>
-        </div>
-      </CardHeader>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-heading-4 flex items-center gap-2">
+          <MessageSquare className="size-5" />
+          Comentarios ({comments.length})
+        </h2>
+        <Button
+          className="gap-1"
+          onClick={() => setShowComments(!showComments)}
+          size="sm"
+          variant="ghost"
+        >
+          {showComments ? (
+            <>
+              <ChevronUp className="size-4" />
+              Ocultar
+            </>
+          ) : (
+            <>
+              <ChevronDown className="size-4" />
+              Mostrar
+            </>
+          )}
+        </Button>
+      </div>
 
       {showComments && (
-        <CardContent>
-          <div className="space-y-6">
-            {user ? (
-              <div className="space-y-4">
-                {showCommentForm ? (
-                  <CommentForm
-                    onCancel={() => setShowCommentForm(false)}
-                    onSubmit={handleCommentSubmitted}
-                    placeholder="Share your thoughts..."
-                    postId={postId}
-                  />
-                ) : (
-                  <Button
-                    className="w-full justify-start text-muted-foreground"
-                    onClick={() => setShowCommentForm(true)}
-                    variant="outline"
-                  >
-                    Write a comment...
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <Card className="bg-muted/50">
-                <CardContent className="py-4 text-center">
-                  <p className="text-muted-foreground text-sm">
-                    <a className="text-primary hover:underline" href="/auth">
-                      Sign in
-                    </a>{" "}
-                    to join the conversation
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-
-            {comments.length > 0 ? (
-              <div className="space-y-4">
-                <CommentTree
-                  comments={commentTree}
-                  currentUser={user}
+        <div className="space-y-6">
+          {user ? (
+            <div className="space-y-4">
+              {showCommentForm ? (
+                <CommentForm
+                  onCancel={() => setShowCommentForm(false)}
+                  onSubmit={handleCommentSubmitted}
+                  placeholder="Comparte tus pensamientos..."
                   postId={postId}
-                  showLimit={5}
                 />
-              </div>
-            ) : (
-              <div className="py-8 text-center text-muted-foreground">
-                <MessageSquare className="mx-auto mb-3 size-8 opacity-50" />
-                <p>No comments yet. Be the first to share your thoughts!</p>
-              </div>
-            )}
-          </div>
-        </CardContent>
+              ) : (
+                <Button
+                  className="w-full justify-start text-muted-foreground"
+                  onClick={() => setShowCommentForm(true)}
+                  variant="outline"
+                >
+                  Escribe un comentario...
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="rounded-lg border bg-muted/50 p-4 text-center">
+              <p className="text-muted-foreground text-sm">
+                <a className="text-primary hover:underline" href="/auth">
+                  Inicia sesión
+                </a>{" "}
+                para unirte a la conversación
+              </p>
+            </div>
+          )}
+
+          {comments.length > 0 ? (
+            <div className="space-y-4">
+              <CommentTree
+                comments={commentTree}
+                currentUser={user}
+                postId={postId}
+                showLimit={5}
+              />
+            </div>
+          ) : (
+            <div className="py-8 text-center text-muted-foreground">
+              <MessageSquare className="mx-auto mb-3 size-8 opacity-50" />
+              <p>Aún no hay comentarios. ¡Sé el primero en compartir tus pensamientos!</p>
+            </div>
+          )}
+        </div>
       )}
-    </Card>
+    </div>
   );
 }

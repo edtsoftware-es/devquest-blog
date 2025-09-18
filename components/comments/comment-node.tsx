@@ -67,7 +67,7 @@ export function CommentNode({
       />
 
       {hasReplies && canShowReplies && (
-        <div className="mt-4 ml-4 border-muted border-l-2 pl-4 sm:ml-6">
+        <div className="mt-3 ml-6 border-muted border-l pl-4">
           <CommentTree
             comments={repliesToShow}
             currentUser={currentUser}
@@ -88,15 +88,15 @@ export function CommentNode({
                 {isExpanded ? (
                   <>
                     <ChevronUp className="size-4" />
-                    <span className="text-sm">Show fewer replies</span>
+                    <span className="text-sm">Mostrar menos respuestas</span>
                   </>
                 ) : (
                   <>
                     <ChevronDown className="size-4" />
                     <span className="text-sm">
                       {hiddenRepliesCount === 1
-                        ? "Show 1 more reply"
-                        : `Show ${hiddenRepliesCount} more replies`}
+                        ? "Mostrar 1 respuesta más"
+                        : `Mostrar ${hiddenRepliesCount} respuestas más`}
                     </span>
                   </>
                 )}
@@ -107,11 +107,11 @@ export function CommentNode({
       )}
 
       {hasReplies && !canShowReplies && (
-        <div className="mt-2 ml-4 sm:ml-6">
+        <div className="mt-2 ml-6">
           <p className="text-muted-foreground text-xs">
-            {comment.replies.length} more{" "}
-            {comment.replies.length === 1 ? "reply" : "replies"} (maximum
-            nesting reached)
+            {comment.replies.length} {" "}
+            {comment.replies.length === 1 ? "respuesta más" : "respuestas más"} (máximo
+            de anidamiento alcanzado)
           </p>
         </div>
       )}
