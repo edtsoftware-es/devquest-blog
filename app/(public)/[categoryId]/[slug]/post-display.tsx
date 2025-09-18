@@ -2,6 +2,7 @@
 
 import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { Clock, Eye, MessageCircle } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   AuthorCard,
   AuthorCardDescription,
@@ -27,6 +28,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import type { api } from "@/convex/_generated/api";
 
 const formatDate = (timestamp: number) => {
@@ -43,10 +45,24 @@ type PostDisplayProps = {
 
 export function PostDisplay({ preloadedPost }: PostDisplayProps) {
   const post = usePreloadedQuery(preloadedPost);
+  const pathname = usePathname();
 
   if (!post) {
     return null;
   }
+
+  const shareUrl = `${window.location.origin}${pathname}`;
+  const shareText = `${post.title}`;
+
+  const shareOnTwitter = () => {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const shareOnLinkedIn = () => {
+    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+    window.open(linkedinUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="space-y-6">
@@ -64,7 +80,6 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
         </Breadcrumb>
       </div>
 
-      {/* Header del post */}
       <div className="border-none shadow-none">
         <div className="space-y-4 px-0 pb-4">
           <div className="flex items-center gap-6">
@@ -89,8 +104,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
               <Avatar className="size-10">
                 <AvatarImage src={post.author.image} />
                 <AvatarFallback>
-                  {post.author.name?.charAt(0).toUpperCase() ||
-                    (post.author.role === "admin" ? "A" : "U")}
+                  {post.author.name?.charAt(0).toUpperCase() || "A"}
                 </AvatarFallback>
               </Avatar>
               <span className="text-body-7 text-neutral-900">
@@ -230,12 +244,57 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
 
                   <h5 className="text-heading-5">Popular tags</h5>
                 </div>
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map((tag: string) => (
+                    <Button className="w-fit" key={tag} size={"xs"}>
+                      {tag}
+                      <Badge variant="tertiary">26</Badge>
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </aside>
       </div>
-      <hr className="my-10" />
+      <hr className="mt-12 mb-8" />
+
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="flex items-center justify-between lg:col-span-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {post.tags.map((tag: string) => (
+              <Badge className="text-xs" key={tag} variant="secondary">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="text-body-6 text-neutral-900">Compartir:</span>
+            <div className="flex items-center gap-1 rounded-lg border bg-muted px-3 py-2">
+              <Button
+                aria-label="Compartir en Twitter"
+                className="h-8 w-8 p-0"
+                onClick={shareOnTwitter}
+                size="sm"
+                variant="ghost"
+              >
+                <span className="font-bold text-sm text-white">X</span>
+              </Button>
+              <div className="h-4 w-px bg-border" />
+              <Button
+                aria-label="Compartir en LinkedIn"
+                className="h-8 w-8 p-0"
+                onClick={shareOnLinkedIn}
+                size="sm"
+                variant="ghost"
+              >
+                <span className="font-bold text-sm text-white">in</span>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
