@@ -19,7 +19,7 @@ function AuthorCardImageContainer({
   return (
     <div
       className={cn(
-        "flex size-38 shrink-0 rounded-full bg-neutral-200",
+        "flex size-38 shrink-0 overflow-hidden rounded-full bg-neutral-200",
         className
       )}
       {...props}

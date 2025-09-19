@@ -31,7 +31,7 @@ function StandardCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-63 rounded-[1rem] bg-neutral-200 lg:h-80 lg:min-w-80",
+        "relative flex h-63 overflow-hidden rounded-[1rem] bg-neutral-200 lg:h-80 lg:min-w-80",
         className
       )}
       {...props}
