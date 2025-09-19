@@ -2,6 +2,7 @@ import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
 import { FileText, Plus } from "lucide-react";
 import Link from "next/link";
+import { ProfileDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import { PostsList } from "./posts-list";
@@ -34,6 +35,7 @@ export default async function DashboardPage() {
               <div className="flex items-center gap-3">
                 <RoleButton preloadedUserRole={preloadedUserRole} />
                 <UserInfo preloadedCurrentUser={preloadedCurrentUser} />
+                <ProfileDialog preloadedCurrentUser={preloadedCurrentUser} />
               </div>
               <Button asChild>
                 <Link href="/dashboard/posts/create" prefetch>
