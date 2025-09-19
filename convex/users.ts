@@ -1,5 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
 import { UserWithRoleValidator } from "./lib/validators";
@@ -32,12 +33,15 @@ export const getCurrentUser = query({
     }
 
     const userProfile = await getUserProfile(ctx, userId);
+    const avatarUrl =
+      (await ctx.storage.getUrl(userProfile.avatarUrl as Id<"_storage">)) ??
+      user.image;
 
     return {
       _id: user._id,
       name: user.name,
       email: user.email,
-      image: user.image,
+      image: avatarUrl,
       role: userProfile.role,
       nickname: userProfile.nickname,
       bio: userProfile.bio,
@@ -111,5 +115,25 @@ export const updateUserProfile = mutation({
       name: args.username,
     });
     return null;
+  },
+});
+
+export const sendImage = mutation({
+  args: {
+    storageId: v.id("_storage"),
+    userId: v.id("users"),
+  },
+  handler: async (ctx, args) => {
+    const userProfile = await getUserProfile(ctx, args.userId);
+    await ctx.db.patch(userProfile._id, {
+      avatarUrl: args.storageId,
+    });
+    return null;
+  },
+});
+
+export const generateUploadUrl = mutation({
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
   },
 });

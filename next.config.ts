@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "convex.cloud",
+        hostname: "reliable-cuttlefish-158.convex.cloud",
       },
     ],
   },

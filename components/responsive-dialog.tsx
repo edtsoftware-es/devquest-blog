@@ -1,6 +1,7 @@
 "use client";
 
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
+import { Camera } from "lucide-react";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -100,28 +101,80 @@ function ProfileForm({
   onSuccess: () => void;
 }) {
   const updateUserProfile = useMutation(api.users.updateUserProfile);
+  const sendImage = useMutation(api.users.sendImage);
+  const generateUploadUrl = useMutation(api.users.generateUploadUrl);
+
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
 
   return (
     <form
       className={cn("grid items-start gap-6", className)}
       onSubmit={async (e) => {
         e.preventDefault();
+        const postUrl = await generateUploadUrl();
+
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: {
+            // biome-ignore lint/style/noNonNullAssertion: selectedImage is not null
+            "Content-Type": selectedImage!.type,
+          },
+          body: selectedImage,
+        });
+        if (!result.ok) {
+          throw new Error("Failed to upload image");
+        }
+        const { storageId } = await result.json();
+        await sendImage({ storageId, userId: currentUser._id });
         await updateUserProfile({
           nickname: (e.target as HTMLFormElement).nickname.value,
           bio: (e.target as HTMLFormElement).bio.value,
           username: (e.target as HTMLFormElement).username.value,
         });
+        setSelectedImage(null);
+        // biome-ignore lint/style/noNonNullAssertion: imageInputRef is not null
+        imageInputRef.current!.value = "";
         onSuccess();
       }}
     >
       <AuthorCard>
         <AuthorCardImageContainer>
-          <Avatar className="size-full">
-            <AvatarImage src={currentUser.image} />
-            <AvatarFallback>
-              {currentUser.name?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <div className="group relative cursor-pointer">
+            <Avatar className="size-full">
+              <AvatarImage
+                decoding="sync"
+                loading="eager"
+                src={
+                  selectedImage
+                    ? URL.createObjectURL(selectedImage)
+                    : currentUser.image
+                }
+              />
+              <AvatarFallback>
+                {currentUser.name?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+
+            <button
+              aria-label="Cambiar foto de perfil"
+              className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+              onClick={() => imageInputRef.current?.click()}
+              type="button"
+            >
+              <Camera className="h-6 w-6 text-white" />
+            </button>
+
+            <input
+              accept="image/*"
+              className="hidden"
+              onChange={(event) =>
+                setSelectedImage(event.target.files?.[0] ?? null)
+              }
+              ref={imageInputRef}
+              type="file"
+            />
+          </div>
         </AuthorCardImageContainer>
       </AuthorCard>
       <div className="grid gap-3">

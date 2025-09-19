@@ -10,7 +10,9 @@ const applicationTables = {
     avatarUrl: v.optional(v.string()),
     bio: v.optional(v.string()),
     username: v.string(),
-  }).index("by_user", ["userId"]),
+  })
+    .index("by_user", ["userId"])
+    .index("by_nickname", ["nickname"]),
   posts: defineTable({
     title: v.string(),
     image: v.string(),
