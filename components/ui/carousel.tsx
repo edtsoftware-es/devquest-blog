@@ -211,7 +211,7 @@ function CarouselNext({
   return (
     <Button
       className={cn(
-        "group absolute size-8 rounded-full border border-secondary hover:bg-secondary lg:size-10",
+        "group absolute size-8 rounded-full border border-secondary hover:bg-secondary hover:text-primary lg:size-10",
         orientation === "horizontal"
           ? "-right-[-30px] 2xl:-right-16 -translate-y-1/2 top-1/2"
           : "-bottom-12 -translate-x-1/2 left-1/2 rotate-90",

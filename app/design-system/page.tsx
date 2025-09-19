@@ -247,20 +247,14 @@ export default function DesignSystem() {
           <FeaturedCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
             <FeaturedCardTags
-              categories={[
-                { _id: "1", slug: "technology", name: "Technology" },
-                { _id: "2", slug: "react", name: "React" },
-              ]}
               className="absolute top-4 left-4 z-10 hidden lg:flex"
+              tags={["technology", "react"]}
             />
           </FeaturedCardImageContainer>
           <FeaturedCardShell>
             <FeaturedCardTags
-              categories={[
-                { _id: "1", slug: "technology", name: "Technology" },
-                { _id: "2", slug: "react", name: "React" },
-              ]}
               className="flex lg:hidden"
+              tags={["technology", "react"]}
             >
               <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
                 Sep 13, 2025
@@ -361,12 +355,7 @@ export default function DesignSystem() {
         <HighlightCard>
           <HighlightCardImageContainer>
             <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
-            <HighlightCardTags
-              categories={[
-                { _id: "1", slug: "technology", name: "Technology" },
-                { _id: "2", slug: "react", name: "React" },
-              ]}
-            />
+            <HighlightCardTags tags={["technology", "react"]} />
           </HighlightCardImageContainer>
           <HighlightCardTitle>Understanding React Hooks</HighlightCardTitle>
         </HighlightCard>
