@@ -1,6 +1,7 @@
 import { Gamepad2 } from "lucide-react";
-import type { JSX } from "react/jsx-dev-runtime";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Topic } from "@/types";
 
 export const MockCategories: Topic[] = [
   {
@@ -40,12 +41,6 @@ export const MockCategories: Topic[] = [
   { slug: "fitness", name: "Fitness", image: <Gamepad2 aria-hidden="true" /> },
 ];
 
-type Topic = {
-  slug: string;
-  name: string;
-  image: JSX.Element;
-};
-
 export default function Explore({
   categories,
   className,
@@ -54,18 +49,21 @@ export default function Explore({
   className?: string;
 }) {
   return (
-    <main
-      className={`flex w-full max-w-[1024px] flex-col items-center justify-center gap-8 ${className}`}
+    <section
+      className={cn(
+        "flex w-full max-w-[1024px] flex-col items-center justify-center gap-8",
+        className
+      )}
     >
-      <p className="text-secondary text-xl">Explora los trending topics</p>
-      <section className="flex flex-wrap items-center justify-center gap-3">
+      <h2 className="text-secondary text-xl">Explora los trending topics</h2>
+      <div className="flex flex-wrap items-center justify-center gap-3">
         {categories.map((category) => (
           <Button className="w-fit rounded-full" key={category.slug} size="xs">
             {category.image}
             {category.name}
           </Button>
         ))}
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }
