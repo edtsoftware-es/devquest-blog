@@ -9,10 +9,7 @@ function HighlightCard({
 }: React.ComponentProps<"article">) {
   return (
     <article
-      className={cn(
-        "flex max-w-107 xs:max-w-69 flex-col gap-y-4 bg-transparent",
-        className
-      )}
+      className={cn("flex flex-col gap-y-4 bg-transparent", className)}
       {...props}
     />
   );
@@ -33,7 +30,7 @@ function HighlightCardImageContainer({
     >
       {children}
       <div className="absolute right-2 bottom-2">
-        <Button size="icon" type="button">
+        <Button aria-label="Read full article" size="icon" type="button">
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>
@@ -41,15 +38,15 @@ function HighlightCardImageContainer({
   );
 }
 
-type HighlightCardCategoriesProps = {
-  categories: { _id: string; slug: string; name: string }[];
+type HighlightCardTagsProps = {
+  tags: string[];
 };
 
-function HighlightCardCategories({
-  categories,
+function HighlightCardTags({
+  tags,
   className,
   ...props
-}: React.ComponentProps<"div"> & HighlightCardCategoriesProps) {
+}: React.ComponentProps<"div"> & HighlightCardTagsProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div
@@ -59,12 +56,12 @@ function HighlightCardCategories({
       )}
       {...props}
     >
-      {categories.map(({ _id, name }, index) => (
+      {tags.map((tag, index) => (
         <Badge
           className={`bg-background-${(index % MAX_BACKGROUND_VARIANTS) + 1}`}
-          key={_id}
+          key={tag}
         >
-          {name}
+          {tag}
         </Badge>
       ))}
     </div>
@@ -89,6 +86,6 @@ function HighlightCardTitle({
 export {
   HighlightCard,
   HighlightCardImageContainer,
-  HighlightCardCategories,
+  HighlightCardTags,
   HighlightCardTitle,
 };
