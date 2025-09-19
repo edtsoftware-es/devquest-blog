@@ -29,7 +29,6 @@ import {
   FeaturedCardAuthor,
   FeaturedCardAuthorContainer,
   FeaturedCardAuthorName,
-  FeaturedCardCategories,
   FeaturedCardContent,
   FeaturedCardDescription,
   FeaturedCardFooter,
@@ -39,12 +38,13 @@ import {
   FeaturedCardReadingTime,
   FeaturedCardShell,
   FeaturedCardStats,
+  FeaturedCardTags,
   FeaturedCardTitle,
 } from "@/components/cards/featured-card";
 import {
   HighlightCard,
-  HighlightCardCategories,
   HighlightCardImageContainer,
+  HighlightCardTags,
   HighlightCardTitle,
 } from "@/components/cards/highlight-card";
 import {
@@ -246,7 +246,7 @@ export default function DesignSystem() {
         <FeaturedCard>
           <FeaturedCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
-            <FeaturedCardCategories
+            <FeaturedCardTags
               categories={[
                 { _id: "1", slug: "technology", name: "Technology" },
                 { _id: "2", slug: "react", name: "React" },
@@ -255,7 +255,7 @@ export default function DesignSystem() {
             />
           </FeaturedCardImageContainer>
           <FeaturedCardShell>
-            <FeaturedCardCategories
+            <FeaturedCardTags
               categories={[
                 { _id: "1", slug: "technology", name: "Technology" },
                 { _id: "2", slug: "react", name: "React" },
@@ -268,7 +268,7 @@ export default function DesignSystem() {
               <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
                 5 mins
               </FeaturedCardReadingTime>
-            </FeaturedCardCategories>
+            </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
                 <FeaturedCardTitle>Understanding React</FeaturedCardTitle>
@@ -361,7 +361,7 @@ export default function DesignSystem() {
         <HighlightCard>
           <HighlightCardImageContainer>
             <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
-            <HighlightCardCategories
+            <HighlightCardTags
               categories={[
                 { _id: "1", slug: "technology", name: "Technology" },
                 { _id: "2", slug: "react", name: "React" },
