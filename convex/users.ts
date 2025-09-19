@@ -20,7 +20,6 @@ export const getUserRole = query({
 
 export const getCurrentUser = query({
   args: {},
-  returns: UserWithRoleValidator,
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
@@ -40,6 +39,9 @@ export const getCurrentUser = query({
       email: user.email,
       image: user.image,
       role: userProfile.role,
+      nickname: userProfile.nickname,
+      bio: userProfile.bio,
+      username: userProfile.username,
     };
   },
 });
@@ -66,6 +68,7 @@ export const getCurrentUserOptional = query({
         email: user.email,
         image: user.image,
         role: userProfile.role,
+        username: userProfile.username,
       };
     } catch {
       return null;
@@ -83,6 +86,30 @@ export const changeRole = mutation({
     const userProfile = await getUserProfile(ctx, userId);
     const nuevoRol = userProfile.role === "admin" ? "user" : "admin";
     await ctx.db.patch(userProfile._id, { role: nuevoRol });
+    return null;
+  },
+});
+
+export const updateUserProfile = mutation({
+  args: {
+    nickname: v.string(),
+    bio: v.string(),
+    username: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw AuthErrors.userNotAuthenticated();
+    }
+    const userProfile = await getUserProfile(ctx, userId);
+    await ctx.db.patch(userProfile._id, {
+      nickname: args.nickname,
+      bio: args.bio,
+      username: args.username,
+    });
+    await ctx.db.patch(userId, {
+      name: args.username,
+    });
     return null;
   },
 });

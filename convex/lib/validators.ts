@@ -87,6 +87,9 @@ export const UserWithRoleValidator = v.object({
   email: v.optional(v.string()),
   image: v.optional(v.string()),
   role: v.string(),
+  nickname: v.optional(v.string()),
+  bio: v.optional(v.string()),
+  username: v.optional(v.string()),
 });
 
 export const PostInputFields = {
