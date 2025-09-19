@@ -475,23 +475,30 @@ export const recommendedPosts = query({
   args: {},
   handler: async (ctx) => {
     const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
 
-    const likes = await ctx.db
-      .query("likes")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .collect();
-
-    const likedPostIds = likes.map((like) => like.postId).filter(Boolean);
-
-    if (likedPostIds.length === 0) {
-      const posts = await ctx.db
+    if (!userProfile.userId) {
+      return await ctx.db
         .query("posts")
         .withIndex("by_view_count")
         .order("desc")
         .filter((q) => q.eq(q.field("published"), true))
         .take(MAX_RECOMMENDED_POSTS);
-      return posts;
+    }
+
+    const likes = await ctx.db
+      .query("likes")
+      .withIndex("by_user", (q) => q.eq("userId", userProfile.userId))
+      .collect();
+
+    const likedPostIds = likes.map((like) => like.postId).filter(Boolean);
+
+    if (likedPostIds.length === 0) {
+      return await ctx.db
+        .query("posts")
+        .withIndex("by_view_count")
+        .order("desc")
+        .filter((q) => q.eq(q.field("published"), true))
+        .take(MAX_RECOMMENDED_POSTS);
     }
 
     const likedPosts = await Promise.all(
@@ -507,6 +514,7 @@ export const recommendedPosts = query({
         );
       }
     }
+
     const favoriteCategories = Array.from(categoryCount.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([categoryId]) => categoryId);
@@ -516,6 +524,7 @@ export const recommendedPosts = query({
       if (recommended.length >= MAX_RECOMMENDED_POSTS) {
         break;
       }
+
       const posts = await ctx.db
         .query("posts")
         .withIndex("by_category_and_published", (q) =>
@@ -537,6 +546,7 @@ export const recommendedPosts = query({
         }
       }
     }
+
     return recommended.slice(0, MAX_RECOMMENDED_POSTS);
   },
 });
