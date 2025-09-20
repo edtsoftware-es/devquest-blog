@@ -1,3 +1,4 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
@@ -474,9 +475,9 @@ const MAX_RECOMMENDED_POSTS = 5;
 export const recommendedPosts = query({
   args: {},
   handler: async (ctx) => {
-    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = await getAuthUserId(ctx);
 
-    if (!userProfile.userId) {
+    if (!userId) {
       return await ctx.db
         .query("posts")
         .withIndex("by_view_count")
@@ -487,7 +488,7 @@ export const recommendedPosts = query({
 
     const likes = await ctx.db
       .query("likes")
-      .withIndex("by_user", (q) => q.eq("userId", userProfile.userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     const likedPostIds = likes.map((like) => like.postId).filter(Boolean);

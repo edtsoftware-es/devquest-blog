@@ -26,6 +26,7 @@ import { SearchDialog } from "./search-dialog";
 
 export default async function Header() {
   const categories = await fetchQuery(api.categories.getAllCategories, {});
+  const recommendedPosts = await fetchQuery(api.posts.recommendedPosts, {});
 
   return (
     <header className="flex w-full items-center justify-center px-3 md:px-7">
@@ -97,7 +98,10 @@ export default async function Header() {
               width={100}
             />
           </div>
-          <SearchDialog categories={categories} />
+          <SearchDialog
+            categories={categories}
+            recommendedPosts={recommendedPosts}
+          />
           <div className="hidden items-center md:flex">
             <ModeToggle />
           </div>
