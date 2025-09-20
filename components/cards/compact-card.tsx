@@ -83,7 +83,7 @@ function CompactCardPublishedAt({
   return (
     <span
       className={cn(
-        "font-medium text-[0.75rem] text-neutral-600 leading-[1.2]",
+        "font-medium text-[0.75rem] text-neutral-600 capitalize leading-[1.2]",
         className
       )}
       {...props}

@@ -46,10 +46,14 @@ export function PaginationNavigation({
   );
 
   const getPageHref = (page: number) => {
-    if (page === 1) {
-      return pathname;
-    }
     const params = new URLSearchParams(searchParams.toString());
+
+    if (page === 1) {
+      params.delete("page");
+      const paramString = params.toString();
+      return paramString ? `${pathname}?${paramString}` : pathname;
+    }
+
     params.set("page", page.toString());
     return `${pathname}?${params.toString()}`;
   };
