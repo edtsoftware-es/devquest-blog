@@ -11,7 +11,7 @@ export function Heading({
   className?: string;
 }) {
   return (
-    <div className={cn("mb-6 flex items-center gap-2", className)}>
+    <div className={cn("flex items-center gap-2", className)}>
       <svg
         aria-hidden="true"
         fill="none"
@@ -26,7 +26,7 @@ export function Heading({
           fill="#F3F4F6"
         />
       </svg>
-      <h5 className="text-heading-6 md:text-heading-5">{children}</h5>
+      <h5 className="text-heading-5">{children}</h5>
     </div>
   );
 }

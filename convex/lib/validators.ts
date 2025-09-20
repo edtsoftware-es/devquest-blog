@@ -4,6 +4,13 @@ import { v } from "convex/values";
 
 const optionalCursor = v.union(v.string(), v.null());
 
+export const PopularTag = {
+  tag: v.string(),
+  count: v.number(),
+} as const;
+
+export const PopularTagValidator = v.object(PopularTag);
+
 export const PostFields = {
   _id: v.id("posts"),
   _creationTime: v.number(),
@@ -38,6 +45,15 @@ export const PostWithAuthorValidator = v.object({
   authorName: v.string(),
   authorImage: v.optional(v.string()),
 });
+
+export const HomePostsValidator = v.object({
+  mainPosts: v.array(PostWithAuthorDataValidator),
+  mainPopularPost: PostWithAuthorDataValidator,
+  highLightPosts: v.array(PostValidator),
+  compactPosts: v.array(PostValidator),
+  weeklys: v.array(PostValidator),
+  popularTags: v.array(PopularTagValidator),
+} as const);
 
 export const CategoryValidator = v.object({
   _id: v.id("categories"),

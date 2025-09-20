@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   CompactCard,
   CompactCardContent,
@@ -33,8 +34,19 @@ import {
 } from "@/components/cards/highlight-card";
 import { SectionHeading } from "@/components/headings";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { PostWithAuthorData } from "@/convex/lib/types";
+import { getPublishedDate } from "@/lib/utils";
+import type { Post } from "@/types";
 
-export default function Trending() {
+export default function Trending({
+  compactPosts,
+  highLightPosts,
+  mainPopularPost,
+}: {
+  mainPopularPost: PostWithAuthorData;
+  highLightPosts: Post[];
+  compactPosts: Post[];
+}) {
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <SectionHeading
@@ -45,34 +57,41 @@ export default function Trending() {
       <div className="mt-7 grid w-full grid-cols-1 gap-6 md:grid-cols-2">
         <FeaturedCard>
           <FeaturedCardImageContainer>
-            <div className="h-full w-full rounded-[1rem] bg-green-500" />
+            <Image
+              alt={`Image for ${mainPopularPost.title}`}
+              className="rounded-[1rem] rounded-br-[1.75rem]"
+              layout="fill"
+              objectFit="cover"
+              src={mainPopularPost.image || ""}
+            />
             <FeaturedCardTags
               className="absolute top-4 left-4 z-10 hidden lg:flex"
-              tags={["technology", "react"]}
+              tags={mainPopularPost.tags}
             />
           </FeaturedCardImageContainer>
           <FeaturedCardShell>
             <FeaturedCardTags
               className="flex lg:hidden"
-              tags={["technology", "react"]}
+              tags={mainPopularPost.tags}
             >
               <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
-                Sep 13, 2025
+                {getPublishedDate(
+                  mainPopularPost.publishedAt ?? mainPopularPost._creationTime
+                )}
               </FeaturedCardPublishedAt>
               <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
-                5 min read
+                {mainPopularPost.duration} min read
               </FeaturedCardReadingTime>
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
-                <FeaturedCardTitle>Understanding React</FeaturedCardTitle>
+                <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
                 <FeaturedCardReadingTime className="hidden lg:inline">
-                  5 min read
+                  {mainPopularPost.duration} min read
                 </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>
-                Learn the fundamentals of React and how to build modern,
-                interactive web applications with this comprehensive guide.
+                {mainPopularPost.excerpt}
               </FeaturedCardDescription>
             </FeaturedCardContent>
             <FeaturedCardFooter>
@@ -80,15 +99,20 @@ export default function Trending() {
                 <FeaturedCardAuthor>
                   <Avatar className="size-8 xs:size-10">
                     <AvatarImage
-                      alt="Jivs Jivs profile picture"
-                      src="https://github.com/shadcn.png"
+                      alt={`Profile picture of ${mainPopularPost.authorName}`}
+                      aria-hidden
+                      src={mainPopularPost.authorImage || ""}
                     />
                     <AvatarFallback>JJ</AvatarFallback>
                   </Avatar>
-                  <FeaturedCardAuthorName>Jivs Jivs</FeaturedCardAuthorName>
+                  <FeaturedCardAuthorName>
+                    {mainPopularPost.authorName}
+                  </FeaturedCardAuthorName>
                 </FeaturedCardAuthor>
                 <FeaturedCardPublishedAt className="hidden lg:inline">
-                  Sep 13, 2025
+                  {getPublishedDate(
+                    mainPopularPost.publishedAt ?? mainPopularPost._creationTime
+                  )}
                 </FeaturedCardPublishedAt>
               </FeaturedCardAuthorContainer>
               <FeaturedCardStats commentsCount={33} viewsCount={300} />
@@ -97,54 +121,50 @@ export default function Trending() {
         </FeaturedCard>
         <div className="mt-4 flex w-full flex-col gap-6 md:mt-0">
           <div className="flex w-full flex-col gap-4 lg:flex-row">
-            <HighlightCard className="w-full">
-              <HighlightCardImageContainer>
-                <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
-                <HighlightCardTags tags={["technology", "react"]} />
-              </HighlightCardImageContainer>
-              <HighlightCardTitle>Understanding React Hooks</HighlightCardTitle>
-            </HighlightCard>
-            <HighlightCard className="w-full">
-              <HighlightCardImageContainer>
-                <div className="h-full w-full rounded-[1rem] rounded-br-[1.75rem] bg-green-500" />
-                <HighlightCardTags tags={["technology", "react"]} />
-              </HighlightCardImageContainer>
-              <HighlightCardTitle>Understanding React Hooks</HighlightCardTitle>
-            </HighlightCard>
+            {highLightPosts.map((post) => (
+              <HighlightCard className="w-full" key={post._id}>
+                <HighlightCardImageContainer>
+                  <Image
+                    alt={`Image for ${post.title}`}
+                    className="rounded-[1rem] rounded-br-[1.75rem]"
+                    layout="fill"
+                    objectFit="cover"
+                    src={post.image || ""}
+                  />
+                  <HighlightCardTags tags={post.tags} />
+                </HighlightCardImageContainer>
+                <HighlightCardTitle>{post.title}</HighlightCardTitle>
+              </HighlightCard>
+            ))}
           </div>
           <div className="flex w-full flex-col gap-4">
-            <CompactCard className="bg-background">
-              <CompactCardImageContainer>
-                <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-              </CompactCardImageContainer>
-              <CompactCardContent>
-                <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
-                <CompactCardFooter>
-                  <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-                  <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-                </CompactCardFooter>
-                <CompactCardStats
-                  className="xs:flex hidden"
-                  commentsCount={12}
-                />
-              </CompactCardContent>
-            </CompactCard>
-            <CompactCard className="bg-background">
-              <CompactCardImageContainer>
-                <div className="h-full w-full rounded-[0.625rem] bg-green-500" />
-              </CompactCardImageContainer>
-              <CompactCardContent>
-                <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
-                <CompactCardFooter>
-                  <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-                  <CompactCardReadingTime>5 mins</CompactCardReadingTime>
-                </CompactCardFooter>
-                <CompactCardStats
-                  className="xs:flex hidden"
-                  commentsCount={12}
-                />
-              </CompactCardContent>
-            </CompactCard>
+            {compactPosts.map((post) => (
+              <CompactCard className="bg-background" key={post._id}>
+                <CompactCardImageContainer>
+                  <Image
+                    alt={`Image for ${post.title}`}
+                    className="rounded-[0.625rem]"
+                    fill
+                    src={post.image || ""}
+                  />
+                </CompactCardImageContainer>
+                <CompactCardContent>
+                  <CompactCardTitle>{post.title}</CompactCardTitle>
+                  <CompactCardFooter>
+                    <CompactCardPublishedAt>
+                      {getPublishedDate(post.publishedAt ?? post._creationTime)}
+                    </CompactCardPublishedAt>
+                    <CompactCardReadingTime>
+                      {post.duration || "0 mins"}
+                    </CompactCardReadingTime>
+                  </CompactCardFooter>
+                  <CompactCardStats
+                    className="xs:flex hidden"
+                    commentsCount={post.commentsCount}
+                  />
+                </CompactCardContent>
+              </CompactCard>
+            ))}
           </div>
         </div>
       </div>

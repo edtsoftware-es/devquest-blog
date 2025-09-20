@@ -29,7 +29,7 @@ function CompactCardImageContainer({
   return (
     <div
       className={cn(
-        "flex h-21 w-27 shrink-0 rounded-[0.625rem] bg-neutral-200",
+        "relative flex h-21 w-27 shrink-0 overflow-hidden rounded-[0.625rem] bg-neutral-200",
         className
       )}
       {...props}
