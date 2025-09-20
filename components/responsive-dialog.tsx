@@ -2,7 +2,8 @@
 
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Camera } from "lucide-react";
-import React from "react";
+import React, { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,10 +29,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import type { UserWithRole } from "@/convex/lib/types";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
+import { cn, convertFileToWebp } from "@/lib/utils";
 import { AuthorCard, AuthorCardImageContainer } from "./cards/author-card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-
 export function ProfileDialog({
   preloadedCurrentUser,
 }: {
@@ -106,36 +106,53 @@ function ProfileForm({
 
   const imageInputRef = React.useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
-
+  const [transition, startTransition] = useTransition();
   return (
     <form
       className={cn("grid items-start gap-6", className)}
-      onSubmit={async (e) => {
+      onSubmit={(e) => {
         e.preventDefault();
-        const postUrl = await generateUploadUrl();
+        startTransition(async () => {
+          try {
+            await updateUserProfile({
+              nickname: (e.target as HTMLFormElement).nickname.value,
+              bio: (e.target as HTMLFormElement).bio.value,
+              username: (e.target as HTMLFormElement).username.value,
+            });
 
-        const result = await fetch(postUrl, {
-          method: "POST",
-          headers: {
-            // biome-ignore lint/style/noNonNullAssertion: selectedImage is not null
-            "Content-Type": selectedImage!.type,
-          },
-          body: selectedImage,
+            if (selectedImage) {
+              const postUrl = await generateUploadUrl();
+              const webpBlob = await convertFileToWebp(selectedImage);
+
+              const result = await fetch(postUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": webpBlob.type,
+                },
+                body: webpBlob,
+              });
+              if (!result.ok) {
+                throw new Error("Failed to upload image");
+              }
+              const { storageId } = await result.json();
+              await sendImage({ storageId, userId: currentUser._id });
+
+              setSelectedImage(null);
+
+              // biome-ignore lint/style/noNonNullAssertion: imageInputRef is not null
+              imageInputRef.current!.value = "";
+            }
+
+            toast.success("Perfil actualizado correctamente");
+            onSuccess();
+          } catch (error) {
+            toast.error(
+              error instanceof Error
+                ? error.message
+                : "Error al actualizar el perfil"
+            );
+          }
         });
-        if (!result.ok) {
-          throw new Error("Failed to upload image");
-        }
-        const { storageId } = await result.json();
-        await sendImage({ storageId, userId: currentUser._id });
-        await updateUserProfile({
-          nickname: (e.target as HTMLFormElement).nickname.value,
-          bio: (e.target as HTMLFormElement).bio.value,
-          username: (e.target as HTMLFormElement).username.value,
-        });
-        setSelectedImage(null);
-        // biome-ignore lint/style/noNonNullAssertion: imageInputRef is not null
-        imageInputRef.current!.value = "";
-        onSuccess();
       }}
     >
       <AuthorCard>
@@ -194,7 +211,9 @@ function ProfileForm({
         />
       </div>
 
-      <Button type="submit">Guardar</Button>
+      <Button disabled={transition} type="submit">
+        {transition ? "Guardando..." : "Guardar"}
+      </Button>
     </form>
   );
 }
