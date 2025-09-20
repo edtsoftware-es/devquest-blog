@@ -63,7 +63,7 @@ function FeaturedCardShell({
           <div className="absolute size-full bg-transparent" />
           <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background">
             <div className="absolute right-0 bottom-0">
-              <Button size="icon" type="button">
+              <Button aria-label="Read full article" size="icon" type="button">
                 <ArrowRight aria-hidden="true" />
               </Button>
             </div>
@@ -75,11 +75,11 @@ function FeaturedCardShell({
 }
 
 type FeaturedCardCategoriesProps = {
-  categories: { _id: string; slug: string; name: string }[];
+  tags: string[];
 };
 
-function FeaturedCardCategories({
-  categories,
+function FeaturedCardTags({
+  tags,
   className,
   children,
   ...props
@@ -90,12 +90,12 @@ function FeaturedCardCategories({
       className={cn("flex flex-wrap items-center gap-1.5", className)}
       {...props}
     >
-      {categories.map(({ _id, name }, index) => (
+      {tags.map((tag, index) => (
         <Badge
           className={`bg-background-${(index % MAX_BACKGROUND_VARIANTS) + 1}`}
-          key={_id}
+          key={tag}
         >
-          {name}
+          {tag}
         </Badge>
       ))}
       {children}
@@ -273,7 +273,7 @@ export {
   FeaturedCard,
   FeaturedCardImageContainer,
   FeaturedCardShell,
-  FeaturedCardCategories,
+  FeaturedCardTags,
   FeaturedCardPublishedAt,
   FeaturedCardReadingTime,
   FeaturedCardContent,

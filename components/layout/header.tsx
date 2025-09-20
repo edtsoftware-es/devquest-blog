@@ -1,5 +1,5 @@
 import { fetchQuery } from "convex/nextjs";
-import { MenuIcon, SearchIcon } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
@@ -22,9 +22,11 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { UserDropDownMenu } from "../user-dropdown-menu";
+import { SearchDialog } from "./search-dialog";
 
 export default async function Header() {
   const categories = await fetchQuery(api.categories.getAllCategories, {});
+  const recommendedPosts = await fetchQuery(api.posts.recommendedPosts, {});
 
   return (
     <header className="flex w-full items-center justify-center px-3 md:px-7">
@@ -96,15 +98,10 @@ export default async function Header() {
               width={100}
             />
           </div>
-          <Button
-            aria-label="Buscar contenido"
-            className="h-auto p-0 pr-4 xs:pr-8 text-neutral-900 md:pr-0"
-            type="button"
-            variant="link"
-          >
-            <SearchIcon size={16} />
-            <span>Buscar</span>
-          </Button>
+          <SearchDialog
+            categories={categories}
+            recommendedPosts={recommendedPosts}
+          />
           <div className="hidden items-center md:flex">
             <ModeToggle />
           </div>

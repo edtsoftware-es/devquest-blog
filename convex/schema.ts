@@ -8,7 +8,11 @@ const applicationTables = {
     role: v.union(v.literal("admin"), v.literal("user")),
     nickname: v.string(),
     avatarUrl: v.optional(v.string()),
-  }).index("by_user", ["userId"]),
+    bio: v.optional(v.string()),
+    username: v.string(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_nickname", ["nickname"]),
   posts: defineTable({
     title: v.string(),
     image: v.string(),

@@ -23,6 +23,10 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
       if (!user) {
         return;
       }
+      const userProfile = await ctx.db.get(args.userId);
+      if (userProfile) {
+        return;
+      }
       const randomNickname = uniqueNamesGenerator({
         dictionaries: [adjectives, colors, languages],
         separator: "-",
@@ -33,6 +37,8 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
         role: "user",
         avatarUrl: user.image,
         nickname: randomNickname,
+        bio: "",
+        username: user.name,
       });
     },
   },
