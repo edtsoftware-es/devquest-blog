@@ -13,6 +13,7 @@ import {
   AuthorCardDescription,
   AuthorCardImageContainer,
   AuthorCardName,
+  AuthorCardNickname,
 } from "@/components/cards/author-card";
 import {
   CompactCard,
@@ -408,7 +409,10 @@ export default function DesignSystem() {
           <AuthorCardImageContainer>
             <div className="h-full w-full rounded-full bg-green-500" />
           </AuthorCardImageContainer>
-          <AuthorCardName>Jivs Jivs</AuthorCardName>
+          <div className="flex flex-col items-center gap-1">
+            <AuthorCardName>Jivs Jivs</AuthorCardName>
+            <AuthorCardNickname>@jivs_jivs</AuthorCardNickname>
+          </div>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
             quis lorem vitae neque luctus malesuada. Sed ac ipsum sit amet sem
@@ -416,11 +420,16 @@ export default function DesignSystem() {
           </AuthorCardDescription>
         </AuthorCard>
 
-        <AuthorCard className="max-w-136 gap-y-3 border-none bg-background">
-          <AuthorCardImageContainer className="mb-3">
+        <AuthorCard className="max-w-136 border-none bg-background">
+          <AuthorCardImageContainer>
             <div className="h-full w-full rounded-full bg-green-500" />
           </AuthorCardImageContainer>
-          <AuthorCardName className="text-[2.375rem]">Jivs Jivs</AuthorCardName>
+          <div className="flex flex-col items-center gap-1">
+            <AuthorCardName className="text-[2.375rem] leading-[1.2]">
+              Jivs Jivs
+            </AuthorCardName>
+            <AuthorCardNickname>@jivs_jivs</AuthorCardNickname>
+          </div>
           <AuthorCardDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
             quis lorem vitae neque luctus malesuada. Sed ac ipsum sit amet sem

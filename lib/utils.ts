@@ -1,4 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -55,4 +57,13 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 
   return image;
+}
+
+export function formatDate(timestamp?: number) {
+  if (!timestamp) {
+    return "";
+  }
+  return format(new Date(timestamp), "MMM dd, yyyy", {
+    locale: es,
+  });
 }
