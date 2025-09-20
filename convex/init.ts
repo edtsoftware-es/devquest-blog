@@ -1,5 +1,7 @@
+import { ShardedCounter } from "@convex-dev/sharded-counter";
 import { faker } from "@faker-js/faker";
 import { v } from "convex/values";
+import { components } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { internalMutation } from "./_generated/server";
@@ -20,6 +22,8 @@ type FakeDataCounts = {
   commentsCount: number;
   likesCount: number;
 };
+
+export const postCounter = new ShardedCounter(components.shardedCounter);
 
 async function createUsers(
   ctx: MutationCtx,
@@ -113,6 +117,7 @@ async function createPosts(
       deletedAt: undefined,
       viewCount: faker.number.int({ min: 0, max: 1000 }),
     });
+    await postCounter.inc(ctx, "totalPosts");
     postIds.push(postId);
   }
   return postIds;

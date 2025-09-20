@@ -1,5 +1,8 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { ShardedCounter } from "@convex-dev/sharded-counter";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import { components } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
@@ -24,6 +27,9 @@ export const HOME_POSTS_LIMIT = 5;
 const POPULAR_SLICE_START = 1;
 const POPULAR_SLICE_END = 3;
 const DEFAULT_POSTS_PER_PAGE = 8;
+const LATEST_POSTS_LIMIT = 50;
+
+export const postCounter = new ShardedCounter(components.shardedCounter);
 
 export function calculateReadingDuration(content: string): number {
   const cleanContent = content
@@ -53,6 +59,23 @@ export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
 
   return userProfile;
 }
+
+export const getLatestPosts = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const _posts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .paginate(
+        args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
+      );
+
+    return _posts;
+  },
+});
 
 export const getHomePosts = query({
   args: {},
@@ -534,7 +557,6 @@ export const getPostsByUserRole = query({
 
 export const createPost = mutation({
   args: PostInputFields,
-  returns: v.id("posts"),
   handler: async (ctx, args) => {
     const userProfile = await requireUser(ctx);
     const userId = userProfile.userId;
@@ -542,7 +564,7 @@ export const createPost = mutation({
     const duration = calculateReadingDuration(args.content);
     const now = Date.now();
 
-    return await ctx.db.insert("posts", {
+    await ctx.db.insert("posts", {
       title: args.title,
       image: args.image,
       duration,
@@ -559,6 +581,8 @@ export const createPost = mutation({
       publishedAt: args.published ? now : undefined,
       viewCount: 0,
     });
+
+    await postCounter.inc(ctx, "totalPosts");
   },
 });
 
@@ -623,6 +647,9 @@ export const deletePost = mutation({
     }
 
     await ctx.db.delete(args.postId);
+
+    await postCounter.dec(ctx, "totalPosts");
+
     return null;
   },
 });
