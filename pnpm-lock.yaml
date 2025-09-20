@@ -14,6 +14,9 @@ importers:
       '@convex-dev/auth':
         specifier: ^0.0.81
         version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0(react@19.1.1))(react@19.1.1)
+      '@convex-dev/sharded-counter':
+        specifier: ^0.1.8
+        version: 0.1.8(convex@1.27.0(react@19.1.1))
       '@hookform/resolvers':
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.62.0(react@19.1.1))
@@ -422,6 +425,11 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  '@convex-dev/sharded-counter@0.1.8':
+    resolution: {integrity: sha512-kcv9BAvqrtBAvtzBsqLVz5Elzf0xe7sio3QX5eXvk+ZVIJb+rIeF9h4ZI6qH2RuW/qQvwY5stNZghDbGzLIvDw==}
+    peerDependencies:
+      convex: ~1.16.5 || >=1.17.0 <1.35.0
 
   '@cspell/cspell-bundled-dicts@8.19.4':
     resolution: {integrity: sha512-2ZRcZP/ncJ5q953o8i+R0fb8+14PDt5UefUNMrFZZHvfTI0jukAASOQeLY+WT6ASZv6CgbPrApAdbppy9FaXYQ==}
@@ -5036,6 +5044,10 @@ snapshots:
       server-only: 0.0.1
     optionalDependencies:
       react: 19.1.1
+
+  '@convex-dev/sharded-counter@0.1.8(convex@1.27.0(react@19.1.1))':
+    dependencies:
+      convex: 1.27.0(react@19.1.1)
 
   '@cspell/cspell-bundled-dicts@8.19.4':
     dependencies:
