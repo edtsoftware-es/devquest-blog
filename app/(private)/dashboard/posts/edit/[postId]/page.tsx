@@ -1,8 +1,8 @@
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { fetchQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
+import type { Category, PostId } from "@/types";
 import { PostForm } from "../../create/post-form";
-import { Category, PostId } from "@/types";
 
 type EditPostPageProps = {
   params: {
@@ -19,12 +19,12 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
   ]);
 
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto max-w-4xl px-6 py-8">
-        <PostForm 
-          categories={categories as Category[]} 
-          post={post}
+    <div className="w-full px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <PostForm
+          categories={categories as Category[]}
           mode="edit"
+          post={post}
         />
       </div>
     </div>
