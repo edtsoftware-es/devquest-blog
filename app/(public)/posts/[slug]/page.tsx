@@ -32,8 +32,8 @@ export default async function PostPage({
         <div className="lg:col-span-2">
           <CommentsSection
             postId={post._id}
+            preloadedPost={preloadedPost}
             preloadedUser={preloadedUser}
-            totalComments={post.commentsCount}
           />
         </div>
       </div>
