@@ -1,5 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
 
@@ -30,12 +31,19 @@ export const getCurrentUser = query({
     if (!user) {
       throw AuthErrors.userNotFound();
     }
+    let avatarUrl = user.image;
+    try {
+      avatarUrl =
+        (await ctx.storage.getUrl(user.image as Id<"_storage">)) ?? user.image;
+    } catch {
+      avatarUrl = user.image;
+    }
 
     return {
       _id: user._id,
       name: user.name,
       email: user.email,
-      image: user.image,
+      image: avatarUrl,
       role: user.role,
       nickname: user.nickname,
       bio: user.bio,
