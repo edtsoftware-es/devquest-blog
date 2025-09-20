@@ -4,7 +4,7 @@ import { type Preloaded, usePreloadedQuery } from "convex/react";
 import { User } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { api } from "@/convex/_generated/api";
+import type { api } from "@/convex/_generated/api";
 
 export function UserInfo({
   preloadedCurrentUser,

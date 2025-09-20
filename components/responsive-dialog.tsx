@@ -168,7 +168,7 @@ function ProfileForm({
                     : currentUser.image
                 }
               />
-              <AvatarFallback>
+              <AvatarFallback className="size-full">
                 {currentUser.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>

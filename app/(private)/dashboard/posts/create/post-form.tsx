@@ -34,8 +34,6 @@ import type { Category } from "@/types";
 const TITLE_MAX_LENGTH = 200;
 const SLUG_MAX_LENGTH = 100;
 const EXCERPT_MAX_LENGTH = 500;
-const WORD_SPLIT_REGEX = /\s+/;
-const WORDS_PER_MINUTE = 200;
 
 const postSchema = z.object({
   title: z
@@ -68,76 +66,10 @@ type PostFormProps = {
 export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
   const router = useRouter();
 
-  const createPost = useMutation(api.posts.createPost).withOptimisticUpdate(
-    (localStore, args) => {
-      const existingPosts = localStore.getQuery(
-        api.posts.getPostsByUserRole,
-        {}
-      );
-      if (existingPosts !== undefined) {
-        const now = Date.now();
-        const duration = Math.ceil(
-          args.content.split(WORD_SPLIT_REGEX).length / WORDS_PER_MINUTE
-        );
-        const tempPost = {
-          _id: `temp_${now}` as Id<"posts">,
-          _creationTime: now,
-          title: args.title,
-          image: args.image,
-          duration,
-          slug: args.slug,
-          categoryId: args.categoryId,
-          content: args.content,
-          excerpt: args.excerpt,
-          authorId: "temp-author" as Id<"users">,
-          authorName: "Usuario",
-          tags: args.tags,
-          likesCount: 0,
-          commentsCount: 0,
-          published: args.published,
-          updatedAt: now,
-          publishedAt: args.published ? now : undefined,
-          deletedAt: undefined,
-          viewCount: 0,
-        };
-        localStore.setQuery(api.posts.getPostsByUserRole, {}, [
-          tempPost,
-          ...existingPosts,
-        ]);
-      }
-    }
-  );
+  const createPost = useMutation(api.posts.createPost);
 
-  const updatePost = useMutation(api.posts.updatePost).withOptimisticUpdate(
-    (localStore, args) => {
-      const existingPosts = localStore.getQuery(
-        api.posts.getPostsByUserRole,
-        {}
-      );
-      if (existingPosts !== undefined) {
-        const updatedPosts = existingPosts.map((existingPost) => {
-          if (existingPost._id === args.postId) {
-            const now = Date.now();
-            return {
-              ...existingPost,
-              title: args.title,
-              image: args.image,
-              slug: args.slug,
-              categoryId: args.categoryId,
-              content: args.content,
-              excerpt: args.excerpt,
-              tags: args.tags,
-              published: args.published,
-              updatedAt: now,
-              publishedAt: args.published && !existingPost.published ? now : existingPost.publishedAt,
-            };
-          }
-          return existingPost;
-        });
-        localStore.setQuery(api.posts.getPostsByUserRole, {}, updatedPosts);
-      }
-    }
-  );
+  const updatePost = useMutation(api.posts.updatePost);
+
   const form = useForm<PostFormData>({
     // @ts-expect-error - Zod version compatibility issue
     resolver: zodResolver(postSchema),
@@ -149,7 +81,7 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
       content: post?.content || "",
       excerpt: post?.excerpt || "",
       tags: post?.tags?.join(", ") || "",
-      published: post?.published || false,
+      published: post?.published,
     },
   });
 
@@ -188,7 +120,9 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
       }
       router.push("/dashboard");
     } catch {
-      toast.error(`Error al ${mode === "edit" ? "actualizar" : "crear"} el post`);
+      toast.error(
+        `Error al ${mode === "edit" ? "actualizar" : "crear"} el post`
+      );
     }
   };
 
@@ -214,34 +148,124 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
           {mode === "edit" ? "Editar Post" : "Crear Nuevo Post"}
         </h1>
         <p className="mt-2 text-muted-foreground text-sm">
-          {mode === "edit" 
-            ? "Modifica los campos que desees cambiar" 
-            : "Completa todos los campos para crear un nuevo post"
-          }
+          {mode === "edit"
+            ? "Modifica los campos que desees cambiar"
+            : "Completa todos los campos para crear un nuevo post"}
         </p>
       </div>
 
       <div className="rounded-lg border bg-card p-6">
         <Form {...form}>
-          <form
-            className="space-y-6"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Título</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Título del post"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleTitleChange(e.target.value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="slug"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Slug</FormLabel>
+                    <FormControl>
+                      <Input placeholder="url-del-post" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormField
               control={form.control}
-              name="title"
+              name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Título</FormLabel>
+                  <FormLabel>URL de la imagen</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Título del post"
+                      placeholder="https://ejemplo.com/imagen.jpg"
                       {...field}
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleTitleChange(e.target.value);
-                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Categoría</FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una categoría" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category._id} value={category._id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="tags"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Etiquetas</FormLabel>
+                    <FormControl>
+                      <Input placeholder="react, javascript, web" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="excerpt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Extracto</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="min-h-[100px]"
+                      placeholder="Breve descripción del post..."
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -251,60 +275,23 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
 
             <FormField
               control={form.control}
-              name="slug"
+              name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Slug</FormLabel>
+                  <FormLabel>Contenido</FormLabel>
                   <FormControl>
-                    <Input placeholder="url-del-post" {...field} />
+                    <MinimalTiptapEditor
+                      autofocus={false}
+                      className="w-full"
+                      editable={true}
+                      editorClassName="focus:outline-hidden"
+                      editorContentClassName="p-4 min-h-[300px]"
+                      onChange={field.onChange}
+                      output="html"
+                      placeholder="Escribe el contenido de tu post aquí..."
+                      value={field.value}
+                    />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="image"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>URL de la imagen</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="categoryId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Categoría</FormLabel>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona una categoría" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -312,103 +299,46 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
 
             <FormField
               control={form.control}
-              name="tags"
+              name="published"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Etiquetas</FormLabel>
-                  <FormControl>
-                    <Input placeholder="react, javascript, web" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <FormField
-            control={form.control}
-            name="excerpt"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Extracto</FormLabel>
-                <FormControl>
-                  <Textarea
-                    className="min-h-[100px]"
-                    placeholder="Breve descripción del post..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contenido</FormLabel>
-                <FormControl>
-                  <MinimalTiptapEditor
-                    autofocus={false}
-                    className="w-full"
-                    editable={true}
-                    editorClassName="focus:outline-hidden"
-                    editorContentClassName="p-4 min-h-[300px]"
-                    onChange={field.onChange}
-                    output="html"
-                    placeholder="Escribe el contenido de tu post aquí..."
-                    value={field.value}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="published"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border bg-card p-4">
-                <div className="space-y-0.5">
-                  <FormLabel>Publicar</FormLabel>
-                  <div className="text-muted-foreground text-sm">
-                    Marca esta casilla para publicar el post inmediatamente
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border bg-card p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Publicar</FormLabel>
+                    <div className="text-muted-foreground text-sm">
+                      Marca esta casilla para publicar el post inmediatamente
+                    </div>
                   </div>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
-          <div className="flex gap-3 pt-4">
-            <Button
-              disabled={form.formState.isSubmitting}
-              onClick={() => router.back()}
-              type="button"
-              variant="outline"
-            >
-              Cancelar
-            </Button>
-            <Button
-              disabled={form.formState.isSubmitting}
-              type="submit"
-            >
-              {form.formState.isSubmitting 
-                ? (mode === "edit" ? "Actualizando..." : "Creando...") 
-                : (mode === "edit" ? "Actualizar Post" : "Crear Post")
-              }
-            </Button>
-          </div>
-        </form>
-      </Form>
+            <div className="flex gap-3 pt-4">
+              <Button
+                disabled={form.formState.isSubmitting}
+                onClick={() => router.back()}
+                type="button"
+                variant="outline"
+              >
+                Cancelar
+              </Button>
+              <Button disabled={form.formState.isSubmitting} type="submit">
+                {form.formState.isSubmitting
+                  ? mode === "edit"
+                    ? "Actualizando..."
+                    : "Creando..."
+                  : mode === "edit"
+                    ? "Actualizar Post"
+                    : "Crear Post"}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );
