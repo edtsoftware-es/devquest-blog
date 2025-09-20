@@ -15,7 +15,7 @@ function StandardCard({
   return (
     <article
       className={cn(
-        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_auto] lg:grid-rows-1 lg:gap-3.5",
+        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
         variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_auto]",
         className
       )}
@@ -31,7 +31,7 @@ function StandardCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-63 rounded-[1rem] bg-neutral-200 lg:h-80 lg:min-w-80",
+        "relative flex h-63 overflow-hidden rounded-[1rem] bg-neutral-200 lg:h-80 lg:w-80",
         className
       )}
       {...props}
@@ -85,28 +85,28 @@ function StandardCardShell({
   );
 }
 
-type StandardCardCategoriesProps = {
-  categories: { _id: string; slug: string; name: string }[];
+type StandardCardTagsProps = {
+  tags: string[];
 };
 
-function StandardCardCategories({
-  categories,
+function StandardCardTags({
+  tags,
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & StandardCardCategoriesProps) {
+}: React.ComponentProps<"div"> & StandardCardTagsProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div
       className={cn("flex flex-wrap-reverse items-center gap-1.5", className)}
       {...props}
     >
-      {categories.map(({ _id, name }, index) => (
+      {tags.map((tag, index) => (
         <Badge
           className={`bg-background-${(index % MAX_BACKGROUND_VARIANTS) + 1}`}
-          key={_id}
+          key={tag}
         >
-          {name}
+          {tag}
         </Badge>
       ))}
       {children}
@@ -284,7 +284,7 @@ export {
   StandardCard,
   StandardCardImageContainer,
   StandardCardShell,
-  StandardCardCategories,
+  StandardCardTags,
   StandardCardContent,
   StandardCardHeader,
   StandardCardTitle,
