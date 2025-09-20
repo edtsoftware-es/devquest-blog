@@ -15,7 +15,7 @@ function StandardCard({
   return (
     <article
       className={cn(
-        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_1fr] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
+        "relative isolate grid max-w-300 grid-cols-1 grid-rows-[auto_1fr] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
         variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_1fr]",
         className
       )}

@@ -6,6 +6,7 @@ import {
   usePreloadedQuery,
 } from "convex/react";
 import Image from "next/image";
+import Link from "next/link";
 import { DEFAULT_LATEST_POSTS_LIMIT } from "@/app/(public)/page";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
@@ -62,9 +63,12 @@ export default function StandardPostList({
               <StandardCardTags className="xs:flex hidden" tags={post.tags} />
               <StandardCardContent>
                 <StandardCardHeader>
-                  <StandardCardTitle className="line-clamp-1 lg:text-xl">
-                    {post.title}
-                  </StandardCardTitle>
+                  <Link href={`/posts/${post.slug}`}>
+                    <span className="absolute inset-0 z-50" />
+                    <StandardCardTitle className="line-clamp-1 lg:text-xl">
+                      {post.title}
+                    </StandardCardTitle>
+                  </Link>
                   <StandardCardReadingTime>
                     {`${post.duration} mins`}
                   </StandardCardReadingTime>

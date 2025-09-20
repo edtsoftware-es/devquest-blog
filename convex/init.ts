@@ -37,7 +37,7 @@ async function createUsers(
       email: faker.internet.email(),
       emailVerificationTime: Date.now(),
       role: faker.helpers.arrayElement(["admin", "user"]),
-      nickname: faker.person.fullName(),
+      nickname: faker.internet.username(),
       bio: faker.lorem.sentence(),
     });
     userIds.push(userId);

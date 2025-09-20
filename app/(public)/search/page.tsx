@@ -98,7 +98,10 @@ export default async function SearchPage({
                   />
                   <StandardCardContent>
                     <StandardCardHeader>
-                      <StandardCardTitle>{post.title}</StandardCardTitle>
+                      <Link href={`/posts/${post.slug}`}>
+                        <span className="absolute inset-0 z-50" />
+                        <StandardCardTitle>{post.title}</StandardCardTitle>
+                      </Link>
                       <StandardCardReadingTime>
                         {`${post.duration} mins`}
                       </StandardCardReadingTime>
