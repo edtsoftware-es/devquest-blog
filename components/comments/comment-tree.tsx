@@ -2,12 +2,12 @@
 
 import type { Id } from "@/convex/_generated/dataModel";
 import { CommentNode } from "./comment-node";
-import type { CommentTree as CommentTreeType, UserProfile } from "./types";
+import type { CommentTree as CommentTreeType } from "./types";
 
 type CommentTreeProps = {
   comments: CommentTreeType[];
   postId: Id<"posts">;
-  currentUser?: UserProfile | null;
+  currentUser?: any;
   maxDepth?: number;
   showLimit?: number;
   startIndex?: number;

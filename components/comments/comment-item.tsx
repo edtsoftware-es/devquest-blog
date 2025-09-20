@@ -7,7 +7,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -123,7 +122,9 @@ export function CommentItem({
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm">
-                <span className="font-medium text-foreground">{comment.authorName}</span>
+                <span className="font-medium text-foreground">
+                  {comment.authorName}
+                </span>
                 <span className="text-muted-foreground">·</span>
                 <time className="text-muted-foreground text-xs">
                   {formatDistanceToNow(new Date(comment._creationTime), {
@@ -169,7 +170,9 @@ export function CommentItem({
               />
             ) : (
               <div className="prose prose-sm max-w-none text-foreground">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed">{comment.content}</p>
+                <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                  {comment.content}
+                </p>
               </div>
             )}
 
@@ -208,7 +211,8 @@ export function CommentItem({
           <DialogHeader>
             <DialogTitle>Eliminar comentario</DialogTitle>
             <DialogDescription>
-              ¿Estás seguro de que quieres eliminar este comentario? Esta acción no se puede deshacer.
+              ¿Estás seguro de que quieres eliminar este comentario? Esta acción
+              no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -257,7 +261,9 @@ function EditCommentForm({
     }
 
     if (trimmedContent.length > MAX_COMMENT_LENGTH) {
-      toast.error(`El comentario no puede exceder ${MAX_COMMENT_LENGTH} caracteres`);
+      toast.error(
+        `El comentario no puede exceder ${MAX_COMMENT_LENGTH} caracteres`
+      );
       return;
     }
 

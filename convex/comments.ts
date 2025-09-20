@@ -66,7 +66,6 @@ export const getCommentsWithAuthors = query({
 
 export const createComment = mutation({
   args: CommentInputFields,
-  returns: v.id("comments"),
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
@@ -114,7 +113,6 @@ export const createComment = mutation({
       throw new Error("Comment content cannot exceed 1000 characters");
     }
 
-    // Prevent duplicate replies
     if (args.parentId) {
       const duplicateComment = await ctx.db
         .query("comments")

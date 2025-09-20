@@ -8,22 +8,22 @@ import type { Id } from "@/convex/_generated/dataModel";
 
 type CommentsSectionProps = {
   postId: Id<"posts">;
+  preloadedPost: Preloaded<typeof api.posts.getPdpPost>;
   preloadedUser: Preloaded<typeof api.users.getCurrentUserOptional>;
-  totalComments: number;
 };
 
 export function CommentsSection({
   postId,
+  preloadedPost,
   preloadedUser,
-  totalComments,
 }: CommentsSectionProps) {
   return (
     <div className="mt-12">
       <CommentsErrorBoundary>
         <CommentsContainer
           postId={postId}
+          preloadedPost={preloadedPost}
           preloadedUser={preloadedUser}
-          totalComments={totalComments}
         />
       </CommentsErrorBoundary>
     </div>
