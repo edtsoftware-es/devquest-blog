@@ -8,7 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { cn } from "@/lib/utils";
 
 type CommentFormProps = {
   postId: Id<"posts">;
@@ -30,34 +29,7 @@ export function CommentForm({
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const createComment = useMutation(api.comments.createComment).withOptimisticUpdate(
-    (localStore, args) => {
-      // Add optimistic comment while server processes the request
-      const existingComments = localStore.getQuery(api.comments.getCommentsWithAuthors, {
-        postId: args.postId,
-      });
-
-      if (existingComments) {
-        const optimisticComment = {
-          _id: `temp-${Date.now()}` as any,
-          _creationTime: Date.now(),
-          postId: args.postId,
-          authorId: "temp-user" as any,
-          parentId: args.parentId,
-          content: args.content,
-          likesCount: 0,
-          authorName: "You",
-          authorImage: undefined,
-          deletedAt: undefined,
-        };
-
-        localStore.setQuery(api.comments.getCommentsWithAuthors, { postId: args.postId }, {
-          ...existingComments,
-          page: [optimisticComment, ...existingComments.page],
-        });
-      }
-    }
-  );
+  const createComment = useMutation(api.comments.createComment);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,7 +87,13 @@ export function CommentForm({
               value={content}
             />
             <div className="mt-2 flex items-center justify-between text-xs">
-              <span className={remainingChars < 100 ? "text-destructive" : "text-muted-foreground"}>
+              <span
+                className={
+                  remainingChars < 100
+                    ? "text-destructive"
+                    : "text-muted-foreground"
+                }
+              >
                 {remainingChars} characters remaining
               </span>
             </div>
@@ -128,11 +106,7 @@ export function CommentForm({
               size="sm"
               type="submit"
             >
-              {isSubmitting 
-                ? "Posting..." 
-                : parentId 
-                  ? "Reply" 
-                  : "Comment"}
+              {isSubmitting ? "Posting..." : parentId ? "Reply" : "Comment"}
             </Button>
 
             {onCancel && (

@@ -17,16 +17,17 @@ import { buildCommentTree } from "./utils";
 type CommentsContainerProps = {
   postId: Id<"posts">;
   preloadedUser: Preloaded<typeof api.users.getCurrentUserOptional>;
-  totalComments: number;
+  preloadedPost: Preloaded<typeof api.posts.getPdpPost>;
 };
 
 export function CommentsContainer({
   postId,
   preloadedUser,
-  totalComments,
+  preloadedPost,
 }: CommentsContainerProps) {
   const [showComments, setShowComments] = useState(true);
   const [showCommentForm, setShowCommentForm] = useState(false);
+  const post = usePreloadedQuery(preloadedPost);
 
   const {
     results: comments,
@@ -51,7 +52,7 @@ export function CommentsContainer({
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-heading-4">
           <MessageSquare className="size-5" />
-          Comentarios ({totalComments})
+          Comentarios ({post?.commentsCount})
         </h2>
         <Button
           className="gap-1"
