@@ -1,5 +1,6 @@
 import { fetchQuery } from "convex/nextjs";
 import { Heading, SectionHeading } from "@/components/headings";
+import { NewsletterCard } from "@/components/newsletter-card";
 import { api } from "@/convex/_generated/api";
 import { HOME_POSTS_LIMIT } from "@/convex/posts";
 import CompactPostList from "@/shared/components/compact-post-list";
@@ -15,14 +16,14 @@ export default async function Home() {
     <div className="flex w-full flex-col items-center gap-10">
       <Hero posts={posts.mainPosts.slice(0, HOME_POSTS_LIMIT)} />
       <Explore categories={MockCategories} className="mt-8 px-4" />
-      <div className="flex w-full flex-col items-center justify-center px-4 xl:max-w-[1200px]">
+      <section className="flex w-full flex-col items-center justify-center px-4 xl:max-w-[1200px]">
         <Trending
           compactPosts={posts.compactPosts}
           highLightPosts={posts.highLightPosts}
           mainPopularPost={posts.mainPopularPost}
         />
-      </div>
-      <div className="grid w-full max-w-[1200px] gap-8 px-4 lg:grid-cols-3">
+      </section>
+      <section className="grid w-full max-w-[1200px] gap-8 px-4 lg:grid-cols-3">
         <div className="flex flex-col gap-8 lg:col-span-2">
           <SectionHeading
             slug="latest-articles"
@@ -42,7 +43,9 @@ export default async function Home() {
             <TagList className="mt-4" tags={posts.popularTags} />
           </div>
         </aside>
-      </div>
+      </section>
+      <NewsletterCard className="bg-transparent pt-0" hiddeIcon />
+      <section />
     </div>
   );
 }

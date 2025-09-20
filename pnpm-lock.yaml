@@ -4,160 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@auth/core':
-    specifier: ^0.40.0
-    version: 0.40.0
-  '@convex-dev/auth':
-    specifier: ^0.0.81
-    version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0)(react@19.1.1)
-  '@hookform/resolvers':
-    specifier: ^5.2.2
-    version: 5.2.2(react-hook-form@7.62.0)
-  '@radix-ui/react-avatar':
-    specifier: ^1.1.10
-    version: 1.1.10(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-dialog':
-    specifier: ^1.1.15
-    version: 1.1.15(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-dropdown-menu':
-    specifier: ^2.1.16
-    version: 2.1.16(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-icons':
-    specifier: ^1.3.2
-    version: 1.3.2(react@19.1.1)
-  '@radix-ui/react-label':
-    specifier: ^2.1.7
-    version: 2.1.7(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-popover':
-    specifier: ^1.1.15
-    version: 1.1.15(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-select':
-    specifier: ^2.2.6
-    version: 2.2.6(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-separator':
-    specifier: ^1.1.7
-    version: 1.1.7(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-slot':
-    specifier: ^1.2.3
-    version: 1.2.3(@types/react@19.1.12)(react@19.1.1)
-  '@radix-ui/react-switch':
-    specifier: ^1.2.6
-    version: 1.2.6(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-toggle':
-    specifier: ^1.1.10
-    version: 1.1.10(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-toggle-group':
-    specifier: ^1.1.11
-    version: 1.1.11(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@radix-ui/react-tooltip':
-    specifier: ^1.2.8
-    version: 1.2.8(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@tiptap/extension-code-block-lowlight':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/extension-code-block@3.4.2)(@tiptap/pm@3.4.2)(highlight.js@11.11.1)(lowlight@3.3.0)
-  '@tiptap/extension-color':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/extension-text-style@3.4.2)
-  '@tiptap/extension-horizontal-rule':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)
-  '@tiptap/extension-image':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)
-  '@tiptap/extension-text-style':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)
-  '@tiptap/extension-typography':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)
-  '@tiptap/extensions':
-    specifier: ^3.4.2
-    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)
-  '@tiptap/pm':
-    specifier: ^3.4.2
-    version: 3.4.2
-  '@tiptap/react':
-    specifier: ^3.4.2
-    version: 3.4.2(@floating-ui/dom@1.7.4)(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  '@tiptap/starter-kit':
-    specifier: ^3.4.2
-    version: 3.4.2
-  babel-plugin-react-compiler:
-    specifier: 19.1.0-rc.3
-    version: 19.1.0-rc.3
-  browser-image-compression:
-    specifier: ^2.0.2
-    version: 2.0.2
-  class-variance-authority:
-    specifier: ^0.7.1
-    version: 0.7.1
-  clsx:
-    specifier: ^2.1.1
-    version: 2.1.1
-  convex:
-    specifier: ^1.27.0
-    version: 1.27.0(react@19.1.1)
-  date-fns:
-    specifier: ^4.1.0
-    version: 4.1.0
-  embla-carousel-autoplay:
-    specifier: ^8.6.0
-    version: 8.6.0(embla-carousel@8.6.0)
-  embla-carousel-react:
-    specifier: ^8.6.0
-    version: 8.6.0(react@19.1.1)
-  lowlight:
-    specifier: ^3.3.0
-    version: 3.3.0
-  lucide-react:
-    specifier: ^0.544.0
-    version: 0.544.0(react@19.1.1)
-  next:
-    specifier: 15.5.3
-    version: 15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1)(react@19.1.1)
-  next-themes:
-    specifier: ^0.4.6
-    version: 0.4.6(react-dom@19.1.1)(react@19.1.1)
-  nuqs:
-    specifier: ^2.6.0
-    version: 2.6.0(next@15.5.3)(react@19.1.1)
-  react:
-    specifier: ^19.0.0
-    version: 19.1.1
-  react-dom:
-    specifier: ^19.0.0
-    version: 19.1.1(react@19.1.1)
-  react-error-boundary:
-    specifier: ^6.0.0
-    version: 6.0.0(react@19.1.1)
-  react-hook-form:
-    specifier: ^7.62.0
-    version: 7.62.0(react@19.1.1)
-  react-medium-image-zoom:
-    specifier: ^5.3.0
-    version: 5.3.0(react-dom@19.1.1)(react@19.1.1)
-  sharp:
-    specifier: ^0.34.4
-    version: 0.34.4
-  sonner:
-    specifier: ^2.0.7
-    version: 2.0.7(react-dom@19.1.1)(react@19.1.1)
-  tailwind-merge:
-    specifier: ^3.3.1
-    version: 3.3.1
-  unique-names-generator:
-    specifier: ^4.7.1
-    version: 4.7.1
-  use-debounce:
-    specifier: ^10.0.6
-    version: 10.0.6(react@19.1.1)
-  vaul:
-    specifier: ^1.1.2
-    version: 1.1.2(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
-  zod:
-    specifier: ^4.1.8
-    version: 4.1.8
+importers:
 
   .:
     dependencies:
@@ -2449,8 +2296,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  baseline-browser-mapping@2.8.2:
-    resolution: {integrity: sha512-NvcIedLxrs9llVpX7wI+Jz4Hn9vJQkCPKrTaHIE0sW/Rj1iq6Fzby4NbyTZjQJNoypBXNaG7tEHkTgONZpwgxQ==}
+  baseline-browser-mapping@2.8.6:
+    resolution: {integrity: sha512-wrH5NNqren/QMtKUEEJf7z86YjfqW/2uw3IL3/xpqZUC95SSVIFXYQeeGjL6FT/X68IROu6RMehZQS5foy2BXw==}
     hasBin: true
 
   body-parser@2.2.0:
@@ -2464,8 +2311,8 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
-  browserslist@4.26.0:
-    resolution: {integrity: sha512-P9go2WrP9FiPwLv3zqRD/Uoxo0RSHjzFCiQz7d4vbmwNqQFo9T9WCeP/Qn5EbcKQY6DBbkxEXNcpJOmncNrb7A==}
+  browserslist@4.26.2:
+    resolution: {integrity: sha512-ECFzp6uFOSB+dcZ5BK/IBaGWssbSYBHvuMeMt3MMFyhI0Z8SqGgEkBLARgpRH3hutIgPVsALcMwbDrJqPxQ65A==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
@@ -2767,10 +2614,6 @@ packages:
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
-
-  detect-libc@2.0.4:
-    resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
-    engines: {node: '>=8'}
 
   detect-libc@2.1.0:
     resolution: {integrity: sha512-vEtk+OcP7VBRtQZ1EJ3bdgzSfBjgnEalLTp5zjJrS+2Z1w2KZly4SBdac/WDU3hhsNAZ9E8SC96ME4Ey8MZ7cg==}
@@ -4745,6 +4588,362 @@ packages:
   zod@4.1.8:
     resolution: {integrity: sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ==}
 
+dependencies:
+  '@auth/core':
+    specifier: ^0.40.0
+    version: 0.40.0
+  '@convex-dev/auth':
+    specifier: ^0.0.81
+    version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0)(react@19.1.1)
+  '@hookform/resolvers':
+    specifier: ^5.2.2
+    version: 5.2.2(react-hook-form@7.62.0)
+  '@radix-ui/react-avatar':
+    specifier: ^1.1.10
+    version: 1.1.10(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-dialog':
+    specifier: ^1.1.15
+    version: 1.1.15(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-dropdown-menu':
+    specifier: ^2.1.16
+    version: 2.1.16(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-icons':
+    specifier: ^1.3.2
+    version: 1.3.2(react@19.1.1)
+  '@radix-ui/react-label':
+    specifier: ^2.1.7
+    version: 2.1.7(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-popover':
+    specifier: ^1.1.15
+    version: 1.1.15(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-select':
+    specifier: ^2.2.6
+    version: 2.2.6(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-separator':
+    specifier: ^1.1.7
+    version: 1.1.7(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-slot':
+    specifier: ^1.2.3
+    version: 1.2.3(@types/react@19.1.12)(react@19.1.1)
+  '@radix-ui/react-switch':
+    specifier: ^1.2.6
+    version: 1.2.6(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-toggle':
+    specifier: ^1.1.10
+    version: 1.1.10(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-toggle-group':
+    specifier: ^1.1.11
+    version: 1.1.11(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@radix-ui/react-tooltip':
+    specifier: ^1.2.8
+    version: 1.2.8(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@tiptap/extension-code-block-lowlight':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/extension-code-block@3.4.2)(@tiptap/pm@3.4.2)(highlight.js@11.11.1)(lowlight@3.3.0)
+  '@tiptap/extension-color':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/extension-text-style@3.4.2)
+  '@tiptap/extension-horizontal-rule':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)
+  '@tiptap/extension-image':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)
+  '@tiptap/extension-text-style':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)
+  '@tiptap/extension-typography':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)
+  '@tiptap/extensions':
+    specifier: ^3.4.2
+    version: 3.4.2(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)
+  '@tiptap/pm':
+    specifier: ^3.4.2
+    version: 3.4.2
+  '@tiptap/react':
+    specifier: ^3.4.2
+    version: 3.4.2(@floating-ui/dom@1.7.4)(@tiptap/core@3.4.2)(@tiptap/pm@3.4.2)(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  '@tiptap/starter-kit':
+    specifier: ^3.4.2
+    version: 3.4.2
+  babel-plugin-react-compiler:
+    specifier: 19.1.0-rc.3
+    version: 19.1.0-rc.3
+  browser-image-compression:
+    specifier: ^2.0.2
+    version: 2.0.2
+  class-variance-authority:
+    specifier: ^0.7.1
+    version: 0.7.1
+  clsx:
+    specifier: ^2.1.1
+    version: 2.1.1
+  convex:
+    specifier: ^1.27.0
+    version: 1.27.0(react@19.1.1)
+  date-fns:
+    specifier: ^4.1.0
+    version: 4.1.0
+  embla-carousel-autoplay:
+    specifier: ^8.6.0
+    version: 8.6.0(embla-carousel@8.6.0)
+  embla-carousel-react:
+    specifier: ^8.6.0
+    version: 8.6.0(react@19.1.1)
+  lowlight:
+    specifier: ^3.3.0
+    version: 3.3.0
+  lucide-react:
+    specifier: ^0.544.0
+    version: 0.544.0(react@19.1.1)
+  next:
+    specifier: 15.5.3
+    version: 15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1)(react@19.1.1)
+  next-themes:
+    specifier: ^0.4.6
+    version: 0.4.6(react-dom@19.1.1)(react@19.1.1)
+  nuqs:
+    specifier: ^2.6.0
+    version: 2.6.0(next@15.5.3)(react@19.1.1)
+  react:
+    specifier: ^19.0.0
+    version: 19.1.1
+  react-dom:
+    specifier: ^19.0.0
+    version: 19.1.1(react@19.1.1)
+  react-error-boundary:
+    specifier: ^6.0.0
+    version: 6.0.0(react@19.1.1)
+  react-hook-form:
+    specifier: ^7.62.0
+    version: 7.62.0(react@19.1.1)
+  react-medium-image-zoom:
+    specifier: ^5.3.0
+    version: 5.3.0(react-dom@19.1.1)(react@19.1.1)
+  sharp:
+    specifier: ^0.34.4
+    version: 0.34.4
+  sonner:
+    specifier: ^2.0.7
+    version: 2.0.7(react-dom@19.1.1)(react@19.1.1)
+  tailwind-merge:
+    specifier: ^3.3.1
+    version: 3.3.1
+  unique-names-generator:
+    specifier: ^4.7.1
+    version: 4.7.1
+  use-debounce:
+    specifier: ^10.0.6
+    version: 10.0.6(react@19.1.1)
+  vaul:
+    specifier: ^1.1.2
+    version: 1.1.2(@types/react-dom@19.1.9)(@types/react@19.1.12)(react-dom@19.1.1)(react@19.1.1)
+  zod:
+    specifier: ^4.1.8
+    version: 4.1.8
+  .:
+    dependencies:
+      '@auth/core':
+        specifier: ^0.40.0
+        version: 0.40.0
+      '@convex-dev/auth':
+        specifier: ^0.0.81
+        version: 0.0.81(@auth/core@0.40.0)(convex@1.27.0(react@19.1.1))(react@19.1.1)
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.62.0(react@19.1.1))
+      '@radix-ui/react-avatar':
+        specifier: ^1.1.10
+        version: 1.1.10(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-dropdown-menu':
+        specifier: ^2.1.16
+        version: 2.1.16(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-icons':
+        specifier: ^1.3.2
+        version: 1.3.2(react@19.1.1)
+      '@radix-ui/react-label':
+        specifier: ^2.1.7
+        version: 2.1.7(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-popover':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-select':
+        specifier: ^2.2.6
+        version: 2.2.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-separator':
+        specifier: ^1.1.7
+        version: 1.1.7(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-slot':
+        specifier: ^1.2.3
+        version: 1.2.3(@types/react@19.1.12)(react@19.1.1)
+      '@radix-ui/react-switch':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-toggle':
+        specifier: ^1.1.10
+        version: 1.1.10(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-toggle-group':
+        specifier: ^1.1.11
+        version: 1.1.11(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-tooltip':
+        specifier: ^1.2.8
+        version: 1.2.8(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@tiptap/extension-code-block-lowlight':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))(@tiptap/extension-code-block@3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))(@tiptap/pm@3.4.2))(@tiptap/pm@3.4.2)(highlight.js@11.11.1)(lowlight@3.3.0)
+      '@tiptap/extension-color':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/extension-text-style@3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2)))
+      '@tiptap/extension-horizontal-rule':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))(@tiptap/pm@3.4.2)
+      '@tiptap/extension-image':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))
+      '@tiptap/extension-text-style':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))
+      '@tiptap/extension-typography':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))
+      '@tiptap/extensions':
+        specifier: ^3.4.2
+        version: 3.4.2(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))(@tiptap/pm@3.4.2)
+      '@tiptap/pm':
+        specifier: ^3.4.2
+        version: 3.4.2
+      '@tiptap/react':
+        specifier: ^3.4.2
+        version: 3.4.2(@floating-ui/dom@1.7.4)(@tiptap/core@3.4.2(@tiptap/pm@3.4.2))(@tiptap/pm@3.4.2)(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@tiptap/starter-kit':
+        specifier: ^3.4.2
+        version: 3.4.2
+      babel-plugin-react-compiler:
+        specifier: 19.1.0-rc.3
+        version: 19.1.0-rc.3
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      convex:
+        specifier: ^1.27.0
+        version: 1.27.0(react@19.1.1)
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
+      embla-carousel-autoplay:
+        specifier: ^8.6.0
+        version: 8.6.0(embla-carousel@8.6.0)
+      embla-carousel-react:
+        specifier: ^8.6.0
+        version: 8.6.0(react@19.1.1)
+      lowlight:
+        specifier: ^3.3.0
+        version: 3.3.0
+      lucide-react:
+        specifier: ^0.544.0
+        version: 0.544.0(react@19.1.1)
+      next:
+        specifier: 15.5.3
+        version: 15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      nuqs:
+        specifier: ^2.6.0
+        version: 2.6.0(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+      react:
+        specifier: ^19.0.0
+        version: 19.1.1
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.1.1(react@19.1.1)
+      react-error-boundary:
+        specifier: ^6.0.0
+        version: 6.0.0(react@19.1.1)
+      react-hook-form:
+        specifier: ^7.62.0
+        version: 7.62.0(react@19.1.1)
+      react-medium-image-zoom:
+        specifier: ^5.3.0
+        version: 5.3.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      sharp:
+        specifier: ^0.34.4
+        version: 0.34.4
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
+      use-debounce:
+        specifier: ^10.0.6
+        version: 10.0.6(react@19.1.1)
+      vaul:
+        specifier: ^1.1.2
+        version: 1.1.2(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      zod:
+        specifier: ^4.1.8
+        version: 4.1.8
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 2.2.2
+        version: 2.2.2
+      '@faker-js/faker':
+        specifier: ^9.4.0
+        version: 9.9.0
+      '@tailwindcss/postcss':
+        specifier: ^4
+        version: 4.1.13
+      '@tailwindcss/typography':
+        specifier: ^0.5.16
+        version: 0.5.16(tailwindcss@4.1.13)
+      '@types/node':
+        specifier: ^20
+        version: 20.19.13
+      '@types/react':
+        specifier: ^19
+        version: 19.1.12
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.1.9(@types/react@19.1.12)
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.6.1
+      npm-run-all:
+        specifier: ^4.1.5
+        version: 4.1.5
+      prettier:
+        specifier: ^3.5.3
+        version: 3.6.2
+      shadcn:
+        specifier: ^3.2.1
+        version: 3.2.1(@types/node@20.19.13)(typescript@5.9.2)
+      tailwindcss:
+        specifier: ^4
+        version: 4.1.13
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@4.1.13)
+      tw-animate-css:
+        specifier: ^1.3.8
+        version: 1.3.8
+      typescript:
+        specifier: ^5
+        version: 5.9.2
+      ultracite:
+        specifier: 5.3.3
+        version: 5.3.3(@types/node@20.19.13)(jiti@2.5.1)(lightningcss@1.30.1)(msw@2.11.2(@types/node@20.19.13)(typescript@5.9.2))(typescript@5.9.2)(yaml@2.8.1)
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -4808,7 +5007,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.28.4
       '@babel/helper-validator-option': 7.27.1
-      browserslist: 4.26.0
+      browserslist: 4.26.2
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -6267,7 +6466,7 @@ snapshots:
 
   '@tailwindcss/oxide@4.1.13':
     dependencies:
-      detect-libc: 2.0.4
+      detect-libc: 2.1.0
       tar: 7.4.3
     optionalDependencies:
       '@tailwindcss/oxide-android-arm64': 4.1.13
@@ -6678,7 +6877,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  baseline-browser-mapping@2.8.2: {}
+  baseline-browser-mapping@2.8.6: {}
 
   body-parser@2.2.0:
     dependencies:
@@ -6703,22 +6902,13 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
-  /browser-image-compression@2.0.2:
-    resolution: {integrity: sha512-pBLlQyUf6yB8SmmngrcOw3EoS4RpQ1BcylI3T9Yqn7+4nrQTXJD4sJDe5ODnJdrvNMaio5OicFo75rDyJD2Ucw==}
+  browserslist@4.26.2:
     dependencies:
-      uzip: 0.20201231.0
-    dev: false
-
-  /browserslist@4.26.0:
-    resolution: {integrity: sha512-P9go2WrP9FiPwLv3zqRD/Uoxo0RSHjzFCiQz7d4vbmwNqQFo9T9WCeP/Qn5EbcKQY6DBbkxEXNcpJOmncNrb7A==}
-    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
-    hasBin: true
-    dependencies:
-      baseline-browser-mapping: 2.8.2
+      baseline-browser-mapping: 2.8.6
       caniuse-lite: 1.0.30001741
       electron-to-chromium: 1.5.218
       node-releases: 2.0.21
-      update-browserslist-db: 1.1.3(browserslist@4.26.0)
+      update-browserslist-db: 1.1.3(browserslist@4.26.2)
 
   bytes@3.1.2: {}
 
@@ -7026,8 +7216,6 @@ snapshots:
   depd@2.0.0: {}
 
   dequal@2.0.3: {}
-
-  detect-libc@2.0.4: {}
 
   detect-libc@2.1.0: {}
 
@@ -7747,7 +7935,7 @@ snapshots:
 
   lightningcss@1.30.1:
     dependencies:
-      detect-libc: 2.0.4
+      detect-libc: 2.1.0
     optionalDependencies:
       lightningcss-darwin-arm64: 1.30.1
       lightningcss-darwin-x64: 1.30.1
@@ -8932,9 +9120,9 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  update-browserslist-db@1.1.3(browserslist@4.26.0):
+  update-browserslist-db@1.1.3(browserslist@4.26.2):
     dependencies:
-      browserslist: 4.26.0
+      browserslist: 4.26.2
       escalade: 3.2.0
       picocolors: 1.1.1
 
@@ -8967,12 +9155,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  /uzip@0.20201231.0:
-    resolution: {integrity: sha512-OZeJfZP+R0z9D6TmBgLq2LHzSSptGMGDGigGiEe0pr8UBe/7fdflgHlHBNDASTXB5jnFuxHpNaJywSg8YFeGng==}
-    dev: false
-
-  /validate-npm-package-license@3.0.4:
-    resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
+  validate-npm-package-license@3.0.4:
     dependencies:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
