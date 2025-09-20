@@ -1,21 +1,20 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
-import { UserWithRoleValidator } from "./lib/validators";
-import { getUserProfile } from "./posts";
 
 export const getUserRole = query({
   args: {},
-  returns: v.string(),
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw AuthErrors.userNotAuthenticated();
     }
-    const userProfile = await getUserProfile(ctx, userId);
-    return userProfile.role;
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
+    return user.role;
   },
 });
 
@@ -32,27 +31,21 @@ export const getCurrentUser = query({
       throw AuthErrors.userNotFound();
     }
 
-    const userProfile = await getUserProfile(ctx, userId);
-    const avatarUrl =
-      (await ctx.storage.getUrl(userProfile.avatarUrl as Id<"_storage">)) ??
-      user.image;
-
     return {
       _id: user._id,
       name: user.name,
       email: user.email,
-      image: avatarUrl,
-      role: userProfile.role,
-      nickname: userProfile.nickname,
-      bio: userProfile.bio,
-      username: userProfile.username,
+      image: user.image,
+      role: user.role,
+      nickname: user.nickname,
+      bio: user.bio,
+      username: user.name,
     };
   },
 });
 
 export const getCurrentUserOptional = query({
   args: {},
-  returns: v.union(UserWithRoleValidator, v.null()),
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
@@ -65,14 +58,13 @@ export const getCurrentUserOptional = query({
     }
 
     try {
-      const userProfile = await getUserProfile(ctx, userId);
       return {
         _id: user._id,
         name: user.name,
         email: user.email,
         image: user.image,
-        role: userProfile.role,
-        username: userProfile.username,
+        role: user.role,
+        username: user.name,
       };
     } catch {
       return null;
@@ -81,15 +73,17 @@ export const getCurrentUserOptional = query({
 });
 
 export const changeRole = mutation({
-  returns: v.null(),
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) {
       throw AuthErrors.userNotAuthenticated();
     }
-    const userProfile = await getUserProfile(ctx, userId);
-    const nuevoRol = userProfile.role === "admin" ? "user" : "admin";
-    await ctx.db.patch(userProfile._id, { role: nuevoRol });
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
+    const nuevoRol = user.role === "admin" ? "user" : "admin";
+    await ctx.db.patch(user._id, { role: nuevoRol });
     return null;
   },
 });
@@ -105,13 +99,13 @@ export const updateUserProfile = mutation({
     if (!userId) {
       throw AuthErrors.userNotAuthenticated();
     }
-    const userProfile = await getUserProfile(ctx, userId);
-    await ctx.db.patch(userProfile._id, {
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
+    await ctx.db.patch(user._id, {
       nickname: args.nickname,
       bio: args.bio,
-      username: args.username,
-    });
-    await ctx.db.patch(userId, {
       name: args.username,
     });
     return null;
@@ -124,9 +118,12 @@ export const sendImage = mutation({
     userId: v.id("users"),
   },
   handler: async (ctx, args) => {
-    const userProfile = await getUserProfile(ctx, args.userId);
-    await ctx.db.patch(userProfile._id, {
-      avatarUrl: args.storageId,
+    const user = await ctx.db.get(args.userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
+    await ctx.db.patch(user._id, {
+      image: args.storageId,
     });
     return null;
   },
