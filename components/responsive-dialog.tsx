@@ -27,11 +27,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
-import type { UserWithRole } from "@/convex/lib/types";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn, convertFileToWebp } from "@/lib/utils";
 import { AuthorCard, AuthorCardImageContainer } from "./cards/author-card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+
 export function ProfileDialog({
   preloadedCurrentUser,
 }: {
@@ -97,7 +97,7 @@ function ProfileForm({
   currentUser,
   onSuccess,
 }: React.ComponentProps<"form"> & {
-  currentUser: UserWithRole;
+  currentUser: any;
   onSuccess: () => void;
 }) {
   const updateUserProfile = useMutation(api.users.updateUserProfile);

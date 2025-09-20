@@ -2,6 +2,7 @@ import type { Infer } from "convex/values";
 import type {
   CategoryValidator,
   CommentValidator,
+  PopularTagValidator,
   PostInputValidator,
   PostValidator,
   PostWithAuthorDataValidator,
@@ -10,6 +11,7 @@ import type {
 } from "./validators";
 
 export type Post = Infer<typeof PostValidator>;
+export type PopularTag = Infer<typeof PopularTagValidator>;
 export type PostWithAuthor = Infer<typeof PostWithAuthorValidator>;
 export type PostWithAuthorData = Infer<typeof PostWithAuthorDataValidator>;
 export type Category = Infer<typeof CategoryValidator>;

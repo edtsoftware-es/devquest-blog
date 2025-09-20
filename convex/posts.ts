@@ -1,5 +1,8 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { ShardedCounter } from "@convex-dev/sharded-counter";
+import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import { components } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
@@ -12,13 +15,18 @@ import {
   PostInputFields,
   PostUpdateFields,
   PostValidator,
-  PostWithAuthorDataValidator,
   PostWithAuthorValidator,
 } from "./lib/validators";
 
 const WORDS_PER_MINUTE = 200;
 const WEEKLY_TRENDING_POSTS_LIMIT = 4;
+export const HOME_POSTS_LIMIT = 5;
+const POPULAR_SLICE_START = 1;
+const POPULAR_SLICE_END = 3;
 const DEFAULT_POSTS_PER_PAGE = 8;
+const LATEST_POSTS_LIMIT = 50;
+
+export const counter = new ShardedCounter(components.shardedCounter);
 
 export function calculateReadingDuration(content: string): number {
   const cleanContent = content
@@ -38,22 +46,150 @@ export function calculateReadingDuration(content: string): number {
 
 export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
   const userProfile = await ctx.db
-    .query("userProfiles")
-    .withIndex("by_user", (q) => q.eq("userId", userId))
+    .query("users")
+    .withIndex("by_id", (q) => q.eq("_id", userId))
     .unique();
 
   if (!userProfile) {
-    throw AuthErrors.profileNotFound();
+    throw AuthErrors.userNotFound();
   }
 
   return userProfile;
 }
 
+export const getLatestPosts = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const posts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .paginate(
+        args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
+      );
+
+    return posts;
+  },
+});
+
+export const getHomePosts = query({
+  args: {},
+  handler: async (ctx) => {
+    const totalPosts = await counter.count(ctx, "totalPosts");
+
+    const _posts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .take(HOME_POSTS_LIMIT);
+
+    const mainPosts = await Promise.all(
+      _posts.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: author?.image || "",
+        };
+      })
+    );
+
+    const _popularPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_view_count")
+      .order("desc")
+      .filter((q) => q.eq(q.field("published"), true))
+      .take(HOME_POSTS_LIMIT);
+
+    const mainPopularPostAuthor = await ctx.db.get(_popularPosts[0].authorId);
+
+    const mainPopularPost: PostWithAuthorData = {
+      ..._popularPosts[0],
+      authorName: mainPopularPostAuthor?.name || "Usuario desconocido",
+      authorImage: mainPopularPostAuthor?.image || "",
+    };
+
+    const highLightPosts = _popularPosts.slice(
+      POPULAR_SLICE_START,
+      POPULAR_SLICE_END
+    );
+    const compactPosts = _popularPosts.slice(
+      POPULAR_SLICE_END,
+      HOME_POSTS_LIMIT
+    );
+
+    const weeklys = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .take(HOME_POSTS_LIMIT);
+
+    const allPublishedPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .collect();
+
+    const tagCount = new Map<string, number>();
+
+    for (const post of allPublishedPosts) {
+      for (const tag of post.tags) {
+        tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+      }
+    }
+
+    const popularTags = Array.from(tagCount.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    return {
+      totalPosts,
+      mainPosts,
+      mainPopularPost,
+      highLightPosts,
+      compactPosts,
+      weeklys,
+      popularTags,
+    };
+  },
+});
+
+export const getPopularTags = query({
+  args: {
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const DEFAULT_LIMIT = 10;
+    const limit = args.limit ?? DEFAULT_LIMIT;
+
+    const allPublishedPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .collect();
+
+    const tagCount = new Map<string, number>();
+
+    for (const post of allPublishedPosts) {
+      for (const tag of post.tags) {
+        tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+      }
+    }
+
+    const popularTags = Array.from(tagCount.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
+
+    return popularTags;
+  },
+});
+
 export const getPublishedPosts = query({
   args: {
     paginationOpts: optionalPaginationOpts,
   },
-  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     const posts = await ctx.db
       .query("posts")
@@ -69,7 +205,6 @@ export const getPublishedAuthorPosts = query({
   args: {
     paginationOpts: optionalPaginationOpts,
   },
-  returns: createPaginatedResultValidator(PostWithAuthorDataValidator),
   handler: async (ctx, args) => {
     const posts = await ctx.db
       .query("posts")
@@ -96,7 +231,6 @@ export const getPostBySlug = query({
   args: {
     slug: v.string(),
   },
-  returns: v.union(PostValidator, v.null()),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
@@ -109,7 +243,6 @@ export const getPostBySlugWithAuthor = query({
   args: {
     slug: v.string(),
   },
-  returns: v.union(PostWithAuthorValidator, v.null()),
   handler: async (ctx, args) => {
     const post = await ctx.db
       .query("posts")
@@ -134,59 +267,6 @@ export const getPdpPost = query({
   args: {
     slug: v.string(),
   },
-  returns: v.union(
-    v.object({
-      _id: v.id("posts"),
-      _creationTime: v.number(),
-      title: v.string(),
-      image: v.string(),
-      duration: v.number(),
-      slug: v.string(),
-      categoryId: v.id("categories"),
-      content: v.string(),
-      excerpt: v.string(),
-      authorId: v.id("users"),
-      tags: v.array(v.string()),
-      likesCount: v.number(),
-      commentsCount: v.number(),
-      published: v.boolean(),
-      updatedAt: v.number(),
-      publishedAt: v.optional(v.number()),
-      deletedAt: v.optional(v.number()),
-      viewCount: v.number(),
-      author: v.object({
-        _id: v.id("users"),
-        _creationTime: v.number(),
-        name: v.optional(v.string()),
-        email: v.optional(v.string()),
-        phone: v.optional(v.string()),
-        image: v.optional(v.string()),
-        emailVerificationTime: v.optional(v.number()),
-        phoneVerificationTime: v.optional(v.number()),
-        isAnonymous: v.optional(v.boolean()),
-        role: v.union(v.literal("admin"), v.literal("user")),
-        userProfileId: v.optional(v.id("userProfiles")),
-      }),
-      category: v.object({
-        _id: v.id("categories"),
-        _creationTime: v.number(),
-        name: v.string(),
-        slug: v.string(),
-        description: v.string(),
-      }),
-      weeklyTrendingPosts: v.array(
-        v.object({
-          _id: v.id("posts"),
-          title: v.string(),
-          slug: v.string(),
-          _creationTime: v.number(),
-          duration: v.number(),
-          image: v.string(),
-        })
-      ),
-    }),
-    v.null()
-  ),
   handler: async (ctx, args) => {
     const post = await ctx.db
       .query("posts")
@@ -199,9 +279,9 @@ export const getPdpPost = query({
 
     const author = await ctx.db.get(post.authorId);
     const category = await ctx.db.get(post.categoryId);
-    const userProfile = await ctx.db
-      .query("userProfiles")
-      .withIndex("by_user", (q) => q.eq("userId", post.authorId))
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_id", (q) => q.eq("_id", post.authorId))
       .unique();
 
     if (!author) {
@@ -233,8 +313,8 @@ export const getPdpPost = query({
       ...post,
       author: {
         ...author,
-        role: userProfile?.role || "user",
-        userProfileId: userProfile?._id,
+        role: user?.role || "user",
+        userProfileId: user?._id,
       },
       category,
       weeklyTrendingPosts: trendingPostsWithDetails,
@@ -247,7 +327,6 @@ export const getPostsByCategoryId = query({
     categoryId: v.id("categories"),
     paginationOpts: optionalPaginationOpts,
   },
-  returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     return await ctx.db
       .query("posts")
@@ -263,27 +342,14 @@ export const getPaginatedPostsWithAuthorByNickname = query({
     page: v.optional(v.number()),
     postsPerPage: v.optional(v.number()),
   },
-  returns: v.object({
-    author: v.object({
-      username: v.string(),
-      nickname: v.string(),
-      avatarUrl: v.optional(v.string()),
-      bio: v.optional(v.string()),
-    }),
-    posts: v.array(PostWithAuthorDataValidator),
-    totalPosts: v.number(),
-    totalPages: v.number(),
-    currentPage: v.number(),
-    hasNextPage: v.boolean(),
-    hasPreviousPage: v.boolean(),
-  }),
+
   handler: async (ctx, args) => {
-    const userProfile = await ctx.db
-      .query("userProfiles")
+    const user = await ctx.db
+      .query("users")
       .withIndex("by_nickname", (q) => q.eq("nickname", args.nickname))
       .unique();
 
-    if (!userProfile) {
+    if (!user) {
       throw AuthErrors.userNotFound();
     }
 
@@ -293,9 +359,7 @@ export const getPaginatedPostsWithAuthorByNickname = query({
 
     const allPosts = await ctx.db
       .query("posts")
-      .withIndex("by_author_published", (q) =>
-        q.eq("authorId", userProfile.userId)
-      )
+      .withIndex("by_author_published", (q) => q.eq("authorId", user._id))
       .filter((q) => q.eq(q.field("published"), true))
       .order("desc")
       .collect();
@@ -307,16 +371,16 @@ export const getPaginatedPostsWithAuthorByNickname = query({
 
     const postsWithAuthorData = paginatedPosts.map((post) => ({
       ...post,
-      authorName: userProfile.username || "Usuario desconocido",
-      authorImage: userProfile.avatarUrl || "",
+      authorName: user.name || "Usuario desconocido",
+      authorImage: user.image || "",
     }));
 
     return {
       author: {
-        username: userProfile.username,
-        nickname: userProfile.nickname,
-        avatarUrl: userProfile.avatarUrl,
-        bio: userProfile.bio,
+        username: user.name,
+        nickname: user.nickname,
+        avatarUrl: user.image,
+        bio: user.bio,
       },
       posts: postsWithAuthorData,
       totalPosts,
@@ -350,7 +414,7 @@ export const getUserPosts = query({
   returns: createPaginatedResultValidator(PostValidator),
   handler: async (ctx, args) => {
     const userProfile = await requireUser(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     return await ctx.db
       .query("posts")
@@ -365,7 +429,7 @@ export const getPostById = query({
   returns: v.union(PostValidator, v.null()),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
@@ -402,7 +466,7 @@ export const getPostsByUserRole = query({
       return postsWithAuthors;
     }
 
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
     const posts = await ctx.db
       .query("posts")
       .withIndex("by_author", (q) => q.eq("authorId", userId))
@@ -418,15 +482,14 @@ export const getPostsByUserRole = query({
 
 export const createPost = mutation({
   args: PostInputFields,
-  returns: v.id("posts"),
   handler: async (ctx, args) => {
     const userProfile = await requireUser(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     const duration = calculateReadingDuration(args.content);
     const now = Date.now();
 
-    return await ctx.db.insert("posts", {
+    await ctx.db.insert("posts", {
       title: args.title,
       image: args.image,
       duration,
@@ -443,6 +506,8 @@ export const createPost = mutation({
       publishedAt: args.published ? now : undefined,
       viewCount: 0,
     });
+
+    await counter.inc(ctx, "totalPosts");
   },
 });
 
@@ -451,7 +516,7 @@ export const updatePost = mutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
@@ -490,7 +555,7 @@ export const deletePost = mutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
@@ -507,6 +572,9 @@ export const deletePost = mutation({
     }
 
     await ctx.db.delete(args.postId);
+
+    await counter.dec(ctx, "totalPosts");
+
     return null;
   },
 });
@@ -518,7 +586,7 @@ export const togglePostPublished = mutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = userProfile._id;
 
     const post = await ctx.db.get(args.postId);
     if (!post) {

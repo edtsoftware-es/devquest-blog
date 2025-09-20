@@ -1,13 +1,19 @@
 import { type ClassValue, clsx } from "clsx";
-import { format } from "date-fns";
+import { format, formatDate as formatDateFns } from "date-fns";
 import { es } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
+
+const DEFAULT_QUALITY = 0.8;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const DEFAULT_QUALITY = 0.8;
+export function getPublishedDate(dateString: number) {
+  return dateString
+    ? formatDateFns(dateString, "MMM dd, yyyy")
+    : formatDateFns(dateString, "MMM dd, yyyy");
+}
 
 export async function convertFileToWebp(
   file: File,

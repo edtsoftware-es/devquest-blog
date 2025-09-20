@@ -1,5 +1,7 @@
+import { ShardedCounter } from "@convex-dev/sharded-counter";
 import { faker } from "@faker-js/faker";
 import { v } from "convex/values";
+import { components } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { internalMutation } from "./_generated/server";
@@ -21,6 +23,8 @@ type FakeDataCounts = {
   likesCount: number;
 };
 
+export const postCounter = new ShardedCounter(components.shardedCounter);
+
 async function createUsers(
   ctx: MutationCtx,
   count: number
@@ -32,6 +36,9 @@ async function createUsers(
       image: faker.image.avatar(),
       email: faker.internet.email(),
       emailVerificationTime: Date.now(),
+      role: faker.helpers.arrayElement(["admin", "user"]),
+      nickname: faker.person.fullName(),
+      bio: faker.lorem.sentence(),
     });
     userIds.push(userId);
   }
@@ -97,7 +104,7 @@ async function createPosts(
 
     const postId = await ctx.db.insert("posts", {
       title,
-      image: faker.image.url({ width: 800, height: 400 }),
+      image: `https://picsum.photos/id/${faker.number.int({ min: 1, max: 1000 })}/800/400`,
       duration,
       slug,
       categoryId: faker.helpers.arrayElement(categoryIds),
@@ -113,6 +120,7 @@ async function createPosts(
       deletedAt: undefined,
       viewCount: faker.number.int({ min: 0, max: 1000 }),
     });
+    await postCounter.inc(ctx, "totalPosts");
     postIds.push(postId);
   }
   return postIds;
