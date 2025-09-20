@@ -22,12 +22,12 @@ export const getCurrentUserProfile = async (ctx: QueryCtx | MutationCtx) => {
   const userId = await getAuthUserId(ctx);
 
   const userProfile = await ctx.db
-    .query("userProfiles")
-    .withIndex("by_user", (q) => q.eq("userId", userId as any))
+    .query("users")
+    .withIndex("by_id", (q) => q.eq("_id", userId as any))
     .unique();
 
   if (!userProfile) {
-    throw AuthErrors.profileNotFound();
+    throw AuthErrors.userNotFound();
   }
 
   return userProfile;
@@ -38,13 +38,13 @@ export const getCurrentUserProfile = async (ctx: QueryCtx | MutationCtx) => {
  * @throws {AppError} If user doesn't have admin permissions
  */
 export const requireAdmin = async (ctx: QueryCtx | MutationCtx) => {
-  const userProfile = await getCurrentUserProfile(ctx);
+  const user = await getCurrentUserProfile(ctx);
 
-  if (userProfile.role !== "admin") {
+  if (user.role !== "admin") {
     throw AuthErrors.adminRequired();
   }
 
-  return userProfile;
+  return user;
 };
 
 /**
