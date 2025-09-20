@@ -1,6 +1,7 @@
 "use client";
 
 import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
 import {
   StandardCard,
   StandardCardAuthor,
@@ -40,9 +41,9 @@ export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
       ]}
     >
       <CarouselContent className="w-full pl-6 lg:pl-0">
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <CarouselItem className="w-full" key={post._id}>
-            <HeroItem {...post} />
+            <HeroItem {...post} index={index} />
           </CarouselItem>
         ))}
       </CarouselContent>
@@ -61,52 +62,59 @@ function HeroItem({
   commentsCount,
   viewCount,
   image,
-}: PostWithAuthorData) {
+  index,
+}: PostWithAuthorData & { index: number }) {
   return (
-    <main
-      className={
-        "mt-8 flex h-[350px] w-full max-w-[1400px] items-center rounded-2xl bg-center bg-cover lg:h-[670px]"
-      }
-      style={{ backgroundImage: `url(${image})` }}
-    >
-      <StandardCard className="h-full w-full rounded-2xl border bg-primary/60 backdrop-blur-xs lg:ml-24 lg:h-auto lg:max-w-[700px]">
-        <StandardCardShell
-          className="h-full border-none bg-transparent p-0"
-          hasButton={false}
-        >
-          <StandardCardTags
-            className="flex lg:hidden"
-            tags={["technology", "react"]}
-          />
-          <StandardCardContent className="mb-14 p-0 lg:mb-24">
-            <StandardCardHeader>
-              <StandardCardTitle>{title}</StandardCardTitle>
-            </StandardCardHeader>
-            <StandardCardDescription className="text-secondary">
-              {excerpt}
-            </StandardCardDescription>
-          </StandardCardContent>
-          <StandardCardFooter>
-            <StandardCardAuthorContainer>
-              <StandardCardAuthor>
-                <Avatar className="size-8 xs:size-10">
-                  <AvatarImage src={authorImage} />
-                  <AvatarFallback>AF</AvatarFallback>
-                </Avatar>
-                <StandardCardAuthorName>{authorName}</StandardCardAuthorName>
-              </StandardCardAuthor>
-              <StandardCardPublishedAt className="text-secondary">
-                {publishedAt}
-              </StandardCardPublishedAt>
-            </StandardCardAuthorContainer>
-            <StandardCardStats
-              className="text-secondary [&_span]:text-secondary"
-              commentsCount={commentsCount}
-              viewsCount={viewCount}
+    <div className="relative mt-8 h-[350px] w-full max-w-[1400px] overflow-hidden rounded-2xl lg:h-[670px]">
+      <Image
+        alt={title}
+        className="object-cover"
+        decoding={index === 0 ? "async" : "auto"}
+        fill
+        loading={index === 0 ? "eager" : "lazy"}
+        priority={index === 0}
+        src={image}
+      />
+      <div className="absolute inset-0 flex items-center">
+        <StandardCard className="h-full w-full rounded-2xl border bg-primary/60 backdrop-blur-xs lg:ml-24 lg:h-auto lg:max-w-[700px]">
+          <StandardCardShell
+            className="h-full border-none bg-transparent p-0"
+            hasButton={false}
+          >
+            <StandardCardTags
+              className="flex lg:hidden"
+              tags={["technology", "react"]}
             />
-          </StandardCardFooter>
-        </StandardCardShell>
-      </StandardCard>
-    </main>
+            <StandardCardContent className="mb-14 p-0 lg:mb-24">
+              <StandardCardHeader>
+                <StandardCardTitle>{title}</StandardCardTitle>
+              </StandardCardHeader>
+              <StandardCardDescription className="text-secondary">
+                {excerpt}
+              </StandardCardDescription>
+            </StandardCardContent>
+            <StandardCardFooter>
+              <StandardCardAuthorContainer>
+                <StandardCardAuthor>
+                  <Avatar className="size-8 xs:size-10">
+                    <AvatarImage src={authorImage} />
+                    <AvatarFallback>AF</AvatarFallback>
+                  </Avatar>
+                  <StandardCardAuthorName>{authorName}</StandardCardAuthorName>
+                </StandardCardAuthor>
+                <StandardCardPublishedAt className="text-secondary">
+                  {publishedAt}
+                </StandardCardPublishedAt>
+              </StandardCardAuthorContainer>
+              <StandardCardStats
+                className="text-secondary [&_span]:text-secondary"
+                commentsCount={commentsCount}
+                viewsCount={viewCount}
+              />
+            </StandardCardFooter>
+          </StandardCardShell>
+        </StandardCard>
+      </div>
+    </div>
   );
 }
