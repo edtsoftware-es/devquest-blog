@@ -19,26 +19,14 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   ],
   callbacks: {
     async afterUserCreatedOrUpdated(ctx, args) {
-      const user = await ctx.db.get(args.userId);
-      if (!user) {
-        return;
-      }
-      const userProfile = await ctx.db.get(args.userId);
-      if (userProfile) {
-        return;
-      }
       const randomNickname = uniqueNamesGenerator({
         dictionaries: [adjectives, colors, languages],
         separator: "-",
         style: "lowerCase",
       });
-      await ctx.db.insert("userProfiles", {
-        userId: args.userId,
+      await ctx.db.patch(args.userId, {
         role: "user",
-        avatarUrl: user.image,
         nickname: randomNickname,
-        bio: "",
-        username: user.name,
       });
     },
   },

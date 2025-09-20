@@ -36,6 +36,9 @@ async function createUsers(
       image: faker.image.avatar(),
       email: faker.internet.email(),
       emailVerificationTime: Date.now(),
+      role: faker.helpers.arrayElement(["admin", "user"]),
+      nickname: faker.person.fullName(),
+      bio: faker.lorem.sentence(),
     });
     userIds.push(userId);
   }
@@ -101,7 +104,7 @@ async function createPosts(
 
     const postId = await ctx.db.insert("posts", {
       title,
-      image: faker.image.url({ width: 800, height: 400 }),
+      image: `https://picsum.photos/id/${faker.number.int({ min: 1, max: 1000 })}/800/400`,
       duration,
       slug,
       categoryId: faker.helpers.arrayElement(categoryIds),

@@ -1,9 +1,9 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
-import { getCurrentUserProfile, requireUser } from "./lib/auth";
-import { PostErrors } from "./lib/errors";
+import { AuthErrors, PostErrors } from "./lib/errors";
 import {
   CommentInputFields,
   CommentUpdateFields,
@@ -68,8 +68,10 @@ export const createComment = mutation({
   args: CommentInputFields,
   returns: v.id("comments"),
   handler: async (ctx, args) => {
-    const userProfile = await requireUser(ctx);
-    const userId = userProfile.userId;
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw AuthErrors.userNotAuthenticated();
+    }
 
     const post = await ctx.db.get(args.postId);
     if (!post) {
@@ -155,8 +157,14 @@ export const updateComment = mutation({
   args: CommentUpdateFields,
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw AuthErrors.userNotAuthenticated();
+    }
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
 
     const comment = await ctx.db.get(args.commentId);
     if (!comment) {
@@ -169,7 +177,7 @@ export const updateComment = mutation({
     }
 
     // Check authorization - only comment owner can edit
-    if (comment.authorId !== userId && userProfile.role !== "admin") {
+    if (comment.authorId !== userId && user.role !== "admin") {
       throw new Error("Not authorized to edit this comment");
     }
 
@@ -196,8 +204,14 @@ export const deleteComment = mutation({
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userProfile = await getCurrentUserProfile(ctx);
-    const userId = userProfile.userId;
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      throw AuthErrors.userNotAuthenticated();
+    }
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw AuthErrors.userNotFound();
+    }
 
     const comment = await ctx.db.get(args.commentId);
     if (!comment) {
@@ -210,7 +224,7 @@ export const deleteComment = mutation({
     }
 
     // Check authorization - only comment owner or admin can delete
-    if (comment.authorId !== userId && userProfile.role !== "admin") {
+    if (comment.authorId !== userId && user.role !== "admin") {
       throw new Error("Not authorized to delete this comment");
     }
 
