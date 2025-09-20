@@ -25,6 +25,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { CommentForm } from "./comment-form";
+import { CommentLikeButton } from "./comment-like-button";
 import type { CommentTree, UserProfile } from "./types";
 
 const PRIORITY_COMMENTS_LIMIT = 5;
@@ -177,17 +178,23 @@ export function CommentItem({
             )}
 
             {/* Actions */}
-            {!isEditing && currentUser && (
+            {!isEditing && (
               <div className="flex items-center gap-2">
-                <Button
-                  className="h-auto gap-1 p-1 text-muted-foreground hover:text-foreground"
-                  onClick={() => setShowReplyForm(true)}
-                  size="sm"
-                  variant="ghost"
-                >
-                  <Reply className="size-3" />
-                  <span className="text-xs">Responder</span>
-                </Button>
+                <CommentLikeButton
+                  commentId={comment._id}
+                  likesCount={comment.likesCount}
+                />
+                {currentUser && (
+                  <Button
+                    className="h-auto gap-1 p-1 text-muted-foreground hover:text-foreground"
+                    onClick={() => setShowReplyForm(true)}
+                    size="sm"
+                    variant="ghost"
+                  >
+                    <Reply className="size-3" />
+                    <span className="text-xs">Responder</span>
+                  </Button>
+                )}
               </div>
             )}
           </div>

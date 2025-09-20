@@ -76,3 +76,68 @@ export const toggleLike = mutation({
     return { liked: true, likesCount: post.likesCount + 1 };
   },
 });
+
+export const hasUserLikedComment = query({
+  args: { commentId: v.id("comments") },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) {
+      return false;
+    }
+
+    const like = await ctx.db
+      .query("likes")
+      .withIndex("by_comment_and_user", (q) =>
+        q.eq("commentId", args.commentId).eq("userId", userId)
+      )
+      .unique();
+
+    return !!like;
+  },
+});
+
+export const toggleCommentLike = mutation({
+  args: { commentId: v.id("comments") },
+  returns: v.object({
+    liked: v.boolean(),
+    likesCount: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    const user = await getLoggedInUser(ctx);
+    const comment = await ctx.db.get(args.commentId);
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    if (comment.deletedAt) {
+      throw new Error("Cannot like deleted comment");
+    }
+
+    const existingLike = await ctx.db
+      .query("likes")
+      .withIndex("by_comment_and_user", (q) =>
+        q.eq("commentId", args.commentId).eq("userId", user._id)
+      )
+      .unique();
+
+    if (existingLike) {
+      await ctx.db.delete(existingLike._id);
+      await ctx.db.patch(args.commentId, {
+        likesCount: Math.max(0, comment.likesCount - 1),
+      });
+      return { liked: false, likesCount: Math.max(0, comment.likesCount - 1) };
+    }
+
+    await ctx.db.insert("likes", {
+      postId: undefined,
+      commentId: args.commentId,
+      userId: user._id,
+    });
+    await ctx.db.patch(args.commentId, {
+      likesCount: comment.likesCount + 1,
+    });
+    return { liked: true, likesCount: comment.likesCount + 1 };
+  },
+});
