@@ -39,6 +39,21 @@ function AuthorCardName({ className, ...props }: React.ComponentProps<"h2">) {
   );
 }
 
+function AuthorCardNickname({
+  className,
+  ...props
+}: React.ComponentProps<"h3">) {
+  return (
+    <h3
+      className={cn(
+        "line-clamp-1 text-center font-semibold text-[1.125rem] text-neutral-600 leading-[1.2]",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+
 function AuthorCardDescription({
   className,
   ...props
@@ -58,5 +73,6 @@ export {
   AuthorCard,
   AuthorCardImageContainer,
   AuthorCardName,
+  AuthorCardNickname,
   AuthorCardDescription,
 };

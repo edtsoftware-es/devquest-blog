@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
-import { formatDate } from "date-fns";
+import { format, formatDate as formatDateFns } from "date-fns";
+import { es } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
 const DEFAULT_QUALITY = 0.8;
@@ -10,8 +11,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getPublishedDate(dateString: number) {
   return dateString
-    ? formatDate(dateString, "MMM dd, yyyy")
-    : formatDate(dateString, "MMM dd, yyyy");
+    ? formatDateFns(dateString, "MMM dd, yyyy")
+    : formatDateFns(dateString, "MMM dd, yyyy");
 }
 
 export async function convertFileToWebp(
@@ -62,4 +63,13 @@ async function loadImage(src: string): Promise<HTMLImageElement> {
   });
 
   return image;
+}
+
+export function formatDate(timestamp?: number) {
+  if (!timestamp) {
+    return "";
+  }
+  return format(new Date(timestamp), "MMM dd, yyyy", {
+    locale: es,
+  });
 }

@@ -77,8 +77,6 @@ export const getLatestPosts = query({
 export const getHomePosts = query({
   args: {},
   handler: async (ctx) => {
-    const totalPosts = await counter.count(ctx, "totalPosts");
-
     const _posts = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
@@ -124,7 +122,7 @@ export const getHomePosts = query({
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
       .order("desc")
-      .take(HOME_POSTS_LIMIT);
+      .take(HOME_POSTS_LIMIT - 1);
 
     const allPublishedPosts = await ctx.db
       .query("posts")
@@ -145,13 +143,13 @@ export const getHomePosts = query({
       .slice(0, 10);
 
     return {
-      totalPosts,
       mainPosts,
       mainPopularPost,
       highLightPosts,
       compactPosts,
       weeklys,
       popularTags,
+      latestPosts: _posts,
     };
   },
 });
@@ -611,6 +609,74 @@ export const togglePostPublished = mutation({
 });
 
 const MAX_RECOMMENDED_POSTS = 5;
+
+export const getPaginatedSearchResults = query({
+  args: {
+    query: v.string(),
+    page: v.optional(v.number()),
+    postsPerPage: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    const searchQuery = args.query.toLowerCase().trim();
+    const currentPage = args.page || 1;
+    const postsPerPage = args.postsPerPage || DEFAULT_POSTS_PER_PAGE;
+    const offset = (currentPage - 1) * postsPerPage;
+
+    if (searchQuery.length === 0) {
+      return {
+        posts: [],
+        totalPosts: 0,
+        totalPages: 0,
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        searchQuery: args.query,
+      };
+    }
+
+    const allPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .collect();
+
+    const filteredPosts = allPosts.filter((post) => {
+      const titleMatch = post.title.toLowerCase().includes(searchQuery);
+      const excerptMatch = post.excerpt.toLowerCase().includes(searchQuery);
+      const tagsMatch = post.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery)
+      );
+
+      return titleMatch || excerptMatch || tagsMatch;
+    });
+
+    const totalPosts = filteredPosts.length;
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+    const paginatedPosts = filteredPosts.slice(offset, offset + postsPerPage);
+
+    const postsWithAuthorData = await Promise.all(
+      paginatedPosts.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: author?.image || "",
+        };
+      })
+    );
+
+    return {
+      posts: postsWithAuthorData,
+      totalPosts,
+      totalPages,
+      currentPage,
+      hasNextPage: currentPage < totalPages,
+      hasPreviousPage: currentPage > 1,
+      searchQuery: args.query,
+    };
+  },
+});
 
 export const recommendedPosts = query({
   args: {},

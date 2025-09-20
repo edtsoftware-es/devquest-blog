@@ -1,16 +1,15 @@
+/* biome-ignore-all lint/suspicious/noUnknownAtRules: globals.css config */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
-/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @custom-variant dark (&:is(.dark *));
 
-/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @theme {
   --breakpoint-xs: 35rem; /* 560px */
 }
 
-/* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
 @theme inline {
   /* SHADCN */
   --color-background: var(--neutral-50);
@@ -212,11 +211,9 @@
 
 @layer base {
   * {
-    /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
     @apply border-border outline-ring/50;
   }
   body {
-    /* biome-ignore lint/suspicious/noUnknownAtRules : globals.css config */
     @apply bg-background text-foreground;
   }
 }

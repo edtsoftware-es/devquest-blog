@@ -15,8 +15,8 @@ function StandardCard({
   return (
     <article
       className={cn(
-        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
-        variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_auto]",
+        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_1fr] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
+        variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_1fr]",
         className
       )}
       {...props}
@@ -224,7 +224,7 @@ function StandardCardAuthorName({
   return (
     <span
       className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-900 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "max-w-40 overflow-hidden overflow-ellipsis whitespace-nowrap font-medium xs:font-normal text-[0.75rem] text-neutral-900 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
@@ -240,7 +240,7 @@ function StandardCardPublishedAt({
   return (
     <span
       className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] capitalize leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}

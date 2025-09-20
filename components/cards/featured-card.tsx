@@ -111,7 +111,7 @@ function FeaturedCardPublishedAt({
   return (
     <span
       className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] capitalize leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
@@ -231,7 +231,7 @@ function FeaturedCardAuthorName({
   return (
     <span
       className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-900 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "max-w-40 overflow-hidden overflow-ellipsis whitespace-nowrap font-medium xs:font-normal text-[0.75rem] text-neutral-900 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
