@@ -39,7 +39,7 @@ export default async function Home() {
         </div>
 
         <aside className="flex h-full w-full flex-col lg:col-span-1">
-          <div className="sticky top-10 flex w-full flex-col gap-10">
+          <div className="sticky top-8 flex w-full flex-col gap-10">
             <div className="flex flex-col gap-6">
               <Heading>Tendencias semanales</Heading>
               <CompactPostList posts={posts.weeklys} />
