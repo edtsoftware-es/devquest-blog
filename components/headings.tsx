@@ -44,7 +44,7 @@ export function SectionHeading({
     <div className="flex w-full items-center justify-between rounded-[10px] bg-neutral-200 px-4 py-4 md:px-8">
       <div className="flex flex-col items-start md:flex-row md:items-center md:gap-4 md:pl-8">
         <Heading className="mb-0 pl-0">{title}</Heading>
-        <p className="items-center pt-1 text-muted-foreground text-sm md:pt-0">
+        <p className="items-center pt-1 text-muted-foreground text-sm">
           {subtitle}
         </p>
       </div>

@@ -42,7 +42,7 @@ export default function Trending() {
         subtitle="Las historias más populares de hoy"
         title="Top Trending"
       />
-      <div className="mt-10 grid w-full grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="mt-7 grid w-full grid-cols-1 gap-6 md:grid-cols-2">
         <FeaturedCard>
           <FeaturedCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
@@ -71,14 +71,18 @@ export default function Trending() {
                 </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>
-                Learn the fundamentals of React and how to build modern, interactive web applications with this comprehensive guide.
+                Learn the fundamentals of React and how to build modern,
+                interactive web applications with this comprehensive guide.
               </FeaturedCardDescription>
             </FeaturedCardContent>
             <FeaturedCardFooter>
               <FeaturedCardAuthorContainer>
                 <FeaturedCardAuthor>
                   <Avatar className="size-8 xs:size-10">
-                    <AvatarImage alt="Jivs Jivs profile picture" src="https://github.com/shadcn.png" />
+                    <AvatarImage
+                      alt="Jivs Jivs profile picture"
+                      src="https://github.com/shadcn.png"
+                    />
                     <AvatarFallback>JJ</AvatarFallback>
                   </Avatar>
                   <FeaturedCardAuthorName>Jivs Jivs</FeaturedCardAuthorName>
@@ -91,7 +95,7 @@ export default function Trending() {
             </FeaturedCardFooter>
           </FeaturedCardShell>
         </FeaturedCard>
-        <div className="mt-4 flex w-full flex-col gap-6">
+        <div className="mt-4 flex w-full flex-col gap-6 md:mt-0">
           <div className="flex w-full flex-col gap-4 lg:flex-row">
             <HighlightCard className="w-full">
               <HighlightCardImageContainer>
