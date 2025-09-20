@@ -77,8 +77,6 @@ export const getLatestPosts = query({
 export const getHomePosts = query({
   args: {},
   handler: async (ctx) => {
-    const totalPosts = await counter.count(ctx, "totalPosts");
-
     const _posts = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
@@ -124,7 +122,7 @@ export const getHomePosts = query({
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
       .order("desc")
-      .take(HOME_POSTS_LIMIT);
+      .take(HOME_POSTS_LIMIT - 1);
 
     const allPublishedPosts = await ctx.db
       .query("posts")
@@ -145,13 +143,13 @@ export const getHomePosts = query({
       .slice(0, 10);
 
     return {
-      totalPosts,
       mainPosts,
       mainPopularPost,
       highLightPosts,
       compactPosts,
       weeklys,
       popularTags,
+      latestPosts: _posts,
     };
   },
 });
