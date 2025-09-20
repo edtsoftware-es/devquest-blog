@@ -1,10 +1,10 @@
 import { fetchQuery } from "convex/nextjs";
+import CompactPostList from "@/components/compact-post-list";
 import { Heading, SectionHeading } from "@/components/headings";
 import { NewsletterCard } from "@/components/newsletter-card";
+import TagList from "@/components/tag-list";
 import { api } from "@/convex/_generated/api";
 import { HOME_POSTS_LIMIT } from "@/convex/posts";
-import CompactPostList from "@/shared/components/compact-post-list";
-import TagList from "@/shared/components/tag-list";
 import Explore, { MockCategories } from "./components/explore";
 import Hero from "./components/hero";
 import Trending from "./components/trending";
