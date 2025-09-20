@@ -60,14 +60,18 @@ export default async function AuthorPage({
           <AuthorCardImageContainer>
             <Avatar className="size-full">
               <AvatarImage src={author.avatarUrl} />
-              <AvatarFallback>{author.username.charAt(0)}</AvatarFallback>
+              <AvatarFallback>
+                {author.username?.charAt(0) || "?"}
+              </AvatarFallback>
             </Avatar>
           </AuthorCardImageContainer>
           <div className="flex flex-col items-center gap-1">
             <AuthorCardName className="text-[2.375rem] leading-[1.2]">
               {author.username}
             </AuthorCardName>
-            <AuthorCardNickname>@{author.nickname}</AuthorCardNickname>
+            <AuthorCardNickname>
+              {author.nickname ? `@${author.nickname}` : ""}
+            </AuthorCardNickname>
           </div>
           <AuthorCardDescription>{author.bio}</AuthorCardDescription>
         </AuthorCard>

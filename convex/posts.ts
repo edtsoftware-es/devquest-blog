@@ -618,15 +618,6 @@ export const getPaginatedSearchResults = query({
     page: v.optional(v.number()),
     postsPerPage: v.optional(v.number()),
   },
-  returns: v.object({
-    posts: v.array(PostWithAuthorDataValidator),
-    totalPosts: v.number(),
-    totalPages: v.number(),
-    currentPage: v.number(),
-    hasNextPage: v.boolean(),
-    hasPreviousPage: v.boolean(),
-    searchQuery: v.string(),
-  }),
   handler: async (ctx, args) => {
     const searchQuery = args.query.toLowerCase().trim();
     const currentPage = args.page || 1;
