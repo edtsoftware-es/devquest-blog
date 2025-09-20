@@ -691,3 +691,15 @@ export const recommendedPosts = query({
     return recommended.slice(0, MAX_RECOMMENDED_POSTS);
   },
 });
+
+export const incrementPostViewCount = mutation({
+  args: { postId: v.id("posts") },
+  handler: async (ctx, args) => {
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      throw PostErrors.notFound();
+    }
+
+    return await ctx.db.patch(args.postId, { viewCount: post.viewCount + 1 });
+  },
+});

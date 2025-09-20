@@ -1,8 +1,10 @@
 "use client";
 
-import { type Preloaded, usePreloadedQuery } from "convex/react";
+import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Clock, Eye, MessageCircle } from "lucide-react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import {
   AuthorCard,
   AuthorCardDescription,
@@ -29,7 +31,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import type { api } from "@/convex/_generated/api";
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 
 const formatDate = (timestamp: number) => {
   return new Date(timestamp).toLocaleDateString("en-US", {
@@ -45,7 +48,12 @@ type PostDisplayProps = {
 
 export function PostDisplay({ preloadedPost }: PostDisplayProps) {
   const post = usePreloadedQuery(preloadedPost);
+  const incrementPostViewCount = useMutation(api.posts.incrementPostViewCount);
   const pathname = usePathname();
+
+  useEffect(() => {
+    incrementPostViewCount({ postId: post?._id as Id<"posts"> });
+  }, [post?._id, incrementPostViewCount]);
 
   if (!post) {
     return null;
@@ -140,10 +148,15 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
         <div className="flex flex-col gap-8 lg:col-span-2">
           {post.image && (
             <div className="mb-8 overflow-hidden rounded-xl">
-              <img
+              <Image
                 alt={post.title}
                 className="aspect-video h-[300px] w-full rounded-xl object-cover sm:h-[400px] lg:h-[450px]"
+                decoding="sync"
+                height={1000}
+                loading="eager"
+                priority
                 src={post.image}
+                width={1000}
               />
             </div>
           )}
@@ -191,6 +204,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                   width="24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title>Tendencias semanales</title>
                   <path
                     d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
                     fill="#F3F4F6"
@@ -200,13 +214,17 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                 <h5 className="text-heading-5">Tendencias semanales</h5>
               </div>
               <div className="grid grid-cols-1 gap-4">
-                {post.weeklyTrendingPosts.map((trendingPost) => (
+                {post.weeklyTrendingPosts.map((trendingPost, index) => (
                   <CompactCard key={post._id} variant="reverse">
                     <CompactCardImageContainer>
-                      <img
+                      <Image
                         alt={trendingPost.title}
                         className="h-full w-full rounded-[0.625rem]"
+                        height={1000}
+                        loading={index < 2 ? "eager" : "lazy"}
+                        quality={65}
                         src={trendingPost.image}
+                        width={1000}
                       />
                     </CompactCardImageContainer>
                     <CompactCardContent className="mr-0">
@@ -236,6 +254,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                     width="24"
                     xmlns="http://www.w3.org/2000/svg"
                   >
+                    <title>Popular tags</title>
                     <path
                       d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
                       fill="#F3F4F6"
