@@ -12,6 +12,7 @@ import {
   Trash2,
   User,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -96,12 +97,13 @@ export function PostsList({
               <div className="flex items-start gap-4">
                 {post.image && (
                   <div className="relative flex-shrink-0 overflow-hidden rounded-lg">
-                    <img
+                    <Image
                       alt={post.title}
                       className="h-24 w-24 object-cover transition-transform hover:scale-105"
                       decoding={index < 4 ? "sync" : "async"}
                       height={96}
                       loading={index < 4 ? "eager" : "lazy"}
+                      priority={index < 4}
                       src={post.image}
                       width={96}
                     />
