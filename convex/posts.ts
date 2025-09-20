@@ -18,6 +18,7 @@ import {
 
 const WORDS_PER_MINUTE = 200;
 const WEEKLY_TRENDING_POSTS_LIMIT = 4;
+const DEFAULT_POSTS_PER_PAGE = 8;
 
 export function calculateReadingDuration(content: string): number {
   const cleanContent = content
@@ -253,6 +254,80 @@ export const getPostsByCategoryId = query({
       .withIndex("by_category", (q) => q.eq("categoryId", args.categoryId))
       .order("desc")
       .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
+  },
+});
+
+export const getPaginatedPostsWithAuthorByNickname = query({
+  args: {
+    nickname: v.string(),
+    page: v.optional(v.number()),
+    postsPerPage: v.optional(v.number()),
+  },
+  returns: v.object({
+    author: v.union(
+      v.object({
+        username: v.string(),
+        nickname: v.string(),
+        avatarUrl: v.optional(v.string()),
+        bio: v.optional(v.string()),
+      }),
+      v.null()
+    ),
+    posts: v.array(PostWithAuthorDataValidator),
+    totalPosts: v.number(),
+    totalPages: v.number(),
+    currentPage: v.number(),
+    hasNextPage: v.boolean(),
+    hasPreviousPage: v.boolean(),
+  }),
+  handler: async (ctx, args) => {
+    const userProfile = await ctx.db
+      .query("userProfiles")
+      .withIndex("by_nickname", (q) => q.eq("nickname", args.nickname))
+      .unique();
+
+    if (!userProfile) {
+      throw AuthErrors.userNotFound();
+    }
+
+    const currentPage = args.page || 1;
+    const postsPerPage = args.postsPerPage || DEFAULT_POSTS_PER_PAGE;
+    const offset = (currentPage - 1) * postsPerPage;
+
+    const allPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_author_published", (q) =>
+        q.eq("authorId", userProfile.userId)
+      )
+      .filter((q) => q.eq(q.field("published"), true))
+      .order("desc")
+      .collect();
+
+    const totalPosts = allPosts.length;
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+    const paginatedPosts = allPosts.slice(offset, offset + postsPerPage);
+
+    const postsWithAuthorData = paginatedPosts.map((post) => ({
+      ...post,
+      authorName: userProfile.nickname || "Usuario desconocido",
+      authorImage: userProfile.avatarUrl || "",
+    }));
+
+    return {
+      author: {
+        username: userProfile.username,
+        nickname: userProfile.nickname,
+        avatarUrl: userProfile.avatarUrl,
+        bio: userProfile.bio,
+      },
+      posts: postsWithAuthorData,
+      totalPosts,
+      totalPages,
+      currentPage,
+      hasNextPage: currentPage < totalPages,
+      hasPreviousPage: currentPage > 1,
+    };
   },
 });
 

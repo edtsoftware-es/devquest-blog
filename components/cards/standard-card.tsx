@@ -15,7 +15,7 @@ function StandardCard({
   return (
     <article
       className={cn(
-        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_auto] lg:grid-rows-1 lg:gap-3.5",
+        "relative grid max-w-300 grid-cols-1 grid-rows-[auto_auto] gap-2.5 lg:grid-cols-[auto_1fr] lg:grid-rows-1 lg:gap-3.5",
         variant === "compact" && "lg:grid-cols-1 lg:grid-rows-[auto_auto]",
         className
       )}
@@ -31,7 +31,7 @@ function StandardCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-63 overflow-hidden rounded-[1rem] bg-neutral-200 lg:h-80 lg:min-w-80",
+        "relative flex h-63 overflow-hidden rounded-[1rem] bg-neutral-200 lg:h-80 lg:w-80",
         className
       )}
       {...props}

@@ -41,6 +41,7 @@ const applicationTables = {
     .index("by_published_at", ["publishedAt"])
     .index("by_view_count", ["viewCount"])
     .index("by_not_deleted", ["deletedAt"])
+    .index("by_author_published", ["authorId", "publishedAt"])
     .searchIndex("search_posts", {
       searchField: "content",
       filterFields: ["published", "categoryId", "authorId", "deletedAt"],
