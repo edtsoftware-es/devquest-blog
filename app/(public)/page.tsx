@@ -36,7 +36,10 @@ export default async function Home() {
             subtitle="Mantente siempre al día"
             title="Últimas novedades"
           />
-          <StandardPostList preloaded={preloaded} />
+          <StandardPostList
+            preloaded={preloaded}
+            totalPosts={posts.totalPosts}
+          />
         </div>
 
         <aside className="flex w-full flex-col gap-10 lg:col-span-1">

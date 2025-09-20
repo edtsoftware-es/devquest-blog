@@ -26,7 +26,7 @@ const POPULAR_SLICE_END = 3;
 const DEFAULT_POSTS_PER_PAGE = 8;
 const LATEST_POSTS_LIMIT = 50;
 
-export const postCounter = new ShardedCounter(components.shardedCounter);
+export const counter = new ShardedCounter(components.shardedCounter);
 
 export function calculateReadingDuration(content: string): number {
   const cleanContent = content
@@ -62,7 +62,7 @@ export const getLatestPosts = query({
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-    const _posts = await ctx.db
+    const posts = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
       .order("desc")
@@ -70,13 +70,15 @@ export const getLatestPosts = query({
         args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
       );
 
-    return _posts;
+    return posts;
   },
 });
 
 export const getHomePosts = query({
   args: {},
   handler: async (ctx) => {
+    const totalPosts = await counter.count(ctx, "totalPosts");
+
     const _posts = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
@@ -143,6 +145,7 @@ export const getHomePosts = query({
       .slice(0, 10);
 
     return {
+      totalPosts,
       mainPosts,
       mainPopularPost,
       highLightPosts,
@@ -504,7 +507,7 @@ export const createPost = mutation({
       viewCount: 0,
     });
 
-    await postCounter.inc(ctx, "totalPosts");
+    await counter.inc(ctx, "totalPosts");
   },
 });
 
@@ -570,7 +573,7 @@ export const deletePost = mutation({
 
     await ctx.db.delete(args.postId);
 
-    await postCounter.dec(ctx, "totalPosts");
+    await counter.dec(ctx, "totalPosts");
 
     return null;
   },

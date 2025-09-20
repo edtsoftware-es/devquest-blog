@@ -11,9 +11,11 @@ import { cn } from "@/lib/utils";
 
 export default function StandardPostList({
   preloaded,
+  totalPosts,
   className,
 }: {
   preloaded: Preloaded<typeof api.posts.getLatestPosts>;
+  totalPosts: number;
   className?: string;
 }) {
   const firstPage = usePreloadedQuery(preloaded);
@@ -25,6 +27,8 @@ export default function StandardPostList({
   );
 
   const items = results.length ? results : firstPage.page;
+
+  console.log("POSTS TOTALES", totalPosts);
 
   return (
     <section className="flex w-full flex-col gap-6">
