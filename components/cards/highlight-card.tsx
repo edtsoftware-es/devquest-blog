@@ -23,7 +23,7 @@ function HighlightCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-57 w-full rounded-[1rem] rounded-br-[1.75rem] bg-neutral-200",
+        "relative flex h-57 w-full overflow-hidden rounded-[1rem] rounded-br-[1.75rem] bg-neutral-200",
         className
       )}
       {...props}

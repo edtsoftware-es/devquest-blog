@@ -6,7 +6,6 @@ import {
   StandardCardAuthor,
   StandardCardAuthorContainer,
   StandardCardAuthorName,
-  StandardCardCategories,
   StandardCardContent,
   StandardCardDescription,
   StandardCardFooter,
@@ -14,6 +13,7 @@ import {
   StandardCardPublishedAt,
   StandardCardShell,
   StandardCardStats,
+  StandardCardTags,
   StandardCardTitle,
 } from "@/components/cards/standard-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -74,12 +74,9 @@ function HeroItem({
           className="h-full border-none bg-transparent p-0"
           hasButton={false}
         >
-          <StandardCardCategories
-            categories={[
-              { _id: "1", slug: "technology", name: "Technology" },
-              { _id: "2", slug: "react", name: "React" },
-            ]}
+          <StandardCardTags
             className="flex lg:hidden"
+            tags={["technology", "react"]}
           />
           <StandardCardContent className="mb-14 p-0 lg:mb-24">
             <StandardCardHeader>

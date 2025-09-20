@@ -22,7 +22,7 @@ function FeaturedCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-71 rounded-[1rem] bg-neutral-200 lg:h-105",
+        "relative flex h-71 overflow-hidden rounded-[1rem] bg-neutral-200 lg:h-105",
         className
       )}
       {...props}
@@ -74,7 +74,7 @@ function FeaturedCardShell({
   );
 }
 
-type FeaturedCardCategoriesProps = {
+type FeaturedCardTagsProps = {
   tags: string[];
 };
 
@@ -83,7 +83,7 @@ function FeaturedCardTags({
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & FeaturedCardCategoriesProps) {
+}: React.ComponentProps<"div"> & FeaturedCardTagsProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div

@@ -13,44 +13,11 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 
 const MAX_VISIBLE_TAGS = 3;
-
-const FALLBACK_IMAGE = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=";
-
-function PostImage({ src, alt, index }: { src: string; alt: string; index: number }) {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [hasError, setHasError] = useState(false);
-
-  useEffect(() => {
-    // Reset error state when src changes
-    setHasError(false);
-    setImgSrc(src);
-  }, [src]);
-
-  const handleError = () => {
-    if (!hasError) {
-      setHasError(true);
-      setImgSrc(FALLBACK_IMAGE);
-    }
-  };
-
-  return (
-    <img
-      alt={alt}
-      className="h-24 w-24 object-cover transition-transform hover:scale-105"
-      loading={index < 4 ? "eager" : "lazy"}
-      decoding={index < 4 ? "sync" : "async"}
-      src={imgSrc}
-      onError={handleError}
-      onLoad={() => setHasError(false)}
-    />
-  );
-}
 
 export function PostsList({
   preloadedPosts,
@@ -129,13 +96,15 @@ export function PostsList({
               <div className="flex items-start gap-4">
                 {post.image && (
                   <div className="relative flex-shrink-0 overflow-hidden rounded-lg">
-                  <img
-      alt={post.title}
-      className="h-24 w-24 object-cover transition-transform hover:scale-105"
-      loading={index < 4 ? "eager" : "lazy"}
-      decoding={index < 4 ? "sync" : "async"}
-      src={post.image}
-    />
+                    <img
+                      alt={post.title}
+                      className="h-24 w-24 object-cover transition-transform hover:scale-105"
+                      decoding={index < 4 ? "sync" : "async"}
+                      height={96}
+                      loading={index < 4 ? "eager" : "lazy"}
+                      src={post.image}
+                      width={96}
+                    />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
@@ -202,46 +171,52 @@ export function PostsList({
                   )}
                 </div>
               </div>
-              
+
               <div className="mt-4 flex items-center justify-end gap-2">
-                 <Button asChild size="sm" variant="outline">
-                   <Link href={`/dashboard/posts/edit/${post._id}`} prefetch>
-                     <Edit3 className="mr-1 h-3 w-3" />
-                     Editar
-                   </Link>
-                 </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/posts/${post.slug}`} prefetch>
+                    <Eye className="mr-1 h-3 w-3" />
+                    Ver
+                  </Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/dashboard/posts/edit/${post._id}`} prefetch>
+                    <Edit3 className="mr-1 h-3 w-3" />
+                    Editar
+                  </Link>
+                </Button>
 
-                  <Button
-                    onClick={() => {
-                      void togglePostPublished({ postId: post._id });
-                    }}
-                    size="sm"
-                    variant={post.published ? "secondary" : "default"}
-                  >
-                    {post.published ? (
-                      <>
-                        <EyeOff className="mr-1 h-3 w-3" />
-                        Despublicar
-                      </>
-                    ) : (
-                      <>
-                        <Globe className="mr-1 h-3 w-3" />
-                        Publicar
-                      </>
-                    )}
-                  </Button>
+                <Button
+                  onClick={() => {
+                    void togglePostPublished({ postId: post._id });
+                  }}
+                  size="sm"
+                  variant={post.published ? "secondary" : "default"}
+                >
+                  {post.published ? (
+                    <>
+                      <EyeOff className="mr-1 h-3 w-3" />
+                      Despublicar
+                    </>
+                  ) : (
+                    <>
+                      <Globe className="mr-1 h-3 w-3" />
+                      Publicar
+                    </>
+                  )}
+                </Button>
 
-                  <Button
-                    onClick={() => {
-                      void deletePost({ postId: post._id });
-                    }}
-                    size="sm"
-                    variant="destructive"
-                  >
-                    <Trash2 className="mr-1 h-3 w-3" />
-                    Borrar
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => {
+                    void deletePost({ postId: post._id });
+                  }}
+                  size="sm"
+                  variant="destructive"
+                >
+                  <Trash2 className="mr-1 h-3 w-3" />
+                  Borrar
+                </Button>
+              </div>
             </div>
           ))}
         </div>
