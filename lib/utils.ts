@@ -1,11 +1,18 @@
 import { type ClassValue, clsx } from "clsx";
+import { formatDate } from "date-fns";
 import { twMerge } from "tailwind-merge";
+
+const DEFAULT_QUALITY = 0.8;
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const DEFAULT_QUALITY = 0.8;
+export function getPublishedDate(dateString: number) {
+  return dateString
+    ? formatDate(dateString, "MMM dd, yyyy")
+    : formatDate(dateString, "MMM dd, yyyy");
+}
 
 export async function convertFileToWebp(
   file: File,

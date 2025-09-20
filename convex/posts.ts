@@ -8,7 +8,9 @@ import { AuthErrors, PostErrors } from "./lib/errors";
 import type { PostWithAuthorData } from "./lib/types";
 import {
   createPaginatedResultValidator,
+  HomePostsValidator,
   optionalPaginationOpts,
+  PopularTagValidator,
   PostInputFields,
   PostUpdateFields,
   PostValidator,
@@ -18,6 +20,9 @@ import {
 
 const WORDS_PER_MINUTE = 200;
 const WEEKLY_TRENDING_POSTS_LIMIT = 4;
+export const HOME_POSTS_LIMIT = 5;
+const POPULAR_SLICE_START = 1;
+const POPULAR_SLICE_END = 3;
 const DEFAULT_POSTS_PER_PAGE = 8;
 
 export function calculateReadingDuration(content: string): number {
@@ -48,6 +53,117 @@ export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
 
   return userProfile;
 }
+
+export const getHomePosts = query({
+  args: {},
+  returns: HomePostsValidator,
+  handler: async (ctx) => {
+    const _posts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .take(HOME_POSTS_LIMIT);
+
+    const mainPosts = await Promise.all(
+      _posts.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: author?.image || "",
+        };
+      })
+    );
+
+    const _popularPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_view_count")
+      .order("desc")
+      .filter((q) => q.eq(q.field("published"), true))
+      .take(HOME_POSTS_LIMIT);
+
+    const mainPopularPostAuthor = await ctx.db.get(_popularPosts[0].authorId);
+
+    const mainPopularPost: PostWithAuthorData = {
+      ..._popularPosts[0],
+      authorName: mainPopularPostAuthor?.name || "Usuario desconocido",
+      authorImage: mainPopularPostAuthor?.image || "",
+    };
+
+    const highLightPosts = _popularPosts.slice(
+      POPULAR_SLICE_START,
+      POPULAR_SLICE_END
+    );
+    const compactPosts = _popularPosts.slice(
+      POPULAR_SLICE_END,
+      HOME_POSTS_LIMIT
+    );
+
+    const weeklys = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .order("desc")
+      .take(HOME_POSTS_LIMIT);
+
+    const allPublishedPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .collect();
+
+    const tagCount = new Map<string, number>();
+
+    for (const post of allPublishedPosts) {
+      for (const tag of post.tags) {
+        tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+      }
+    }
+
+    const popularTags = Array.from(tagCount.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+
+    return {
+      mainPosts,
+      mainPopularPost,
+      highLightPosts,
+      compactPosts,
+      weeklys,
+      popularTags,
+    };
+  },
+});
+
+export const getPopularTags = query({
+  args: {
+    limit: v.optional(v.number()),
+  },
+  returns: v.array(PopularTagValidator),
+  handler: async (ctx, args) => {
+    const DEFAULT_LIMIT = 10;
+    const limit = args.limit ?? DEFAULT_LIMIT;
+
+    const allPublishedPosts = await ctx.db
+      .query("posts")
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .collect();
+
+    const tagCount = new Map<string, number>();
+
+    for (const post of allPublishedPosts) {
+      for (const tag of post.tags) {
+        tagCount.set(tag, (tagCount.get(tag) || 0) + 1);
+      }
+    }
+
+    const popularTags = Array.from(tagCount.entries())
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, limit);
+
+    return popularTags;
+  },
+});
 
 export const getPublishedPosts = query({
   args: {
