@@ -1,6 +1,7 @@
 "use client";
 import { useConvexAuth } from "convex/react";
 import { SearchIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -182,7 +183,6 @@ function SearchContent({
   isDesktop,
   onCategoryClick,
   onCategoryHover,
-  onPostClick,
   onSearch,
   onSearchValueChange,
   posts,
@@ -234,7 +234,6 @@ function SearchContent({
             <CompactCard
               className="h-full w-full border-none bg-background"
               key={post._id}
-              onClick={() => onPostClick(post)}
             >
               <CompactCardImageContainer>
                 {/* biome-ignore lint/performance/noImgElement: Using native img keeps card layout simple without extra Next.js config */}
@@ -246,7 +245,10 @@ function SearchContent({
                 />
               </CompactCardImageContainer>
               <CompactCardContent>
-                <CompactCardTitle>{post.title}</CompactCardTitle>
+                <Link href={`/posts/${post.slug}`}>
+                  <span className="absolute inset-0 z-50" />
+                  <CompactCardTitle>{post.title}</CompactCardTitle>
+                </Link>
                 <CompactCardFooter>
                   <CompactCardPublishedAt>
                     {post.publishedAt

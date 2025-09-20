@@ -2,6 +2,7 @@
 
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
+import Link from "next/link";
 import {
   StandardCard,
   StandardCardAuthor,
@@ -55,6 +56,7 @@ export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
 
 function HeroItem({
   title,
+  slug,
   excerpt,
   authorImage,
   authorName,
@@ -87,7 +89,10 @@ function HeroItem({
             />
             <StandardCardContent className="mb-14 p-0 lg:mb-24">
               <StandardCardHeader>
-                <StandardCardTitle>{title}</StandardCardTitle>
+                <Link href={`/posts/${slug}`}>
+                  <span className="absolute inset-0 z-50" />
+                  <StandardCardTitle>{title}</StandardCardTitle>
+                </Link>
               </StandardCardHeader>
               <StandardCardDescription className="text-secondary">
                 {excerpt}

@@ -3,6 +3,7 @@
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
 import { Clock, Eye, MessageCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import {
@@ -10,6 +11,7 @@ import {
   AuthorCardDescription,
   AuthorCardImageContainer,
   AuthorCardName,
+  AuthorCardNickname,
 } from "@/components/cards/author-card";
 import {
   CompactCard,
@@ -183,10 +185,20 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                   </AvatarFallback>
                 </Avatar>
               </AuthorCardImageContainer>
-              <AuthorCardName>
-                {post.author.name ||
-                  (post.author.role === "admin" ? "Administrador" : "Usuario")}
-              </AuthorCardName>
+              <div className="flex flex-col items-center gap-1">
+                <AuthorCardName>
+                  {post.author.name ||
+                    (post.author.role === "admin"
+                      ? "Administrador"
+                      : "Usuario")}
+                </AuthorCardName>
+                <Link href={`/author/${post.author.nickname}`}>
+                  <span className="absolute inset-0 z-50" />
+                  <AuthorCardNickname>
+                    @{post.author.nickname || "unknown"}
+                  </AuthorCardNickname>
+                </Link>
+              </div>
               <AuthorCardDescription>
                 {post.author.role === "admin"
                   ? "Administrador del sistema"
@@ -228,7 +240,12 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       />
                     </CompactCardImageContainer>
                     <CompactCardContent className="mr-0">
-                      <CompactCardTitle>{trendingPost.title}</CompactCardTitle>
+                      <Link href={`/posts/${trendingPost.slug}`}>
+                        <span className="absolute inset-0 z-50" />
+                        <CompactCardTitle>
+                          {trendingPost.title}
+                        </CompactCardTitle>
+                      </Link>
                       <CompactCardFooter className="mr-0">
                         <CompactCardPublishedAt>
                           {post.publishedAt

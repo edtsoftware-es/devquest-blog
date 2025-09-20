@@ -9,7 +9,10 @@ function HighlightCard({
 }: React.ComponentProps<"article">) {
   return (
     <article
-      className={cn("flex flex-col gap-y-4 bg-transparent", className)}
+      className={cn(
+        "relative isolate flex flex-col gap-y-4 bg-transparent",
+        className
+      )}
       {...props}
     />
   );

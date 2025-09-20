@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   CompactCard,
   CompactCardContent,
@@ -31,7 +32,10 @@ export default function CompactPostList({
             />
           </CompactCardImageContainer>
           <CompactCardContent className="mr-0">
-            <CompactCardTitle>{post.title}</CompactCardTitle>
+            <Link href={`/posts/${post.slug}`}>
+              <span className="absolute inset-0 z-50" />
+              <CompactCardTitle>{post.title}</CompactCardTitle>
+            </Link>
             <CompactCardFooter className="mr-0">
               <CompactCardPublishedAt>
                 {getPublishedDate(post.publishedAt ?? post._creationTime)}

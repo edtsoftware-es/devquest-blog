@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   CompactCard,
   CompactCardContent,
@@ -85,7 +86,10 @@ export default function Trending({
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
-                <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
+                <Link href={`/posts/${mainPopularPost.slug}`}>
+                  <span className="absolute inset-0 z-50" />
+                  <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
+                </Link>
                 <FeaturedCardReadingTime className="hidden lg:inline">
                   {mainPopularPost.duration} min read
                 </FeaturedCardReadingTime>
@@ -133,7 +137,10 @@ export default function Trending({
                   />
                   <HighlightCardTags tags={post.tags} />
                 </HighlightCardImageContainer>
-                <HighlightCardTitle>{post.title}</HighlightCardTitle>
+                <Link href={`/posts/${post.slug}`}>
+                  <span className="absolute inset-0 z-50" />
+                  <HighlightCardTitle>{post.title}</HighlightCardTitle>
+                </Link>
               </HighlightCard>
             ))}
           </div>
@@ -149,7 +156,10 @@ export default function Trending({
                   />
                 </CompactCardImageContainer>
                 <CompactCardContent>
-                  <CompactCardTitle>{post.title}</CompactCardTitle>
+                  <Link href={`/posts/${post.slug}`}>
+                    <span className="absolute inset-0 z-50" />
+                    <CompactCardTitle>{post.title}</CompactCardTitle>
+                  </Link>
                   <CompactCardFooter>
                     <CompactCardPublishedAt>
                       {getPublishedDate(post.publishedAt ?? post._creationTime)}
