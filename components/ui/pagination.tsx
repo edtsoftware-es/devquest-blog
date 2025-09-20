@@ -1,7 +1,5 @@
-// biome-ignore-all lint/a11y: Custom pagination component with appropriate accessibility handling
-// biome-ignore-all lint/nursery/useAnchorHref: href not required as anchor elements are used as buttons for pagination navigation
-
 import { ArrowLeft, ArrowRight, MoreHorizontalIcon } from "lucide-react";
+import Link from "next/link";
 import type * as React from "react";
 import { type Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,7 +10,6 @@ function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
       aria-label="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       data-slot="pagination"
-      role="navigation"
       {...props}
     />
   );
@@ -38,7 +35,7 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">;
+  React.ComponentProps<typeof Link>;
 
 function PaginationLink({
   className,
@@ -47,7 +44,7 @@ function PaginationLink({
   ...props
 }: PaginationLinkProps) {
   return (
-    <a
+    <Link
       aria-current={isActive ? "page" : undefined}
       className={cn(
         buttonVariants({
@@ -120,7 +117,6 @@ function PaginationEllipsis({
 }: React.ComponentProps<"span">) {
   return (
     <span
-      aria-hidden
       className={cn(
         "flex size-6 xs:size-9 items-center justify-center",
         className

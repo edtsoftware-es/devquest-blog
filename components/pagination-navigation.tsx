@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   Pagination,
   PaginationContent,
@@ -26,20 +26,8 @@ export function PaginationNavigation({
   hasNextPage,
   hasPreviousPage,
 }: PaginationNavigationProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const navigateToPage = (page: number) => {
-    if (page === 1) {
-      router.push(pathname);
-      return;
-    }
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    router.push(`${pathname}?${params.toString()}`);
-    return;
-  };
 
   if (totalPages <= 1) {
     return null;
@@ -57,6 +45,15 @@ export function PaginationNavigation({
     (_, i) => rangeStart + i
   );
 
+  const getPageHref = (page: number) => {
+    if (page === 1) {
+      return pathname;
+    }
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
   return (
     <Pagination>
       <PaginationContent>
@@ -64,7 +61,7 @@ export function PaginationNavigation({
           <PaginationItem>
             <PaginationPrevious
               aria-label={`Ir a la página ${currentPage - 1}`}
-              onClick={() => navigateToPage(currentPage - 1)}
+              href={getPageHref(currentPage - 1)}
             />
           </PaginationItem>
         )}
@@ -73,8 +70,8 @@ export function PaginationNavigation({
           <PaginationItem>
             <PaginationLink
               aria-label="Ir a la página 1"
+              href={getPageHref(1)}
               isActive={currentPage === 1}
-              onClick={() => navigateToPage(1)}
             >
               1
             </PaginationLink>
@@ -91,8 +88,8 @@ export function PaginationNavigation({
           <PaginationItem key={pageNumber}>
             <PaginationLink
               aria-label={`Ir a la página ${pageNumber}`}
+              href={getPageHref(pageNumber)}
               isActive={pageNumber === currentPage}
-              onClick={() => navigateToPage(pageNumber)}
             >
               {pageNumber}
             </PaginationLink>
@@ -109,8 +106,8 @@ export function PaginationNavigation({
           <PaginationItem>
             <PaginationLink
               aria-label={`Ir a la página ${totalPages}`}
+              href={getPageHref(totalPages)}
               isActive={totalPages === currentPage}
-              onClick={() => navigateToPage(totalPages)}
             >
               {totalPages}
             </PaginationLink>
@@ -121,7 +118,7 @@ export function PaginationNavigation({
           <PaginationItem>
             <PaginationNext
               aria-label={`Ir a la página ${currentPage + 1}`}
-              onClick={() => navigateToPage(currentPage + 1)}
+              href={getPageHref(currentPage + 1)}
             />
           </PaginationItem>
         )}

@@ -264,15 +264,12 @@ export const getPaginatedPostsWithAuthorByNickname = query({
     postsPerPage: v.optional(v.number()),
   },
   returns: v.object({
-    author: v.union(
-      v.object({
-        username: v.string(),
-        nickname: v.string(),
-        avatarUrl: v.optional(v.string()),
-        bio: v.optional(v.string()),
-      }),
-      v.null()
-    ),
+    author: v.object({
+      username: v.string(),
+      nickname: v.string(),
+      avatarUrl: v.optional(v.string()),
+      bio: v.optional(v.string()),
+    }),
     posts: v.array(PostWithAuthorDataValidator),
     totalPosts: v.number(),
     totalPages: v.number(),
