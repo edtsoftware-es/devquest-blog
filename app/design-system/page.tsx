@@ -52,7 +52,6 @@ import {
   StandardCardAuthor,
   StandardCardAuthorContainer,
   StandardCardAuthorName,
-  StandardCardCategories,
   StandardCardContent,
   StandardCardDescription,
   StandardCardFooter,
@@ -62,6 +61,7 @@ import {
   StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
+  StandardCardTags,
   StandardCardTitle,
 } from "@/components/cards/standard-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -297,21 +297,15 @@ export default function DesignSystem() {
         <StandardCard>
           <StandardCardImageContainer>
             <div className="h-full w-full rounded-[1rem] bg-green-500" />
-            <StandardCardCategories
-              categories={[
-                { _id: "1", slug: "technology", name: "Technology" },
-                { _id: "2", slug: "react", name: "React" },
-              ]}
+            <StandardCardTags
               className="absolute bottom-3 left-3 z-10 xs:hidden"
+              tags={["technology", "react"]}
             />
           </StandardCardImageContainer>
           <StandardCardShell>
-            <StandardCardCategories
-              categories={[
-                { _id: "1", slug: "technology", name: "Technology" },
-                { _id: "2", slug: "react", name: "React" },
-              ]}
+            <StandardCardTags
               className="xs:flex hidden"
+              tags={["technology", "react"]}
             />
             <StandardCardContent>
               <StandardCardHeader>

@@ -74,7 +74,7 @@ function FeaturedCardShell({
   );
 }
 
-type FeaturedCardCategoriesProps = {
+type FeaturedCardTagsProps = {
   tags: string[];
 };
 
@@ -83,7 +83,7 @@ function FeaturedCardTags({
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & FeaturedCardCategoriesProps) {
+}: React.ComponentProps<"div"> & FeaturedCardTagsProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div

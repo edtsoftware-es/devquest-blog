@@ -11,7 +11,6 @@ import {
   StandardCardAuthor,
   StandardCardAuthorContainer,
   StandardCardAuthorName,
-  StandardCardCategories,
   StandardCardContent,
   StandardCardDescription,
   StandardCardFooter,
@@ -21,6 +20,7 @@ import {
   StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
+  StandardCardTags,
   StandardCardTitle,
 } from "@/components/cards/standard-card";
 import { PaginationNavigation } from "@/components/pagination-navigation";
@@ -70,67 +70,56 @@ export default async function AuthorPage({
 
       <section className="my-8 flex w-full max-w-6xl flex-col justify-center">
         <div className="flex flex-col gap-y-6">
-          {posts.map((post) => {
-            const categories = post.tags.map((tag, index) => ({
-              _id: `${index + 1}`,
-              slug: tag,
-              name: tag,
-            }));
-
-            return (
-              <StandardCard key={post._id}>
-                <StandardCardImageContainer>
-                  <Image
-                    alt={post.title}
-                    className="h-full w-full object-cover"
-                    fill
-                    src={"/images/galaxia.jpg"}
+          {posts.map((post) => (
+            <StandardCard key={post._id}>
+              <StandardCardImageContainer>
+                <Image
+                  alt={post.title}
+                  className="h-full w-full object-cover"
+                  fill
+                  src={"/images/galaxia.jpg"}
+                />
+                <StandardCardTags
+                  className="absolute bottom-3 left-3 z-10 xs:hidden"
+                  tags={post.tags}
+                />
+              </StandardCardImageContainer>
+              <StandardCardShell>
+                <StandardCardTags className="xs:flex hidden" tags={post.tags} />
+                <StandardCardContent>
+                  <StandardCardHeader>
+                    <StandardCardTitle>{post.title}</StandardCardTitle>
+                    <StandardCardReadingTime>
+                      {`${post.duration} mins`}
+                    </StandardCardReadingTime>
+                  </StandardCardHeader>
+                  <StandardCardDescription>
+                    {post.excerpt}
+                  </StandardCardDescription>
+                </StandardCardContent>
+                <StandardCardFooter>
+                  <StandardCardAuthorContainer>
+                    <StandardCardAuthor>
+                      <Avatar className="size-8 xs:size-10">
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>AF</AvatarFallback>
+                      </Avatar>
+                      <StandardCardAuthorName>
+                        {post.authorName}
+                      </StandardCardAuthorName>
+                    </StandardCardAuthor>
+                    <StandardCardPublishedAt>
+                      {post.publishedAt}
+                    </StandardCardPublishedAt>
+                  </StandardCardAuthorContainer>
+                  <StandardCardStats
+                    commentsCount={post.commentsCount}
+                    viewsCount={post.viewCount}
                   />
-                  <StandardCardCategories
-                    categories={categories}
-                    className="absolute bottom-3 left-3 z-10 xs:hidden"
-                  />
-                </StandardCardImageContainer>
-                <StandardCardShell>
-                  <StandardCardCategories
-                    categories={categories}
-                    className="xs:flex hidden"
-                  />
-                  <StandardCardContent>
-                    <StandardCardHeader>
-                      <StandardCardTitle>{post.title}</StandardCardTitle>
-                      <StandardCardReadingTime>
-                        {`${post.duration} mins`}
-                      </StandardCardReadingTime>
-                    </StandardCardHeader>
-                    <StandardCardDescription>
-                      {post.excerpt}
-                    </StandardCardDescription>
-                  </StandardCardContent>
-                  <StandardCardFooter>
-                    <StandardCardAuthorContainer>
-                      <StandardCardAuthor>
-                        <Avatar className="size-8 xs:size-10">
-                          <AvatarImage src="https://github.com/shadcn.png" />
-                          <AvatarFallback>AF</AvatarFallback>
-                        </Avatar>
-                        <StandardCardAuthorName>
-                          {post.authorName}
-                        </StandardCardAuthorName>
-                      </StandardCardAuthor>
-                      <StandardCardPublishedAt>
-                        {post.publishedAt}
-                      </StandardCardPublishedAt>
-                    </StandardCardAuthorContainer>
-                    <StandardCardStats
-                      commentsCount={post.commentsCount}
-                      viewsCount={post.viewCount}
-                    />
-                  </StandardCardFooter>
-                </StandardCardShell>
-              </StandardCard>
-            );
-          })}
+                </StandardCardFooter>
+              </StandardCardShell>
+            </StandardCard>
+          ))}
         </div>
         {totalPages > 1 && (
           <div className="mt-8 flex w-full max-w-6xl justify-center">

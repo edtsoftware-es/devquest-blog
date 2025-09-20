@@ -85,28 +85,28 @@ function StandardCardShell({
   );
 }
 
-type StandardCardCategoriesProps = {
-  categories: { _id: string; slug: string; name: string }[];
+type StandardCardTagsProps = {
+  tags: string[];
 };
 
-function StandardCardCategories({
-  categories,
+function StandardCardTags({
+  tags,
   className,
   children,
   ...props
-}: React.ComponentProps<"div"> & StandardCardCategoriesProps) {
+}: React.ComponentProps<"div"> & StandardCardTagsProps) {
   const MAX_BACKGROUND_VARIANTS = 5;
   return (
     <div
       className={cn("flex flex-wrap-reverse items-center gap-1.5", className)}
       {...props}
     >
-      {categories.map(({ _id, name }, index) => (
+      {tags.map((tag, index) => (
         <Badge
           className={`bg-background-${(index % MAX_BACKGROUND_VARIANTS) + 1}`}
-          key={_id}
+          key={tag}
         >
-          {name}
+          {tag}
         </Badge>
       ))}
       {children}
@@ -284,7 +284,7 @@ export {
   StandardCard,
   StandardCardImageContainer,
   StandardCardShell,
-  StandardCardCategories,
+  StandardCardTags,
   StandardCardContent,
   StandardCardHeader,
   StandardCardTitle,
