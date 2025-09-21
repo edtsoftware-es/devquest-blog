@@ -2,6 +2,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
+import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors, PostErrors } from "./lib/errors";
 import {
@@ -16,6 +17,27 @@ import {
 const MAX_RECENT_COMMENTS = 5;
 const MAX_RECENT_COMMENTS_TIME = 60_000;
 const MAX_COMMENT_LENGTH = 1000;
+
+async function getImageUrl(
+  ctx: QueryCtx,
+  image: string | Id<"_storage">
+): Promise<string> {
+  try {
+    if (typeof image === "string" && image.startsWith("http")) {
+      return image;
+    }
+    return (await ctx.storage.getUrl(image as Id<"_storage">)) ?? image;
+  } catch {
+    return image;
+  }
+}
+
+async function getUserImageUrl(ctx: QueryCtx, user: any): Promise<string> {
+  if (!user?.image) {
+    return "";
+  }
+  return await getImageUrl(ctx, user.image);
+}
 
 export const getCommentsByPostId = query({
   args: {
@@ -52,7 +74,7 @@ export const getCommentsWithAuthors = query({
         return {
           ...comment,
           authorName: author?.name || "Unknown User",
-          authorImage: author?.image,
+          authorImage: await getUserImageUrl(ctx, author),
         };
       })
     );
@@ -286,7 +308,7 @@ export const getCommentById = query({
     return {
       ...comment,
       authorName: author?.name || "Unknown User",
-      authorImage: author?.image,
+      authorImage: await getUserImageUrl(ctx, author),
     };
   },
 });
