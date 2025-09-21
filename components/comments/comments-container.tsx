@@ -80,6 +80,7 @@ export function CommentsContainer({
             <div className="space-y-4">
               {showCommentForm ? (
                 <CommentForm
+                  autoFocus={true}
                   onCancel={() => setShowCommentForm(false)}
                   onSubmit={handleCommentSubmitted}
                   placeholder="Comparte tus pensamientos..."
