@@ -2,6 +2,7 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
+import { generateUploadUrl } from "./lib/utils";
 
 export const getUserRole = query({
   args: {},
@@ -128,25 +129,8 @@ export const updateUserProfile = mutation({
   },
 });
 
-export const sendImage = mutation({
-  args: {
-    storageId: v.id("_storage"),
-    userId: v.id("users"),
-  },
-  handler: async (ctx, args) => {
-    const user = await ctx.db.get(args.userId);
-    if (!user) {
-      throw AuthErrors.userNotFound();
-    }
-    await ctx.db.patch(user._id, {
-      image: args.storageId,
-    });
-    return null;
-  },
-});
-
-export const generateUploadUrl = mutation({
+export const generateUserUploadUrl = mutation({
   handler: async (ctx) => {
-    return await ctx.storage.generateUploadUrl();
+    return await generateUploadUrl(ctx);
   },
 });
