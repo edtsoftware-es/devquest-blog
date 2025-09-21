@@ -71,7 +71,6 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
   const router = useRouter();
 
   const createPost = useMutation(api.posts.createPost);
-  const sendPostImage = useMutation(api.posts.sendPostImage);
   const generatePostUploadUrl = useMutation(api.posts.generatePostUploadUrl);
   const updatePost = useMutation(api.posts.updatePost);
 
@@ -100,7 +99,7 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
-      let imageUrl = data.image;
+      let storageId: Id<"_storage"> | undefined;
 
       if (selectedImage) {
         const postUrl = await generatePostUploadUrl();
@@ -116,40 +115,35 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
         if (!result.ok) {
           throw new Error("Failed to upload image");
         }
-        const { storageId } = await result.json();
-        imageUrl = storageId;
+        const { storageId: uploadedStorageId } = await result.json();
+        storageId = uploadedStorageId as Id<"_storage">;
       }
 
       if (mode === "edit" && post) {
         await updatePost({
           postId: post._id,
           title: data.title,
-          image: imageUrl,
+          image: data.image,
           slug: data.slug,
           categoryId: data.categoryId as Id<"categories">,
           content: data.content,
           excerpt: data.excerpt,
           tags: tagsArray,
           published: data.published,
+          storageId,
         });
-
-        if (selectedImage) {
-          await sendPostImage({
-            storageId: imageUrl as Id<"_storage">,
-            postId: post._id,
-          });
-        }
         toast.success("Post actualizado correctamente");
       } else {
         await createPost({
           title: data.title,
-          image: imageUrl,
+          image: data.image,
           slug: data.slug,
           categoryId: data.categoryId as Id<"categories">,
           content: data.content,
           excerpt: data.excerpt,
           tags: tagsArray,
           published: data.published,
+          storageId,
         });
         toast.success("Post creado correctamente");
       }

@@ -18,25 +18,8 @@ const MAX_RECENT_COMMENTS = 5;
 const MAX_RECENT_COMMENTS_TIME = 60_000;
 const MAX_COMMENT_LENGTH = 1000;
 
-async function getImageUrl(
-  ctx: QueryCtx,
-  image: string | Id<"_storage">
-): Promise<string> {
-  try {
-    if (typeof image === "string" && image.startsWith("http")) {
-      return image;
-    }
-    return (await ctx.storage.getUrl(image as Id<"_storage">)) ?? image;
-  } catch {
-    return image;
-  }
-}
-
-async function getUserImageUrl(ctx: QueryCtx, user: any): Promise<string> {
-  if (!user?.image) {
-    return "";
-  }
-  return await getImageUrl(ctx, user.image);
+function getUserImageUrl(_ctx: QueryCtx, user: any): string {
+  return user?.image || "";
 }
 
 export const getCommentsByPostId = query({
@@ -74,7 +57,7 @@ export const getCommentsWithAuthors = query({
         return {
           ...comment,
           authorName: author?.name || "Unknown User",
-          authorImage: await getUserImageUrl(ctx, author),
+          authorImage: getUserImageUrl(ctx, author),
         };
       })
     );
@@ -308,7 +291,7 @@ export const getCommentById = query({
     return {
       ...comment,
       authorName: author?.name || "Unknown User",
-      authorImage: await getUserImageUrl(ctx, author),
+      authorImage: getUserImageUrl(ctx, author),
     };
   },
 });
