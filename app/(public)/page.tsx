@@ -31,7 +31,6 @@ export default async function Home() {
       <section className="flex w-full max-w-[1200px] flex-col-reverse gap-12 px-4 lg:grid lg:grid-cols-3 lg:gap-8">
         <div className="flex flex-col gap-8 lg:col-span-2">
           <SectionHeading
-            slug="latest-articles"
             subtitle="Mantente siempre al día"
             title="Últimas novedades"
           />

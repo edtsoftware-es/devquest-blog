@@ -1,7 +1,4 @@
-import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
 
 export function Heading({
   children,
@@ -32,11 +29,9 @@ export function Heading({
 export function SectionHeading({
   title,
   subtitle,
-  slug,
 }: {
   title: string;
   subtitle: string;
-  slug: string;
 }) {
   return (
     <div className="flex w-full items-center justify-between rounded-[10px] border border-neutral-200 bg-primary px-4 py-4 md:px-8">
@@ -46,14 +41,6 @@ export function SectionHeading({
           {subtitle}
         </p>
       </div>
-      <Button asChild className="group w-fit" size="auto" variant="ghost">
-        <Link href={`/blog/${slug}`} prefetch>
-          <span className="rounded-full bg-neutral-900/90 p-1 text-system-white transition-colors group-hover:bg-neutral-900">
-            <ChevronRight aria-hidden="true" />
-          </span>
-          <span className="hidden md:block">ver más</span>
-        </Link>
-      </Button>
     </div>
   );
 }

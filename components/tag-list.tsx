@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { PopularTag } from "@/convex/lib/types";
@@ -13,9 +14,11 @@ export default function TagList({
   return (
     <div className={cn("flex w-full flex-wrap gap-2", className)}>
       {tags.map((tag: PopularTag) => (
-        <Button className="w-fit" key={tag.tag} size={"xs"}>
-          {tag.tag}
-          <Badge variant="tertiary">{tag.count}</Badge>
+        <Button asChild className="w-fit" key={tag.tag} size={"xs"}>
+          <Link href={`search?q=${tag.tag}`}>
+            {tag.tag}
+            <Badge variant="tertiary">{tag.count}</Badge>
+          </Link>
         </Button>
       ))}
     </div>

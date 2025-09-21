@@ -51,7 +51,6 @@ export default function Trending({
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <SectionHeading
-        slug="top-trending"
         subtitle="Las historias más populares de hoy"
         title="Top Trending"
       />
