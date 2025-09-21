@@ -43,7 +43,7 @@ export default function StandardPostList({
 
   const { ref, inView } = useInView({
     threshold: 0,
-    rootMargin: "300px",
+    rootMargin: "500px",
   });
 
   useEffect(() => {
