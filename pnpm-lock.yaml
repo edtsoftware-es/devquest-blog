@@ -137,6 +137,9 @@ importers:
       react-hook-form:
         specifier: ^7.62.0
         version: 7.62.0(react@19.1.1)
+      react-intersection-observer:
+        specifier: ^9.16.0
+        version: 9.16.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-medium-image-zoom:
         specifier: ^5.3.0
         version: 5.3.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -3866,6 +3869,15 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-intersection-observer@9.16.0:
+    resolution: {integrity: sha512-w9nJSEp+DrW9KmQmeWHQyfaP6b03v+TdXynaoA964Wxt7mdR3An11z4NNCQgL4gKSK7y1ver2Fq+JKH6CWEzUA==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
 
   react-medium-image-zoom@5.3.0:
     resolution: {integrity: sha512-RCIzVlsKqy3BYgGgYbolUfuvx0aSKC7YhX/IJGEp+WJxsqdIVYJHkBdj++FAj6VD7RiWj6VVmdCfa/9vJE9hZg==}
@@ -8344,6 +8356,12 @@ snapshots:
   react-hook-form@7.62.0(react@19.1.1):
     dependencies:
       react: 19.1.1
+
+  react-intersection-observer@9.16.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      react: 19.1.1
+    optionalDependencies:
+      react-dom: 19.1.1(react@19.1.1)
 
   react-medium-image-zoom@5.3.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
