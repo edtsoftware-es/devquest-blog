@@ -64,11 +64,7 @@ export default async function Header() {
           <nav>
             <ul className="flex gap-10">
               <li>
-                <Button
-                  asChild
-                  className="h-auto p-0 text-neutral-900"
-                  variant="link"
-                >
+                <Button asChild className="h-auto p-0" variant="link">
                   <Link href="/">Inicio</Link>
                 </Button>
               </li>
@@ -76,11 +72,7 @@ export default async function Header() {
                 <CategoriesDropdown categories={categories} />
               </li>
               <li>
-                <Button
-                  asChild
-                  className="h-auto p-0 text-neutral-900"
-                  variant="link"
-                >
+                <Button asChild className="h-auto p-0" variant="link">
                   <Link
                     href="https://cursos.devtalles.com/"
                     rel="noopener"
@@ -139,18 +131,18 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          className="h-auto p-0 text-neutral-900"
-          type="button"
-          variant="link"
-        >
+        <Button className="h-auto p-0" type="button" variant="link">
           Categorías
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         {categories.map((category: Category) => (
           <DropdownMenuItem asChild key={category._id}>
-            <Link href={`/categories/${category.slug}`} prefetch>
+            <Link
+              className="cursor-pointer"
+              href={`/categories/${category.slug}`}
+              prefetch
+            >
               {category.name}
             </Link>
           </DropdownMenuItem>

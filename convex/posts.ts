@@ -26,6 +26,20 @@ const POPULAR_SLICE_END = 3;
 const DEFAULT_POSTS_PER_PAGE = 8;
 const LATEST_POSTS_LIMIT = 50;
 
+// Pesos para el cálculo del ranking de posts populares
+const VIEW_COUNT_WEIGHT = 0.4;
+const LIKES_COUNT_WEIGHT = 0.3;
+const COMMENTS_COUNT_WEIGHT = 0.3;
+
+// Factor de decay temporal para posts semanales (posts más recientes tienen más peso)
+const WEEKLY_DECAY_FACTOR = 0.1; // Reduce el score en 10% por cada día de antigüedad
+const DAYS_IN_WEEK = 7;
+const HOURS_IN_DAY = 24;
+const MINUTES_IN_HOUR = 60;
+const SECONDS_IN_MINUTE = 60;
+const MILLISECONDS_IN_SECOND = 1000;
+const MINIMUM_DECAY_MULTIPLIER = 0.1;
+
 export const counter = new ShardedCounter(components.shardedCounter);
 
 export function calculateReadingDuration(content: string): number {
@@ -89,12 +103,22 @@ export const getHomePosts = query({
       })
     );
 
-    const _popularPosts = await ctx.db
+    const popularPostsData = await ctx.db
       .query("posts")
-      .withIndex("by_view_count")
-      .order("desc")
-      .filter((q) => q.eq(q.field("published"), true))
-      .take(HOME_POSTS_LIMIT);
+      .withIndex("by_published", (q) => q.eq("published", true))
+      .collect();
+
+    const postsWithScore = popularPostsData.map((post) => ({
+      ...post,
+      score:
+        post.viewCount * VIEW_COUNT_WEIGHT +
+        post.likesCount * LIKES_COUNT_WEIGHT +
+        post.commentsCount * COMMENTS_COUNT_WEIGHT,
+    }));
+
+    const _popularPosts = postsWithScore
+      .sort((a, b) => b.score - a.score)
+      .slice(0, HOME_POSTS_LIMIT);
 
     const mainPopularPostAuthor = await ctx.db.get(_popularPosts[0].authorId);
 
@@ -128,11 +152,40 @@ export const getHomePosts = query({
       }))
     );
 
-    const _weeklys = await ctx.db
+    const millisecondsInDay =
+      HOURS_IN_DAY *
+      MINUTES_IN_HOUR *
+      SECONDS_IN_MINUTE *
+      MILLISECONDS_IN_SECOND;
+    const oneWeekAgo = Date.now() - DAYS_IN_WEEK * millisecondsInDay;
+
+    const weeklyPostsData = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
-      .order("desc")
-      .take(HOME_POSTS_LIMIT - 1);
+      .filter((q) => q.gte(q.field("_creationTime"), oneWeekAgo))
+      .collect();
+
+    const weeklyPostsWithScore = weeklyPostsData.map((post) => {
+      const daysOld = (Date.now() - post._creationTime) / millisecondsInDay;
+      const decayMultiplier = Math.max(
+        MINIMUM_DECAY_MULTIPLIER,
+        1 - daysOld * WEEKLY_DECAY_FACTOR
+      );
+
+      const baseScore =
+        post.viewCount * VIEW_COUNT_WEIGHT +
+        post.likesCount * LIKES_COUNT_WEIGHT +
+        post.commentsCount * COMMENTS_COUNT_WEIGHT;
+
+      return {
+        ...post,
+        score: baseScore * decayMultiplier,
+      };
+    });
+
+    const _weeklys = weeklyPostsWithScore
+      .sort((a, b) => b.score - a.score)
+      .slice(0, HOME_POSTS_LIMIT - 1);
 
     const weeklys = await Promise.all(
       _weeklys.map(async (post) => ({

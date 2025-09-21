@@ -93,7 +93,7 @@ export function SearchDialog({
   const triggerButton = (
     <Button
       aria-label="Buscar contenido"
-      className="h-auto p-0 pr-4 xs:pr-8 text-neutral-900 md:pr-0"
+      className="h-auto p-0 pr-4 xs:pr-8 md:pr-0"
       type="button"
       variant="link"
     >
