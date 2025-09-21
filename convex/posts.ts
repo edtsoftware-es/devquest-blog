@@ -1,7 +1,9 @@
 import { ShardedCounter } from "@convex-dev/sharded-counter";
-import { paginationOptsValidator } from "convex/server";
+import { type PaginationResult, paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
+import { filter } from "convex-helpers/server/filter";
 import { components } from "./_generated/api";
+import type { Doc } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserProfile, requireUser } from "./lib/auth";
 import { AuthErrors, PostErrors } from "./lib/errors";
@@ -653,5 +655,50 @@ export const incrementPostViewCount = mutation({
 export const generatePostUploadUrl = mutation({
   handler: async (ctx) => {
     return await generateUploadUrl(ctx);
+  },
+});
+
+export const getSearchPosts = query({
+  args: {
+    q: v.optional(v.string()),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    const searchQuery = args.q?.toLowerCase().trim() || "";
+
+    if (searchQuery.length === 0) {
+      return {
+        page: [],
+        isDone: true,
+        continueCursor: "",
+      };
+    }
+
+    const posts = (await filter(
+      ctx.db
+        .query("posts")
+        .withIndex("by_published", (q) => q.eq("published", true))
+        .order("desc"),
+      (post: Doc<"posts">) =>
+        post.title.toLowerCase().includes(searchQuery) ||
+        post.content.toLowerCase().includes(searchQuery) ||
+        post.tags.some((tag: any) => tag.toLowerCase().includes(searchQuery))
+    ).paginate(
+      args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
+    )) as PaginationResult<Doc<"posts">>;
+
+    const postsWithImages = await Promise.all(
+      posts.page.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          image: getImageUrl(ctx, post.image),
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: getUserImageUrl(ctx, author),
+        };
+      })
+    );
+
+    return { ...posts, page: postsWithImages };
   },
 });
