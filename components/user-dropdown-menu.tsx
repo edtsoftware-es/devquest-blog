@@ -32,7 +32,7 @@ export function UserDropDownMenu() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem>
           <Link
-            className="flex h-10 w-full items-center justify-between gap-4 text-white"
+            className="flex h-10 w-full items-center justify-between gap-4 text-primary-foreground"
             href="/dashboard"
             prefetch
           >
@@ -46,7 +46,7 @@ export function UserDropDownMenu() {
         </DropdownMenuItem>
         <DropdownMenuItem hidden={isAuthenticated}>
           <Link
-            className="flex h-10 w-full items-center justify-between gap-4 text-white"
+            className="flex h-10 w-full items-center justify-between gap-4 text-primary-foreground"
             href="/auth"
             prefetch
           >

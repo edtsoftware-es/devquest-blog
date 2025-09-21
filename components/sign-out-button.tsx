@@ -17,7 +17,7 @@ export function SignOutButton() {
   return (
     <div className="flex w-full justify-end">
       <Button
-        className="flex h-10 gap-4 p-0 text-white"
+        className="flex h-10 gap-4 p-0 text-primary-foreground"
         onClick={handleSignOut}
         type="button"
         variant="link"
