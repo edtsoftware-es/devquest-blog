@@ -86,7 +86,7 @@ export default function Trending({
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
-                <Link href={`/posts/${mainPopularPost.slug}`}>
+                <Link href={`/posts/${mainPopularPost.slug}`} prefetch>
                   <span className="absolute inset-0 z-50" />
                   <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
                 </Link>
@@ -137,7 +137,7 @@ export default function Trending({
                   />
                   <HighlightCardTags tags={post.tags} />
                 </HighlightCardImageContainer>
-                <Link href={`/posts/${post.slug}`}>
+                <Link href={`/posts/${post.slug}`} prefetch>
                   <span className="absolute inset-0 z-50" />
                   <HighlightCardTitle>{post.title}</HighlightCardTitle>
                 </Link>
@@ -156,7 +156,7 @@ export default function Trending({
                   />
                 </CompactCardImageContainer>
                 <CompactCardContent>
-                  <Link href={`/posts/${post.slug}`}>
+                  <Link href={`/posts/${post.slug}`} prefetch>
                     <span className="absolute inset-0 z-50" />
                     <CompactCardTitle>{post.title}</CompactCardTitle>
                   </Link>

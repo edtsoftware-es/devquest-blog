@@ -34,6 +34,7 @@ export function UserDropDownMenu() {
           <Link
             className="flex h-10 w-full items-center justify-between gap-4 text-white"
             href="/dashboard"
+            prefetch
           >
             <PcCaseIcon size={16} />
             <span className="w-full text-center">Dashboard</span>
@@ -47,6 +48,7 @@ export function UserDropDownMenu() {
           <Link
             className="flex h-10 w-full items-center justify-between gap-4 text-white"
             href="/auth"
+            prefetch
           >
             <LogInIcon size={16} />
             <span className="w-full text-center">Iniciar sesión</span>

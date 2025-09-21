@@ -58,6 +58,7 @@ function PaginationLink({
       )}
       data-active={isActive}
       data-slot="pagination-link"
+      prefetch
       {...props}
     />
   );

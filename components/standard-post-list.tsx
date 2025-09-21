@@ -78,7 +78,7 @@ export default function StandardPostList({
               <StandardCardTags className="xs:flex hidden" tags={post.tags} />
               <StandardCardContent>
                 <StandardCardHeader>
-                  <Link href={`/posts/${post.slug}`}>
+                  <Link href={`/posts/${post.slug}`} prefetch>
                     <span className="absolute inset-0 z-50" />
                     <StandardCardTitle className="line-clamp-1 lg:text-xl">
                       {post.title}
