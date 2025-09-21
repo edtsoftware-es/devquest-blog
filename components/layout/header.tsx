@@ -41,7 +41,14 @@ export default async function Header() {
             />
             <Image
               alt="DevQuest Logo"
-              className="ml-3 inline-block pt-[1px]"
+              className="ml-3 inline-block pt-[1px] dark:hidden"
+              height={100}
+              src="/logo-black.svg"
+              width={100}
+            />
+            <Image
+              alt="DevQuest Logo"
+              className="ml-3 hidden pt-[1px] dark:inline-block"
               height={100}
               src="/logo-white.svg"
               width={100}
@@ -52,7 +59,7 @@ export default async function Header() {
               <li>
                 <Button
                   asChild
-                  className="h-auto p-0 font-light text-neutral-900"
+                  className="h-auto p-0 text-neutral-900"
                   variant="link"
                 >
                   <Link href="/">Inicio</Link>
@@ -64,7 +71,7 @@ export default async function Header() {
               <li>
                 <Button
                   asChild
-                  className="h-auto p-0 font-light text-neutral-900"
+                  className="h-auto p-0 text-neutral-900"
                   variant="link"
                 >
                   <Link
@@ -92,7 +99,14 @@ export default async function Header() {
             />
             <Image
               alt="DevQuest Logo"
-              className="ml-3 inline-block pt-[1px]"
+              className="ml-3 inline-block pt-[1px] dark:hidden"
+              height={100}
+              src="/logo-black.svg"
+              width={100}
+            />
+            <Image
+              alt="DevQuest Logo"
+              className="ml-3 hidden pt-[1px] dark:inline-block"
               height={100}
               src="/logo-white.svg"
               width={100}
@@ -119,7 +133,7 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="h-auto p-0 font-light text-neutral-900"
+          className="h-auto p-0 text-neutral-900"
           type="button"
           variant="link"
         >
