@@ -30,7 +30,7 @@ export default async function Header() {
 
   return (
     <header className="flex w-full items-center justify-center px-3 md:px-7">
-      <div className="mt-7 flex h-20 w-full max-w-6xl flex-row-reverse items-center justify-between rounded-2xl bg-primary px-3 md:flex-row md:px-7">
+      <div className="mt-7 flex h-20 w-full max-w-6xl flex-row-reverse items-center justify-between rounded-2xl border border-secondary-200 bg-primary px-3 md:flex-row md:px-7">
         <section className="hidden items-center gap-9 md:flex">
           <div className="flex items-center">
             <Image
