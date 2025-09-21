@@ -397,20 +397,30 @@ export const getPdpPost = query({
 export const getPostsByCategoryId = query({
   args: {
     categoryId: v.id("categories"),
-    paginationOpts: optionalPaginationOpts,
+    paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
     const posts = await ctx.db
       .query("posts")
       .withIndex("by_category", (q) => q.eq("categoryId", args.categoryId))
       .order("desc")
-      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
+      .paginate(
+        args.paginationOpts ?? {
+          numItems: DEFAULT_POSTS_PER_PAGE,
+          cursor: null,
+        }
+      );
 
     const postsWithImages = await Promise.all(
-      posts.page.map(async (post) => ({
-        ...post,
-        image: getImageUrl(ctx, post.image),
-      }))
+      posts.page.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          image: getImageUrl(ctx, post.image),
+          authorName: author?.name || "Usuario desconocido",
+          authorImage: getUserImageUrl(ctx, author),
+        };
+      })
     );
 
     return { ...posts, page: postsWithImages };
