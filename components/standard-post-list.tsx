@@ -7,6 +7,7 @@ import {
 } from "convex/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { DEFAULT_LATEST_POSTS_LIMIT } from "@/app/(public)/page";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,18 @@ export default function StandardPostList({
   );
 
   const items = results.length ? results : firstPage.page;
+
+  useEffect(() => {
+    function onScroll() {
+      const nearBottom =
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
+      if (nearBottom && status === "CanLoadMore") {
+        loadMore?.(DEFAULT_LATEST_POSTS_LIMIT);
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [status, loadMore]);
 
   return (
     <section className="flex w-full flex-col gap-6">
@@ -87,12 +100,6 @@ export default function StandardPostList({
           </StandardCard>
         ))}
       </div>
-      <Button
-        disabled={status !== "CanLoadMore"}
-        onClick={() => loadMore?.(DEFAULT_LATEST_POSTS_LIMIT)}
-      >
-        Load More
-      </Button>
     </section>
   );
 }
