@@ -70,7 +70,14 @@ export const getLatestPosts = query({
         args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
       );
 
-    return posts;
+    const postsWithImages = await Promise.all(
+      posts.page.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    return { ...posts, page: postsWithImages };
   },
 });
 
@@ -89,7 +96,8 @@ export const getHomePosts = query({
         return {
           ...post,
           authorName: author?.name || "Usuario desconocido",
-          authorImage: author?.image || "",
+          authorImage: await getUserImageUrl(ctx, author),
+          image: await getImageUrl(ctx, post.image),
         };
       })
     );
@@ -106,23 +114,45 @@ export const getHomePosts = query({
     const mainPopularPost: PostWithAuthorData = {
       ..._popularPosts[0],
       authorName: mainPopularPostAuthor?.name || "Usuario desconocido",
-      authorImage: mainPopularPostAuthor?.image || "",
+      authorImage: await getUserImageUrl(ctx, mainPopularPostAuthor),
+      image: await getImageUrl(ctx, _popularPosts[0].image),
     };
 
-    const highLightPosts = _popularPosts.slice(
+    const _highLightPosts = _popularPosts.slice(
       POPULAR_SLICE_START,
       POPULAR_SLICE_END
     );
-    const compactPosts = _popularPosts.slice(
+    const _compactPosts = _popularPosts.slice(
       POPULAR_SLICE_END,
       HOME_POSTS_LIMIT
     );
 
-    const weeklys = await ctx.db
+    const highLightPosts = await Promise.all(
+      _highLightPosts.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    const compactPosts = await Promise.all(
+      _compactPosts.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    const _weeklys = await ctx.db
       .query("posts")
       .withIndex("by_published", (q) => q.eq("published", true))
       .order("desc")
       .take(HOME_POSTS_LIMIT - 1);
+
+    const weeklys = await Promise.all(
+      _weeklys.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
 
     const allPublishedPosts = await ctx.db
       .query("posts")
@@ -151,7 +181,7 @@ export const getHomePosts = query({
       compactPosts,
       weeklys,
       popularTags,
-      latestPosts: _posts,
+      latestPosts: mainPosts,
       categories,
     };
   },
@@ -198,7 +228,14 @@ export const getPublishedPosts = query({
       .order("desc")
       .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
 
-    return posts;
+    const postsWithImages = await Promise.all(
+      posts.page.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    return { ...posts, page: postsWithImages };
   },
 });
 
@@ -219,7 +256,8 @@ export const getPublishedAuthorPosts = query({
         return {
           ...post,
           authorName: author?.name || "Usuario desconocido",
-          authorImage: author?.image || "",
+          authorImage: await getUserImageUrl(ctx, author),
+          image: await getImageUrl(ctx, post.image),
         };
       })
     );
@@ -259,7 +297,8 @@ export const getPostBySlugWithAuthor = query({
     return {
       ...post,
       authorName: author?.name || "Usuario desconocido",
-      authorImage: author?.image,
+      authorImage: await getUserImageUrl(ctx, author),
+      image: await getImageUrl(ctx, post.image),
     };
   },
 });
@@ -292,6 +331,8 @@ export const getPdpPost = query({
       return null;
     }
 
+    const imageUrl = await getImageUrl(ctx, post.image);
+
     // Obtener los últimos 4 posts ordenados por fecha y con más vistas
     const weeklyTrendingPosts = await ctx.db
       .query("posts")
@@ -299,21 +340,23 @@ export const getPdpPost = query({
       .order("desc")
       .take(WEEKLY_TRENDING_POSTS_LIMIT);
 
-    const trendingPostsWithDetails = weeklyTrendingPosts.map(
-      (trendingPost) => ({
+    const trendingPostsWithDetails = await Promise.all(
+      weeklyTrendingPosts.map(async (trendingPost) => ({
         _id: trendingPost._id,
         title: trendingPost.title,
         slug: trendingPost.slug,
         _creationTime: trendingPost._creationTime,
         duration: trendingPost.duration,
-        image: trendingPost.image,
-      })
+        image: await getImageUrl(ctx, trendingPost.image),
+      }))
     );
 
     return {
       ...post,
+      image: imageUrl,
       author: {
         ...author,
+        image: await getUserImageUrl(ctx, author),
         role: user?.role || "user",
         userProfileId: user?._id,
       },
@@ -329,11 +372,20 @@ export const getPostsByCategoryId = query({
     paginationOpts: optionalPaginationOpts,
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const posts = await ctx.db
       .query("posts")
       .withIndex("by_category", (q) => q.eq("categoryId", args.categoryId))
       .order("desc")
       .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
+
+    const postsWithImages = await Promise.all(
+      posts.page.map(async (post) => ({
+        ...post,
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    return { ...posts, page: postsWithImages };
   },
 });
 
@@ -370,17 +422,20 @@ export const getPaginatedPostsWithAuthorByNickname = query({
 
     const paginatedPosts = allPosts.slice(offset, offset + postsPerPage);
 
-    const postsWithAuthorData = paginatedPosts.map((post) => ({
-      ...post,
-      authorName: user.name || "Usuario desconocido",
-      authorImage: user.image || "",
-    }));
+    const postsWithAuthorData = await Promise.all(
+      paginatedPosts.map(async (post) => ({
+        ...post,
+        authorName: user.name || "Usuario desconocido",
+        authorImage: await getUserImageUrl(ctx, user),
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
 
     return {
       author: {
         username: user.name,
         nickname: user.nickname,
-        avatarUrl: user.image,
+        avatarUrl: await getUserImageUrl(ctx, user),
         bio: user.bio,
       },
       posts: postsWithAuthorData,
@@ -441,7 +496,10 @@ export const getPostById = query({
       throw PostErrors.cannotEdit();
     }
 
-    return post;
+    return {
+      ...post,
+      image: await getImageUrl(ctx, post.image),
+    };
   },
 });
 
@@ -460,6 +518,8 @@ export const getPostsByUserRole = query({
           return {
             ...post,
             authorName: author?.name || "Usuario desconocido",
+            authorImage: await getUserImageUrl(ctx, author),
+            image: await getImageUrl(ctx, post.image),
           };
         })
       );
@@ -474,10 +534,15 @@ export const getPostsByUserRole = query({
       .order("desc")
       .collect();
 
-    return posts.map((post) => ({
-      ...post,
-      authorName: "",
-    }));
+    const postsWithImages = await Promise.all(
+      posts.map(async (post) => ({
+        ...post,
+        authorName: "",
+        image: await getImageUrl(ctx, post.image),
+      }))
+    );
+
+    return postsWithImages;
   },
 });
 
@@ -613,6 +678,27 @@ export const togglePostPublished = mutation({
 
 const MAX_RECOMMENDED_POSTS = 5;
 
+async function getImageUrl(
+  ctx: QueryCtx,
+  image: string | Id<"_storage">
+): Promise<string> {
+  try {
+    if (typeof image === "string" && image.startsWith("http")) {
+      return image;
+    }
+    return (await ctx.storage.getUrl(image as Id<"_storage">)) ?? image;
+  } catch {
+    return image;
+  }
+}
+
+async function getUserImageUrl(ctx: QueryCtx, user: any): Promise<string> {
+  if (!user?.image) {
+    return "";
+  }
+  return await getImageUrl(ctx, user.image);
+}
+
 export const getPaginatedSearchResults = query({
   args: {
     query: v.string(),
@@ -664,7 +750,8 @@ export const getPaginatedSearchResults = query({
         return {
           ...post,
           authorName: author?.name || "Usuario desconocido",
-          authorImage: author?.image || "",
+          authorImage: await getUserImageUrl(ctx, author),
+          image: await getImageUrl(ctx, post.image),
         };
       })
     );
@@ -687,12 +774,21 @@ export const recommendedPosts = query({
     const userId = await getAuthUserId(ctx);
 
     if (!userId) {
-      return await ctx.db
+      const posts = await ctx.db
         .query("posts")
         .withIndex("by_view_count")
         .order("desc")
         .filter((q) => q.eq(q.field("published"), true))
         .take(MAX_RECOMMENDED_POSTS);
+
+      const postsWithImages = await Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          image: await getImageUrl(ctx, post.image),
+        }))
+      );
+
+      return postsWithImages;
     }
 
     const likes = await ctx.db
@@ -703,12 +799,21 @@ export const recommendedPosts = query({
     const likedPostIds = likes.map((like) => like.postId).filter(Boolean);
 
     if (likedPostIds.length === 0) {
-      return await ctx.db
+      const posts = await ctx.db
         .query("posts")
         .withIndex("by_view_count")
         .order("desc")
         .filter((q) => q.eq(q.field("published"), true))
         .take(MAX_RECOMMENDED_POSTS);
+
+      const postsWithImages = await Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          image: await getImageUrl(ctx, post.image),
+        }))
+      );
+
+      return postsWithImages;
     }
 
     const likedPosts = await Promise.all(
@@ -752,6 +857,7 @@ export const recommendedPosts = query({
             ...post,
             authorName: post.authorId,
             authorImage: post.authorId,
+            image: await getImageUrl(ctx, post.image),
           });
         }
       }
@@ -770,5 +876,36 @@ export const incrementPostViewCount = mutation({
     }
 
     return await ctx.db.patch(args.postId, { viewCount: post.viewCount + 1 });
+  },
+});
+
+export const sendPostImage = mutation({
+  args: {
+    storageId: v.id("_storage"),
+    postId: v.id("posts"),
+  },
+  handler: async (ctx, args) => {
+    const userProfile = await getCurrentUserProfile(ctx);
+    const userId = userProfile._id;
+
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      throw PostErrors.notFound();
+    }
+
+    if (userProfile.role !== "admin" && post.authorId !== userId) {
+      throw PostErrors.cannotEdit();
+    }
+
+    await ctx.db.patch(args.postId, {
+      image: args.storageId,
+    });
+    return null;
+  },
+});
+
+export const generatePostUploadUrl = mutation({
+  handler: async (ctx) => {
+    return await ctx.storage.generateUploadUrl();
   },
 });
