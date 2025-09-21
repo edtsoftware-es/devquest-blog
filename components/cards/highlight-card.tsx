@@ -10,7 +10,7 @@ function HighlightCard({
   return (
     <article
       className={cn(
-        "relative isolate flex flex-col gap-y-4 bg-transparent",
+        "group relative isolate flex flex-col gap-y-4 bg-transparent",
         className
       )}
       {...props}

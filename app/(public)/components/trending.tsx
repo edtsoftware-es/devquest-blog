@@ -129,7 +129,7 @@ export default function Trending({
                 <HighlightCardImageContainer>
                   <Image
                     alt={`Image for ${post.title}`}
-                    className="rounded-[1rem] rounded-br-[1.75rem]"
+                    className="rounded-[1rem] rounded-br-[1.75rem] transition-all duration-300 group-hover:scale-105"
                     layout="fill"
                     objectFit="cover"
                     src={post.image || ""}

@@ -13,7 +13,7 @@ function CompactCard({
   return (
     <article
       className={cn(
-        "relative isolate flex max-w-146 items-center gap-4 rounded-[1rem] border border-neutral-200 bg-primary py-4 pr-6 pl-4",
+        "relative isolate flex max-w-146 items-center gap-4 rounded-[1rem] border border-neutral-200 bg-primary py-4 pr-6 pl-4 hover:border-neutral-600",
         variant === "reverse" && "flex-row-reverse pr-4 pl-6",
         className
       )}

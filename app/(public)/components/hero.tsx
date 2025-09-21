@@ -69,7 +69,7 @@ function HeroItem({
   index,
 }: PostWithAuthorData & { index: number }) {
   return (
-    <div className="relative mt-8 h-[350px] w-full max-w-[1400px] overflow-hidden rounded-2xl lg:h-[670px]">
+    <div className="group relative mt-8 h-[350px] w-full max-w-[1400px] overflow-hidden rounded-2xl lg:h-[670px]">
       <Image
         alt={title}
         className="object-cover"
@@ -80,7 +80,7 @@ function HeroItem({
         src={image}
       />
       <div className="absolute inset-0 flex items-center">
-        <StandardCard className="h-full w-full rounded-2xl border bg-primary/60 backdrop-blur-xs lg:ml-24 lg:h-auto lg:max-w-[700px]">
+        <StandardCard className="h-full w-full rounded-2xl border border-transparent bg-primary/60 backdrop-blur-xs group-hover:border-neutral-600 lg:ml-24 lg:h-auto lg:max-w-[700px]">
           <StandardCardShell
             className="h-full border-none bg-transparent p-0"
             hasButton={false}
