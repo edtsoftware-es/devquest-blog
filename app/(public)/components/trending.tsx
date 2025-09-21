@@ -81,7 +81,7 @@ export default function Trending({
                 )}
               </FeaturedCardPublishedAt>
               <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
-                {mainPopularPost.duration} min read
+                {mainPopularPost.duration} min
               </FeaturedCardReadingTime>
             </FeaturedCardTags>
             <FeaturedCardContent>
@@ -91,7 +91,7 @@ export default function Trending({
                   <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
                 </Link>
                 <FeaturedCardReadingTime className="hidden lg:inline">
-                  {mainPopularPost.duration} min read
+                  {mainPopularPost.duration} min
                 </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>

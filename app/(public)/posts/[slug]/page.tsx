@@ -26,10 +26,10 @@ export default async function PostPage({
   ]);
 
   return (
-    <div className="container mx-auto max-w-8xl py-10">
+    <div className="container mx-auto max-w-8xl px-4 py-10 lg:px-0">
       <PostDisplay preloadedPost={preloadedPost} />
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="flex w-full">
+        <div className="w-full">
           <CommentsSection
             postId={post._id}
             preloadedPost={preloadedPost}

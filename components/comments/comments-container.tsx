@@ -50,10 +50,10 @@ export function CommentsContainer({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-heading-4">
+        <p className="flex items-center gap-2 font-semibold text-xl">
           <MessageSquare className="size-5" />
           Comentarios ({post?.commentsCount})
-        </h2>
+        </p>
         <Button
           className="gap-1"
           onClick={() => setShowComments(!showComments)}

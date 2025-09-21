@@ -149,7 +149,7 @@ export function PostsList({
                     </div>
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
-                      {post.duration} min lectura
+                      {post.duration} min
                     </div>
                     <div className="flex items-center gap-1">
                       <Eye className="h-3 w-3" />

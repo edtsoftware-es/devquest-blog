@@ -2,6 +2,7 @@
 
 import { useMutation } from "convex/react";
 import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 import { Edit, MoreHorizontal, Reply, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -130,6 +131,7 @@ export function CommentItem({
                 <time className="text-muted-foreground text-xs">
                   {formatDistanceToNow(new Date(comment._creationTime), {
                     addSuffix: true,
+                    locale: es,
                   })}
                 </time>
               </div>

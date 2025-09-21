@@ -22,6 +22,7 @@ import {
   CompactCardReadingTime,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
+import { Heading } from "@/components/headings";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -104,7 +105,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
             )}
             <div className="flex items-center gap-2 text-body-8 text-neutral-600">
               <Clock className="size-4" />
-              <span>{post.duration} min read</span>
+              <span>{post.duration} min</span>
             </div>
           </div>
           <h1 className="text-heading-3">{post.title}</h1>
@@ -173,7 +174,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
           </article>
         </div>
 
-        <aside className="w-full space-y-14 lg:col-span-1">
+        <aside className="h-full w-full space-y-14 lg:col-span-1">
           <div>
             <AuthorCard className="max-w-none">
               <AuthorCardImageContainer>
@@ -206,25 +207,9 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
               </AuthorCardDescription>
             </AuthorCard>
           </div>
-          <div className="space-y-14">
+          <div className="top-8 block space-y-14 lg:sticky">
             <div>
-              <div className="mb-6 flex items-center gap-2">
-                <svg
-                  fill="none"
-                  height="23"
-                  viewBox="0 0 24 23"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>Tendencias semanales</title>
-                  <path
-                    d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
-                    fill="#F3F4F6"
-                  />
-                </svg>
-
-                <h5 className="text-heading-5">Tendencias semanales</h5>
-              </div>
+              <Heading className="mb-6">Tendencias semanales</Heading>
               <div className="grid grid-cols-1 gap-4">
                 {post.weeklyTrendingPosts.map((trendingPost, index) => (
                   <CompactCard key={post._id} variant="reverse">
@@ -263,23 +248,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
             </div>
             <div>
               <div>
-                <div className="mb-6 flex items-center gap-2">
-                  <svg
-                    fill="none"
-                    height="23"
-                    viewBox="0 0 24 23"
-                    width="24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <title>Popular tags</title>
-                    <path
-                      d="M0.5818 11.7288C8.79426 13.4715 10.2517 14.8616 12.1247 22.7374C13.8064 14.8771 15.2306 13.4995 23.4016 11.8281C15.1891 10.0854 13.7317 8.69528 11.8587 0.819485C10.1767 8.67981 8.75282 10.0574 0.5818 11.7288Z"
-                      fill="#F3F4F6"
-                    />
-                  </svg>
-
-                  <h5 className="text-heading-5">Popular tags</h5>
-                </div>
+                <Heading className="mb-6">Popular tags</Heading>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag: string) => (
                     <Button className="w-fit" key={tag} size={"xs"}>
@@ -310,7 +279,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
             <div className="flex items-center gap-1 rounded-lg border bg-muted px-3 py-2">
               <Button
                 aria-label="Compartir en Twitter"
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 rounded-sm bg-black p-0"
                 onClick={shareOnTwitter}
                 size="sm"
                 variant="ghost"
@@ -320,7 +289,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
               <div className="h-4 w-px bg-border" />
               <Button
                 aria-label="Compartir en LinkedIn"
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 rounded-sm bg-[#0a66c2] p-0"
                 onClick={shareOnLinkedIn}
                 size="sm"
                 variant="ghost"
