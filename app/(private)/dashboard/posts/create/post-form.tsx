@@ -2,7 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
+import { Camera } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,6 +32,7 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
+import { convertFileToWebp } from "@/lib/utils";
 import type { Category } from "@/types";
 
 const TITLE_MAX_LENGTH = 200;
@@ -40,7 +44,7 @@ const postSchema = z.object({
     .string()
     .min(1, "El título es requerido")
     .max(TITLE_MAX_LENGTH, "El título no puede exceder 200 caracteres"),
-  image: z.string().url("Debe ser una URL válida"),
+  image: z.string().min(1, "La imagen es requerida"),
   slug: z
     .string()
     .min(1, "El slug es requerido")
@@ -67,8 +71,12 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
   const router = useRouter();
 
   const createPost = useMutation(api.posts.createPost);
-
+  const sendPostImage = useMutation(api.posts.sendPostImage);
+  const generatePostUploadUrl = useMutation(api.posts.generatePostUploadUrl);
   const updatePost = useMutation(api.posts.updatePost);
+
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
 
   const form = useForm<PostFormData>({
     // @ts-expect-error - Zod version compatibility issue
@@ -85,18 +93,38 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
     },
   });
 
-  const onSubmit = (data: PostFormData) => {
+  const onSubmit = async (data: PostFormData) => {
     try {
       const tagsArray = data.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
+      let imageUrl = data.image;
+
+      if (selectedImage) {
+        const postUrl = await generatePostUploadUrl();
+        const webpBlob = await convertFileToWebp(selectedImage);
+
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": webpBlob.type,
+          },
+          body: webpBlob,
+        });
+        if (!result.ok) {
+          throw new Error("Failed to upload image");
+        }
+        const { storageId } = await result.json();
+        imageUrl = storageId;
+      }
+
       if (mode === "edit" && post) {
-        void updatePost({
+        await updatePost({
           postId: post._id,
           title: data.title,
-          image: data.image,
+          image: imageUrl,
           slug: data.slug,
           categoryId: data.categoryId as Id<"categories">,
           content: data.content,
@@ -104,11 +132,18 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
           tags: tagsArray,
           published: data.published,
         });
+
+        if (selectedImage) {
+          await sendPostImage({
+            storageId: imageUrl as Id<"_storage">,
+            postId: post._id,
+          });
+        }
         toast.success("Post actualizado correctamente");
       } else {
-        void createPost({
+        await createPost({
           title: data.title,
-          image: data.image,
+          image: imageUrl,
           slug: data.slug,
           categoryId: data.categoryId as Id<"categories">,
           content: data.content,
@@ -139,6 +174,13 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
     form.setValue("title", title);
     const slug = generateSlug(title);
     form.setValue("slug", slug);
+  };
+
+  const getButtonText = () => {
+    if (form.formState.isSubmitting) {
+      return mode === "edit" ? "Actualizando..." : "Creando...";
+    }
+    return mode === "edit" ? "Actualizar Post" : "Crear Post";
   };
 
   return (
@@ -199,12 +241,76 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>URL de la imagen</FormLabel>
+                  <FormLabel>Imagen del post</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="https://ejemplo.com/imagen.jpg"
-                      {...field}
-                    />
+                    <div className="space-y-4">
+                      <div className="group relative cursor-pointer">
+                        <div className="flex h-[300px] w-full items-center justify-center rounded-lg border-2 border-muted-foreground/25 border-dashed bg-muted/50 lg:h-[450px]">
+                          {selectedImage && (
+                            <Image
+                              alt="Vista previa"
+                              className="aspect-video h-[300px] w-full rounded-xl object-cover sm:h-[400px] lg:h-[450px]"
+                              height={450}
+                              src={URL.createObjectURL(selectedImage)}
+                              width={450}
+                            />
+                          )}
+                          {!selectedImage && post?.image && (
+                            <Image
+                              alt="Imagen actual"
+                              className="h-[300px] w-full rounded-xl object-cover sm:h-[400px] lg:h-[450px]"
+                              height={450}
+                              src={post.image}
+                              width={450}
+                            />
+                          )}
+                          {!(selectedImage || post?.image) && (
+                            <div className="flex flex-col items-center gap-2">
+                              <Camera className="h-8 w-8 text-muted-foreground" />
+                              <span className="text-muted-foreground text-sm">
+                                Haz clic para subir una imagen
+                              </span>
+                            </div>
+                          )}
+                          <button
+                            aria-label="Cambiar imagen del post"
+                            className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                            onClick={() => imageInputRef.current?.click()}
+                            type="button"
+                          >
+                            <Camera className="h-6 w-6 text-white" />
+                          </button>
+                        </div>
+                        <input
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (file) {
+                              setSelectedImage(file);
+                              field.onChange(file.name);
+                            }
+                          }}
+                          ref={imageInputRef}
+                          type="file"
+                        />
+                      </div>
+                      {selectedImage && (
+                        <Button
+                          onClick={() => {
+                            setSelectedImage(null);
+                            field.onChange("");
+                            if (imageInputRef.current) {
+                              imageInputRef.current.value = "";
+                            }
+                          }}
+                          type="button"
+                          variant="outline"
+                        >
+                          Eliminar imagen
+                        </Button>
+                      )}
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -328,13 +434,7 @@ export function PostForm({ categories, post, mode = "create" }: PostFormProps) {
                 Cancelar
               </Button>
               <Button disabled={form.formState.isSubmitting} type="submit">
-                {form.formState.isSubmitting
-                  ? mode === "edit"
-                    ? "Actualizando..."
-                    : "Creando..."
-                  : mode === "edit"
-                    ? "Actualizar Post"
-                    : "Crear Post"}
+                {getButtonText()}
               </Button>
             </div>
           </form>
