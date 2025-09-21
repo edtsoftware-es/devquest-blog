@@ -24,7 +24,8 @@ import {
   StandardCardTags,
   StandardCardTitle,
 } from "./cards/standard-card";
-import { Button } from "./ui/button";
+
+const DEFAULT_OFFSET = 300;
 
 export default function StandardPostList({
   preloaded,
@@ -46,7 +47,8 @@ export default function StandardPostList({
   useEffect(() => {
     function onScroll() {
       const nearBottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 300;
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - DEFAULT_OFFSET;
       if (nearBottom && status === "CanLoadMore") {
         loadMore?.(DEFAULT_LATEST_POSTS_LIMIT);
       }
