@@ -2,41 +2,14 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import type { Id } from "./_generated/dataModel";
-import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors, PostErrors } from "./lib/errors";
-import {
-  CommentInputFields,
-  CommentUpdateFields,
-  CommentValidator,
-  CommentWithAuthorValidator,
-  createPaginatedResultValidator,
-  optionalPaginationOpts,
-} from "./lib/validators";
+import { getUserImageUrl } from "./lib/utils";
+import { CommentInputFields, CommentUpdateFields } from "./lib/validators";
 
 const MAX_RECENT_COMMENTS = 5;
 const MAX_RECENT_COMMENTS_TIME = 60_000;
 const MAX_COMMENT_LENGTH = 1000;
-
-function getUserImageUrl(_ctx: QueryCtx, user: any): string {
-  return user?.image || "";
-}
-
-export const getCommentsByPostId = query({
-  args: {
-    postId: v.id("posts"),
-    paginationOpts: optionalPaginationOpts,
-  },
-  returns: createPaginatedResultValidator(CommentValidator),
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("comments")
-      .withIndex("by_post", (q) => q.eq("postId", args.postId))
-      .filter((q) => q.eq(q.field("deletedAt"), undefined))
-      .order("desc")
-      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
-  },
-});
 
 export const getCommentsWithAuthors = query({
   args: {
@@ -275,23 +248,5 @@ export const deleteComment = mutation({
     }
 
     return null;
-  },
-});
-
-export const getCommentById = query({
-  args: { commentId: v.id("comments") },
-  returns: v.union(CommentWithAuthorValidator, v.null()),
-  handler: async (ctx, args) => {
-    const comment = await ctx.db.get(args.commentId);
-    if (!comment || comment.deletedAt) {
-      return null;
-    }
-
-    const author = await ctx.db.get(comment.authorId);
-    return {
-      ...comment,
-      authorName: author?.name || "Unknown User",
-      authorImage: getUserImageUrl(ctx, author),
-    };
   },
 });

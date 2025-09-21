@@ -1,16 +1,13 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
 import { ShardedCounter } from "@convex-dev/sharded-counter";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { components } from "./_generated/api";
-import type { Id } from "./_generated/dataModel";
-import type { QueryCtx } from "./_generated/server";
 import { mutation, query } from "./_generated/server";
-import { getCurrentUserProfile, requireAdmin, requireUser } from "./lib/auth";
+import { getCurrentUserProfile, requireUser } from "./lib/auth";
 import { AuthErrors, PostErrors } from "./lib/errors";
 import type { PostWithAuthorData } from "./lib/types";
+import { generateUploadUrl, getImageUrl, getUserImageUrl } from "./lib/utils";
 import {
-  createPaginatedResultValidator,
   optionalPaginationOpts,
   PostInputFields,
   PostUpdateFields,
@@ -42,19 +39,6 @@ export function calculateReadingDuration(content: string): number {
   const duration = Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
 
   return duration;
-}
-
-export async function getUserProfile(ctx: QueryCtx, userId: Id<"users">) {
-  const userProfile = await ctx.db
-    .query("users")
-    .withIndex("by_id", (q) => q.eq("_id", userId))
-    .unique();
-
-  if (!userProfile) {
-    throw AuthErrors.userNotFound();
-  }
-
-  return userProfile;
 }
 
 export const getLatestPosts = query({
@@ -266,18 +250,6 @@ export const getPublishedAuthorPosts = query({
   },
 });
 
-export const getPostBySlug = query({
-  args: {
-    slug: v.string(),
-  },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("posts")
-      .withIndex("by_slug", (q) => q.eq("slug", args.slug))
-      .unique();
-  },
-});
-
 export const getPostBySlugWithAuthor = query({
   args: {
     slug: v.string(),
@@ -445,38 +417,6 @@ export const getPaginatedPostsWithAuthorByNickname = query({
       hasNextPage: currentPage < totalPages,
       hasPreviousPage: currentPage > 1,
     };
-  },
-});
-
-export const getAdminPosts = query({
-  args: {
-    paginationOpts: optionalPaginationOpts,
-  },
-  returns: createPaginatedResultValidator(PostValidator),
-  handler: async (ctx, args) => {
-    await requireAdmin(ctx);
-
-    return await ctx.db
-      .query("posts")
-      .order("desc")
-      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
-  },
-});
-
-export const getUserPosts = query({
-  args: {
-    paginationOpts: optionalPaginationOpts,
-  },
-  returns: createPaginatedResultValidator(PostValidator),
-  handler: async (ctx, args) => {
-    const userProfile = await requireUser(ctx);
-    const userId = userProfile._id;
-
-    return await ctx.db
-      .query("posts")
-      .withIndex("by_author", (q) => q.eq("authorId", userId))
-      .order("desc")
-      .paginate(args.paginationOpts ?? { numItems: 10, cursor: null });
   },
 });
 
@@ -698,184 +638,6 @@ export const togglePostPublished = mutation({
   },
 });
 
-const MAX_RECOMMENDED_POSTS = 5;
-
-function getImageUrl(_ctx: QueryCtx, image: string): string {
-  return image;
-}
-
-function getUserImageUrl(_ctx: QueryCtx, user: any): string {
-  return user?.image || "";
-}
-
-export const getPaginatedSearchResults = query({
-  args: {
-    query: v.string(),
-    page: v.optional(v.number()),
-    postsPerPage: v.optional(v.number()),
-  },
-  handler: async (ctx, args) => {
-    const searchQuery = args.query.toLowerCase().trim();
-    const currentPage = args.page || 1;
-    const postsPerPage = args.postsPerPage || DEFAULT_POSTS_PER_PAGE;
-    const offset = (currentPage - 1) * postsPerPage;
-
-    if (searchQuery.length === 0) {
-      return {
-        posts: [],
-        totalPosts: 0,
-        totalPages: 0,
-        currentPage: 1,
-        hasNextPage: false,
-        hasPreviousPage: false,
-        searchQuery: args.query,
-      };
-    }
-
-    const allPosts = await ctx.db
-      .query("posts")
-      .withIndex("by_published", (q) => q.eq("published", true))
-      .order("desc")
-      .collect();
-
-    const filteredPosts = allPosts.filter((post) => {
-      const titleMatch = post.title.toLowerCase().includes(searchQuery);
-      const excerptMatch = post.excerpt.toLowerCase().includes(searchQuery);
-      const tagsMatch = post.tags.some((tag) =>
-        tag.toLowerCase().includes(searchQuery)
-      );
-
-      return titleMatch || excerptMatch || tagsMatch;
-    });
-
-    const totalPosts = filteredPosts.length;
-    const totalPages = Math.ceil(totalPosts / postsPerPage);
-
-    const paginatedPosts = filteredPosts.slice(offset, offset + postsPerPage);
-
-    const postsWithAuthorData = await Promise.all(
-      paginatedPosts.map(async (post) => {
-        const author = await ctx.db.get(post.authorId);
-        return {
-          ...post,
-          authorName: author?.name || "Usuario desconocido",
-          authorImage: getUserImageUrl(ctx, author),
-          image: getImageUrl(ctx, post.image),
-        };
-      })
-    );
-
-    return {
-      posts: postsWithAuthorData,
-      totalPosts,
-      totalPages,
-      currentPage,
-      hasNextPage: currentPage < totalPages,
-      hasPreviousPage: currentPage > 1,
-      searchQuery: args.query,
-    };
-  },
-});
-
-export const recommendedPosts = query({
-  args: {},
-  handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-
-    if (!userId) {
-      const posts = await ctx.db
-        .query("posts")
-        .withIndex("by_view_count")
-        .order("desc")
-        .filter((q) => q.eq(q.field("published"), true))
-        .take(MAX_RECOMMENDED_POSTS);
-
-      const postsWithImages = await Promise.all(
-        posts.map(async (post) => ({
-          ...post,
-          image: getImageUrl(ctx, post.image),
-        }))
-      );
-
-      return postsWithImages;
-    }
-
-    const likes = await ctx.db
-      .query("likes")
-      .withIndex("by_user", (q) => q.eq("userId", userId))
-      .collect();
-
-    const likedPostIds = likes.map((like) => like.postId).filter(Boolean);
-
-    if (likedPostIds.length === 0) {
-      const posts = await ctx.db
-        .query("posts")
-        .withIndex("by_view_count")
-        .order("desc")
-        .filter((q) => q.eq(q.field("published"), true))
-        .take(MAX_RECOMMENDED_POSTS);
-
-      const postsWithImages = await Promise.all(
-        posts.map(async (post) => ({
-          ...post,
-          image: getImageUrl(ctx, post.image),
-        }))
-      );
-
-      return postsWithImages;
-    }
-
-    const likedPosts = await Promise.all(
-      likedPostIds.map((postId) => ctx.db.get(postId as Id<"posts">))
-    );
-
-    const categoryCount = new Map();
-    for (const post of likedPosts) {
-      if (post?.categoryId) {
-        categoryCount.set(
-          post.categoryId,
-          (categoryCount.get(post.categoryId) || 0) + 1
-        );
-      }
-    }
-
-    const favoriteCategories = Array.from(categoryCount.entries())
-      .sort((a, b) => b[1] - a[1])
-      .map(([categoryId]) => categoryId);
-
-    const recommended: PostWithAuthorData[] = [];
-    for (const categoryId of favoriteCategories) {
-      if (recommended.length >= MAX_RECOMMENDED_POSTS) {
-        break;
-      }
-
-      const posts = await ctx.db
-        .query("posts")
-        .withIndex("by_category_and_published", (q) =>
-          q.eq("categoryId", categoryId).eq("published", true)
-        )
-        .order("desc")
-        .collect();
-
-      for (const post of posts) {
-        if (
-          !likedPostIds.some((id) => id && id === post._id) &&
-          recommended.length < MAX_RECOMMENDED_POSTS
-        ) {
-          recommended.push({
-            ...post,
-            authorName: post.authorId,
-            authorImage: post.authorId,
-            image: getImageUrl(ctx, post.image),
-          });
-        }
-      }
-    }
-
-    return recommended.slice(0, MAX_RECOMMENDED_POSTS);
-  },
-});
-
 export const incrementPostViewCount = mutation({
   args: { postId: v.id("posts") },
   handler: async (ctx, args) => {
@@ -890,6 +652,6 @@ export const incrementPostViewCount = mutation({
 
 export const generatePostUploadUrl = mutation({
   handler: async (ctx) => {
-    return await ctx.storage.generateUploadUrl();
+    return await generateUploadUrl(ctx);
   },
 });
