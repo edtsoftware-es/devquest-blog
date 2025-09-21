@@ -64,6 +64,7 @@ export default function StandardPostList({
                 alt={post.title}
                 className="h-full w-full object-cover"
                 fill
+                quality={65}
                 src={post.image || ""}
               />
               <StandardCardTags

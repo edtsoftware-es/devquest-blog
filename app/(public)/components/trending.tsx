@@ -132,6 +132,7 @@ export default function Trending({
                     className="rounded-[1rem] rounded-br-[1.75rem] transition-all duration-300 group-hover:scale-105"
                     layout="fill"
                     objectFit="cover"
+                    quality={65}
                     src={post.image || ""}
                   />
                   <HighlightCardTags tags={post.tags} />
@@ -151,6 +152,7 @@ export default function Trending({
                     alt={`Image for ${post.title}`}
                     className="rounded-[0.625rem]"
                     fill
+                    quality={65}
                     src={post.image || ""}
                   />
                 </CompactCardImageContainer>

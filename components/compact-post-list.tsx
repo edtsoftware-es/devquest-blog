@@ -28,6 +28,7 @@ export default function CompactPostList({
               alt={`Image for ${post.title}`}
               className="rounded-[0.625rem]"
               fill
+              quality={65}
               src={post.image || ""}
             />
           </CompactCardImageContainer>
