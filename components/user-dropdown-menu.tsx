@@ -1,8 +1,10 @@
 "use client";
 
-import { useConvexAuth } from "convex/react";
+import { useConvexAuth, useQuery } from "convex/react";
 import { LogInIcon, PcCaseIcon, User2Icon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { api } from "@/convex/_generated/api";
 import { SignOutButton } from "./sign-out-button";
 import { Button } from "./ui/button";
 import {
@@ -15,6 +17,7 @@ import { Separator } from "./ui/separator";
 
 export function UserDropDownMenu() {
   const { isAuthenticated } = useConvexAuth();
+  const currentUser = useQuery(api.users.getCurrentUserOptional);
 
   return (
     <DropdownMenu>
@@ -25,8 +28,20 @@ export function UserDropDownMenu() {
           type="button"
           variant="ghost"
         >
-          <User2Icon size={16} />
-          <span className="ml-1 hidden md:block">Perfil</span>
+          {isAuthenticated && currentUser?.image ? (
+            <Image
+              alt={currentUser.name || "Usuario"}
+              className="h-6 w-6 rounded-full"
+              height={24}
+              src={currentUser.image}
+              width={24}
+            />
+          ) : (
+            <>
+              <User2Icon size={16} />
+              <span className="ml-1 hidden md:block">Perfil</span>
+            </>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
