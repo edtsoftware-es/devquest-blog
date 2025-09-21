@@ -31,6 +31,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "loremflickr.com",
       },
+      {
+        protocol: "https",
+        hostname: "adjoining-husky-26.convex.cloud",
+      },
+      {
+        protocol: "https",
+        hostname: "impartial-salamander-276.convex.cloud",
+      },
+      {
+        protocol: "https",
+        hostname: "sleek-hornet-520.convex.cloud",
+      },
     ],
   },
 };

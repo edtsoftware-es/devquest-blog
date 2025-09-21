@@ -102,7 +102,7 @@ function ProfileForm({
   onSuccess: () => void;
 }) {
   const updateUserProfile = useMutation(api.users.updateUserProfile);
-  const generateUploadUrl = useMutation(api.users.generateUploadUrl);
+  const generateUploadUrl = useMutation(api.users.generateUserUploadUrl);
 
   const imageInputRef = React.useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = React.useState<File | null>(null);
