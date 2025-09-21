@@ -1,10 +1,9 @@
 "use client";
 
-import { useConvexAuth, useQuery } from "convex/react";
+import type { User } from "@auth/core/types";
 import { LogInIcon, PcCaseIcon, User2Icon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { api } from "@/convex/_generated/api";
 import { SignOutButton } from "./sign-out-button";
 import { Button } from "./ui/button";
 import {
@@ -15,10 +14,11 @@ import {
 } from "./ui/dropdown-menu";
 import { Separator } from "./ui/separator";
 
-export function UserDropDownMenu() {
-  const { isAuthenticated } = useConvexAuth();
-  const currentUser = useQuery(api.users.getCurrentUserOptional);
-
+export function UserDropDownMenu({
+  currentUser,
+}: {
+  currentUser: User | null;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,7 +28,7 @@ export function UserDropDownMenu() {
           type="button"
           variant="ghost"
         >
-          {isAuthenticated && currentUser?.image ? (
+          {currentUser?.image ? (
             <Image
               alt={currentUser.name || "Usuario"}
               className="h-6 w-6 rounded-full"
@@ -56,10 +56,10 @@ export function UserDropDownMenu() {
           </Link>
         </DropdownMenuItem>
         <Separator className="bg-neutral-300" />
-        <DropdownMenuItem hidden={!isAuthenticated}>
+        <DropdownMenuItem hidden={!currentUser}>
           <SignOutButton />
         </DropdownMenuItem>
-        <DropdownMenuItem hidden={isAuthenticated}>
+        <DropdownMenuItem hidden={currentUser !== null}>
           <Link
             className="flex h-10 w-full items-center justify-between gap-4 text-primary-foreground"
             href="/auth"

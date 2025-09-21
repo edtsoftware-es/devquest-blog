@@ -1,3 +1,5 @@
+import type { User } from "@auth/core/types";
+import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { fetchQuery } from "convex/nextjs";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
@@ -25,8 +27,13 @@ import { UserDropDownMenu } from "../user-dropdown-menu";
 import { SearchDialog } from "./search-dialog";
 
 export default async function Header() {
-  const categories = await fetchQuery(api.categories.getAllCategories, {});
-  const recommendedPosts = await fetchQuery(api.posts.recommendedPosts, {});
+  const token = await convexAuthNextjsToken();
+
+  const [categories, recommendedPosts, currentUser] = await Promise.all([
+    fetchQuery(api.categories.getAllCategories, {}),
+    fetchQuery(api.posts.recommendedPosts, {}),
+    fetchQuery(api.users.getCurrentUserOptional, {}, { token }),
+  ]);
 
   return (
     <header className="flex w-full items-center justify-center px-3 md:px-7">
@@ -87,7 +94,7 @@ export default async function Header() {
           </nav>
         </section>
         <div className="flex items-center md:hidden">
-          <MobileMenu />
+          <MobileMenu currentUser={currentUser} />
         </div>
         <section className="flex h-3/5 w-full items-center justify-between gap-4 md:w-auto md:border-neutral-300 md:border-l-2 md:pl-4">
           <div className="flex items-center md:hidden">
@@ -120,7 +127,7 @@ export default async function Header() {
             <ModeToggle />
           </div>
           <div className="hidden items-center md:flex">
-            <UserDropDownMenu />
+            <UserDropDownMenu currentUser={currentUser} />
           </div>
         </section>
       </div>
@@ -153,7 +160,7 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
   );
 }
 
-function MobileMenu() {
+function MobileMenu({ currentUser }: { currentUser: User | null }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -217,7 +224,7 @@ function MobileMenu() {
         <div className="flex w-full items-center justify-between border-t-1 p-4">
           <ModeToggle />
           <SheetClose asChild>
-            <UserDropDownMenu />
+            <UserDropDownMenu currentUser={currentUser} />
           </SheetClose>
         </div>
       </SheetContent>

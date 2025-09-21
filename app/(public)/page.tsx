@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <div className="flex w-full flex-col items-center gap-10">
       <Hero posts={posts.mainPosts.slice(0, HOME_POSTS_LIMIT)} />
-      <Explore categories={posts.categories} className="mt-8 px-4" />
+      <Explore categories={posts.categories} className="px-4" />
       <section className="flex w-full flex-col items-center justify-center px-4 xl:max-w-[1200px]">
         <Trending
           compactPosts={posts.compactPosts}

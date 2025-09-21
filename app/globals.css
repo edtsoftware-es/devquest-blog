@@ -11,6 +11,10 @@
 }
 
 @theme inline {
+  /* FONTS */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
   /* SHADCN */
   --color-background: var(--neutral-50);
   --color-foreground: var(--neutral-900);
@@ -44,10 +48,6 @@
   --color-sidebar-accent-foreground: var(--neutral-900);
   --color-sidebar-border: var(--neutral-200);
   --color-sidebar-ring: var(--neutral-400);
-
-  /* CUSTOM */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 
   --radius-xs: calc(var(--radius) - 4px);
   --radius-sm: calc(var(--radius) - 2px);
@@ -214,7 +214,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 }
 
