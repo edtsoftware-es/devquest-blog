@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn, convertFileToWebp } from "@/lib/utils";
 import { AuthorCard, AuthorCardImageContainer } from "./cards/author-card";
@@ -101,7 +102,6 @@ function ProfileForm({
   onSuccess: () => void;
 }) {
   const updateUserProfile = useMutation(api.users.updateUserProfile);
-  const sendImage = useMutation(api.users.sendImage);
   const generateUploadUrl = useMutation(api.users.generateUploadUrl);
 
   const imageInputRef = React.useRef<HTMLInputElement>(null);
@@ -114,11 +114,7 @@ function ProfileForm({
         e.preventDefault();
         startTransition(async () => {
           try {
-            await updateUserProfile({
-              nickname: (e.target as HTMLFormElement).nickname.value,
-              bio: (e.target as HTMLFormElement).bio.value,
-              username: (e.target as HTMLFormElement).username.value,
-            });
+            let storageId: Id<"_storage"> | undefined;
 
             if (selectedImage) {
               const postUrl = await generateUploadUrl();
@@ -134,14 +130,21 @@ function ProfileForm({
               if (!result.ok) {
                 throw new Error("Failed to upload image");
               }
-              const { storageId } = await result.json();
-              await sendImage({ storageId, userId: currentUser._id });
+              const { storageId: uploadedStorageId } = await result.json();
+              storageId = uploadedStorageId as Id<"_storage">;
 
               setSelectedImage(null);
 
               // biome-ignore lint/style/noNonNullAssertion: imageInputRef is not null
               imageInputRef.current!.value = "";
             }
+
+            await updateUserProfile({
+              nickname: (e.target as HTMLFormElement).nickname.value,
+              bio: (e.target as HTMLFormElement).bio.value,
+              username: (e.target as HTMLFormElement).username.value,
+              storageId,
+            });
 
             toast.success("Perfil actualizado correctamente");
             onSuccess();

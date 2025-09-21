@@ -1,6 +1,5 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
-import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { AuthErrors } from "./lib/errors";
 
@@ -31,19 +30,12 @@ export const getCurrentUser = query({
     if (!user) {
       throw AuthErrors.userNotFound();
     }
-    let avatarUrl = user.image;
-    try {
-      avatarUrl =
-        (await ctx.storage.getUrl(user.image as Id<"_storage">)) ?? user.image;
-    } catch {
-      avatarUrl = user.image;
-    }
 
     return {
       _id: user._id,
       name: user.name,
       email: user.email,
-      image: avatarUrl,
+      image: user.image,
       role: user.role,
       nickname: user.nickname,
       bio: user.bio,
@@ -101,6 +93,7 @@ export const updateUserProfile = mutation({
     nickname: v.string(),
     bio: v.string(),
     username: v.string(),
+    storageId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -111,11 +104,26 @@ export const updateUserProfile = mutation({
     if (!user) {
       throw AuthErrors.userNotFound();
     }
-    await ctx.db.patch(user._id, {
+
+    const updateData: {
+      nickname: string;
+      bio: string;
+      name: string;
+      image?: string;
+    } = {
       nickname: args.nickname,
       bio: args.bio,
       name: args.username,
-    });
+    };
+
+    if (args.storageId) {
+      const imageUrl = await ctx.storage.getUrl(args.storageId);
+      if (imageUrl) {
+        updateData.image = imageUrl;
+      }
+    }
+
+    await ctx.db.patch(user._id, updateData);
     return null;
   },
 });
