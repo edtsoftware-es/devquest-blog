@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { DEFAULT_LATEST_POSTS_LIMIT } from "@/app/(public)/page";
 import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
@@ -25,8 +26,6 @@ import {
   StandardCardTitle,
 } from "./cards/standard-card";
 
-const DEFAULT_OFFSET = 300;
-
 export default function StandardPostList({
   preloaded,
   className,
@@ -42,24 +41,21 @@ export default function StandardPostList({
     { initialNumItems: DEFAULT_LATEST_POSTS_LIMIT }
   );
 
-  const items = results.length ? results : firstPage.page;
+  const { ref, inView } = useInView({
+    threshold: 0.7,
+  });
 
   useEffect(() => {
-    function onScroll() {
-      const nearBottom =
-        window.innerHeight + window.scrollY >=
-        document.body.offsetHeight - DEFAULT_OFFSET;
-      if (nearBottom && status === "CanLoadMore") {
-        loadMore?.(DEFAULT_LATEST_POSTS_LIMIT);
-      }
+    if (inView && status === "CanLoadMore") {
+      loadMore(DEFAULT_LATEST_POSTS_LIMIT);
     }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [status, loadMore]);
+  }, [inView, status, loadMore]);
+
+  const items = results.length ? results : firstPage.page;
 
   return (
     <section className="flex w-full flex-col gap-6">
-      <div className={cn("flex flex-col gap-6", className)}>
+      <div className={cn("flex flex-col gap-6", className)} ref={ref}>
         {items.map((post) => (
           <StandardCard className="" key={post._id}>
             <StandardCardImageContainer className="lg:h-[245px] lg:w-[225px]">
