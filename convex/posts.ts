@@ -142,7 +142,7 @@ export const getHomePosts = query({
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
-    const categories = await ctx.db.query("categories").collect();
+    const categories = await ctx.db.query("categories").take(10);
 
     return {
       mainPosts,
