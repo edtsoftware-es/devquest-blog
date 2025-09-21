@@ -142,6 +142,8 @@ export const getHomePosts = query({
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
 
+    const categories = await ctx.db.query("categories").collect();
+
     return {
       mainPosts,
       mainPopularPost,
@@ -150,6 +152,7 @@ export const getHomePosts = query({
       weeklys,
       popularTags,
       latestPosts: _posts,
+      categories,
     };
   },
 });
