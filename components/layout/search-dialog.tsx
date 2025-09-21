@@ -112,7 +112,7 @@ export function SearchDialog({
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>{triggerButton}</DialogTrigger>
         <DialogContent
-          className="!w-[991px] !max-w-none top-[35%] px-14 py-10"
+          className="!w-[991px] !max-w-none top-[42%] px-14 py-10"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>

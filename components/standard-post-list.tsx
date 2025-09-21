@@ -42,7 +42,8 @@ export default function StandardPostList({
   );
 
   const { ref, inView } = useInView({
-    threshold: 0.7,
+    threshold: 0,
+    rootMargin: "300px",
   });
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function StandardPostList({
 
   return (
     <section className="flex w-full flex-col gap-6">
-      <div className={cn("flex flex-col gap-6", className)} ref={ref}>
+      <div className={cn("flex flex-col gap-6", className)}>
         {items.map((post) => (
           <StandardCard className="" key={post._id}>
             <StandardCardImageContainer className="lg:h-[245px] lg:w-[225px]">
@@ -98,6 +99,7 @@ export default function StandardPostList({
           </StandardCard>
         ))}
       </div>
+      <div className="h-1 w-full" ref={ref} />
     </section>
   );
 }
