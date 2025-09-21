@@ -1,7 +1,9 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { ShardedCounter } from "@convex-dev/sharded-counter";
 import { paginationOptsValidator } from "convex/server";
 import { v } from "convex/values";
 import { components } from "./_generated/api";
+import type { Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
 import { getCurrentUserProfile, requireUser } from "./lib/auth";
 import { AuthErrors, PostErrors } from "./lib/errors";
@@ -635,6 +637,107 @@ export const togglePostPublished = mutation({
     });
 
     return null;
+  },
+});
+
+const MAX_RECOMMENDED_POSTS = 5;
+
+export const recommendedPosts = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+
+    if (!userId) {
+      const posts = await ctx.db
+        .query("posts")
+        .withIndex("by_view_count")
+        .order("desc")
+        .filter((q) => q.eq(q.field("published"), true))
+        .take(MAX_RECOMMENDED_POSTS);
+
+      const postsWithImages = await Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          image: getImageUrl(ctx, post.image),
+        }))
+      );
+
+      return postsWithImages;
+    }
+
+    const likes = await ctx.db
+      .query("likes")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .collect();
+
+    const likedPostIds = likes.map((like) => like.postId).filter(Boolean);
+
+    if (likedPostIds.length === 0) {
+      const posts = await ctx.db
+        .query("posts")
+        .withIndex("by_view_count")
+        .order("desc")
+        .filter((q) => q.eq(q.field("published"), true))
+        .take(MAX_RECOMMENDED_POSTS);
+
+      const postsWithImages = await Promise.all(
+        posts.map(async (post) => ({
+          ...post,
+          image: getImageUrl(ctx, post.image),
+        }))
+      );
+
+      return postsWithImages;
+    }
+
+    const likedPosts = await Promise.all(
+      likedPostIds.map((postId) => ctx.db.get(postId as Id<"posts">))
+    );
+
+    const categoryCount = new Map();
+    for (const post of likedPosts) {
+      if (post?.categoryId) {
+        categoryCount.set(
+          post.categoryId,
+          (categoryCount.get(post.categoryId) || 0) + 1
+        );
+      }
+    }
+
+    const favoriteCategories = Array.from(categoryCount.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([categoryId]) => categoryId);
+
+    const recommended: PostWithAuthorData[] = [];
+    for (const categoryId of favoriteCategories) {
+      if (recommended.length >= MAX_RECOMMENDED_POSTS) {
+        break;
+      }
+
+      const posts = await ctx.db
+        .query("posts")
+        .withIndex("by_category_and_published", (q) =>
+          q.eq("categoryId", categoryId).eq("published", true)
+        )
+        .order("desc")
+        .collect();
+
+      for (const post of posts) {
+        if (
+          !likedPostIds.some((id) => id && id === post._id) &&
+          recommended.length < MAX_RECOMMENDED_POSTS
+        ) {
+          recommended.push({
+            ...post,
+            authorName: post.authorId,
+            authorImage: post.authorId,
+            image: getImageUrl(ctx, post.image),
+          });
+        }
+      }
+    }
+
+    return recommended.slice(0, MAX_RECOMMENDED_POSTS);
   },
 });
 
