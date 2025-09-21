@@ -784,7 +784,7 @@ export const getSearchPosts = query({
       (post: Doc<"posts">) =>
         post.title.toLowerCase().includes(searchQuery) ||
         post.content.toLowerCase().includes(searchQuery) ||
-        post.tags.some((tag: any) => tag.toLowerCase().includes(searchQuery))
+        post.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery))
     ).paginate(
       args.paginationOpts ?? { numItems: LATEST_POSTS_LIMIT, cursor: null }
     )) as PaginationResult<Doc<"posts">>;
