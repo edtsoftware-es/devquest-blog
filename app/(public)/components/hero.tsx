@@ -89,7 +89,7 @@ function HeroItem({
             />
             <StandardCardContent className="mb-14 p-0 lg:mb-24">
               <StandardCardHeader>
-                <Link href={`/posts/${slug}`}>
+                <Link href={`/posts/${slug}`} prefetch>
                   <span className="absolute inset-0 z-50" />
                   <StandardCardTitle>{title}</StandardCardTitle>
                 </Link>

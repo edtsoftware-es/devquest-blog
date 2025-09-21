@@ -47,7 +47,7 @@ export function SectionHeading({
         </p>
       </div>
       <Button asChild className="group w-fit" size="auto" variant="ghost">
-        <Link href={`/blog/${slug}`}>
+        <Link href={`/blog/${slug}`} prefetch>
           <span className="rounded-full bg-neutral-900/90 p-1 text-system-white transition-colors group-hover:bg-neutral-900">
             <ChevronRight aria-hidden="true" />
           </span>

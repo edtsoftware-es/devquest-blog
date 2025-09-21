@@ -192,7 +192,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       ? "Administrador"
                       : "Usuario")}
                 </AuthorCardName>
-                <Link href={`/author/${post.author.nickname}`}>
+                <Link href={`/author/${post.author.nickname}`} prefetch>
                   <span className="absolute inset-0 z-50" />
                   <AuthorCardNickname>
                     @{post.author.nickname || "unknown"}
@@ -240,7 +240,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       />
                     </CompactCardImageContainer>
                     <CompactCardContent className="mr-0">
-                      <Link href={`/posts/${trendingPost.slug}`}>
+                      <Link href={`/posts/${trendingPost.slug}`} prefetch>
                         <span className="absolute inset-0 z-50" />
                         <CompactCardTitle>
                           {trendingPost.title}

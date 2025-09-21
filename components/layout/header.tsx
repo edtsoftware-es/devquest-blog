@@ -143,7 +143,9 @@ function CategoriesDropdown({ categories }: { categories: Category[] }) {
       <DropdownMenuContent align="start">
         {categories.map((category: Category) => (
           <DropdownMenuItem asChild key={category._id}>
-            <Link href={`/categories/${category.slug}`}>{category.name}</Link>
+            <Link href={`/categories/${category.slug}`} prefetch>
+              {category.name}
+            </Link>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

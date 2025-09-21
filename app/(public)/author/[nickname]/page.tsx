@@ -102,7 +102,7 @@ export default async function AuthorPage({
                   />
                   <StandardCardContent>
                     <StandardCardHeader>
-                      <Link href={`/posts/${post.slug}`}>
+                      <Link href={`/posts/${post.slug}`} prefetch>
                         <span className="absolute inset-0 z-50" />
                         <StandardCardTitle>{post.title}</StandardCardTitle>
                       </Link>

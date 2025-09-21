@@ -32,7 +32,7 @@ export default function CompactPostList({
             />
           </CompactCardImageContainer>
           <CompactCardContent className="mr-0">
-            <Link href={`/posts/${post.slug}`}>
+            <Link href={`/posts/${post.slug}`} prefetch>
               <span className="absolute inset-0 z-50" />
               <CompactCardTitle>{post.title}</CompactCardTitle>
             </Link>

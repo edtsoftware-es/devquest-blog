@@ -61,7 +61,9 @@ export default async function SearchPage({
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/">Home</Link>
+                <Link href="/" prefetch>
+                  Home
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
@@ -98,7 +100,7 @@ export default async function SearchPage({
                   />
                   <StandardCardContent>
                     <StandardCardHeader>
-                      <Link href={`/posts/${post.slug}`}>
+                      <Link href={`/posts/${post.slug}`} prefetch>
                         <span className="absolute inset-0 z-50" />
                         <StandardCardTitle>{post.title}</StandardCardTitle>
                       </Link>
