@@ -201,9 +201,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                 </Link>
               </div>
               <AuthorCardDescription>
-                {post.author.role === "admin"
-                  ? "Administrador del sistema"
-                  : "Usuario registrado"}
+                {post.author.bio || ""}
               </AuthorCardDescription>
             </AuthorCard>
           </div>
