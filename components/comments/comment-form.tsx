@@ -1,13 +1,16 @@
 "use client";
 
 import { useMutation } from "convex/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
+
+const MAX_COMMENT_LENGTH = 1000;
+const WARNING_THRESHOLD = 100;
 
 type CommentFormProps = {
   postId: Id<"posts">;
@@ -28,6 +31,7 @@ export function CommentForm({
 }: CommentFormProps) {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const createComment = useMutation(api.comments.createComment);
 
@@ -36,12 +40,14 @@ export function CommentForm({
 
     const trimmedContent = content.trim();
     if (!trimmedContent) {
-      toast.error("Comment cannot be empty");
+      toast.error("El comentario no puede estar vacío");
       return;
     }
 
-    if (trimmedContent.length > 1000) {
-      toast.error("Comment cannot exceed 1000 characters");
+    if (trimmedContent.length > MAX_COMMENT_LENGTH) {
+      toast.error(
+        `El comentario no puede exceder ${MAX_COMMENT_LENGTH} caracteres`
+      );
       return;
     }
 
@@ -55,11 +61,14 @@ export function CommentForm({
       });
 
       setContent("");
-      toast.success(parentId ? "Reply posted!" : "Comment posted!");
+      toast.success(
+        parentId ? "Respuesta publicada!" : "Comentario publicado!"
+      );
       onSubmit?.();
-    } catch (error) {
-      console.error("Failed to create comment:", error);
-      toast.error("Failed to post comment. Please try again.");
+    } catch {
+      toast.error(
+        "Error al publicar el comentario. Por favor, intenta nuevamente."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -70,7 +79,26 @@ export function CommentForm({
     onCancel?.();
   };
 
-  const remainingChars = 1000 - content.length;
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      e.preventDefault();
+      if (content.trim() && !isSubmitting) {
+        handleSubmit(e as any);
+      }
+    }
+  };
+
+  const remainingChars = MAX_COMMENT_LENGTH - content.length;
+
+  const getButtonText = () => {
+    if (isSubmitting) {
+      return "Guardando...";
+    }
+    if (parentId) {
+      return "Responder";
+    }
+    return "Comentar";
+  };
 
   return (
     <Card className="bg-background">
@@ -82,19 +110,27 @@ export function CommentForm({
               className="min-h-24 resize-none"
               disabled={isSubmitting}
               onChange={(e) => setContent(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder={placeholder}
+              ref={textareaRef}
               rows={3}
               value={content}
             />
             <div className="mt-2 flex items-center justify-between text-xs">
               <span
                 className={
-                  remainingChars < 100
+                  remainingChars < WARNING_THRESHOLD
                     ? "text-destructive"
                     : "text-muted-foreground"
                 }
               >
-                {remainingChars} characters remaining
+                {remainingChars} caracteres restantes
+              </span>
+              <span className="text-muted-foreground">
+                {navigator.platform.toLowerCase().includes("mac")
+                  ? "⌘"
+                  : "Ctrl"}
+                +Enter para enviar
               </span>
             </div>
           </div>
@@ -106,7 +142,7 @@ export function CommentForm({
               size="sm"
               type="submit"
             >
-              {isSubmitting ? "Posting..." : parentId ? "Reply" : "Comment"}
+              {getButtonText()}
             </Button>
 
             {onCancel && (
@@ -117,7 +153,7 @@ export function CommentForm({
                 type="button"
                 variant="ghost"
               >
-                Cancel
+                Cancelar
               </Button>
             )}
           </div>
