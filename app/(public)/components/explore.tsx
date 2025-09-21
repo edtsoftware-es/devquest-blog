@@ -55,7 +55,9 @@ export default function Explore({
         className
       )}
     >
-      <h2 className="text-secondary text-xl">Explora los trending topics</h2>
+      <h2 className="font-semibold text-secondary text-xl">
+        Explora los trending topics
+      </h2>
       <div className="flex flex-wrap items-center justify-center gap-3">
         {categories.map((category) => (
           <Button className="w-fit rounded-full" key={category.slug} size="xs">
