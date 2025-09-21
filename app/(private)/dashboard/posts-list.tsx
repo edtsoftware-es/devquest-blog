@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 
 const MAX_VISIBLE_TAGS = 3;
+const PRIORIZE_IMAGE_COUNT = 4;
 
 export function PostsList({
   preloadedPosts,
@@ -89,6 +90,7 @@ export function PostsList({
         </div>
       ) : (
         <div className="space-y-4">
+          {/** biome-ignore lint/complexity/noExcessiveCognitiveComplexity: lint*/}
           {posts.map((post, index) => (
             <div
               className="rounded-lg border bg-card p-6 transition-shadow hover:shadow-md"
@@ -100,10 +102,10 @@ export function PostsList({
                     <Image
                       alt={post.title}
                       className="h-24 w-24 object-cover transition-transform hover:scale-105"
-                      decoding={index < 4 ? "sync" : "async"}
+                      decoding={index < PRIORIZE_IMAGE_COUNT ? "sync" : "async"}
                       height={96}
-                      loading={index < 4 ? "eager" : "lazy"}
-                      priority={index < 4}
+                      loading={index < PRIORIZE_IMAGE_COUNT ? "eager" : "lazy"}
+                      priority={index < PRIORIZE_IMAGE_COUNT}
                       src={post.image}
                       width={96}
                     />
