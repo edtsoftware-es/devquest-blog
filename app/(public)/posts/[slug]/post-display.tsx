@@ -1,7 +1,7 @@
 "use client";
 
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { Clock, Eye, MessageCircle } from "lucide-react";
+import { Clock, Eye, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -125,7 +125,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
 
             <div className="ml-14 flex items-center gap-5">
               <div className="flex items-center gap-2 text-body-7 text-neutral-600">
-                <MessageCircle className="size-4" />
+                <MessageSquare className="size-4" />
                 <span>{post.commentsCount} comentarios</span>
               </div>
 
