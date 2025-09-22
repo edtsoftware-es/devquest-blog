@@ -181,9 +181,9 @@ function CarouselPrevious({
   return (
     <Button
       className={cn(
-        "group absolute size-8 rounded-full border border-transparent bg-primary/60 transition-all duration-300 hover:border-secondary hover:bg-secondary hover:text-primary lg:size-10",
+        "group absolute size-8 rounded-full border border-transparent bg-primary/60 transition-all duration-300 hover:bg-secondary hover:text-primary lg:size-10",
         orientation === "horizontal"
-          ? "-left-[-18px] 2xl:-left-16 -translate-y-1/2 top-1/2"
+          ? "2xl:-left-16 -translate-y-1/2 top-1/2 left-[18px]"
           : "-top-12 -translate-x-1/2 left-1/2 rotate-90",
         className
       )}
