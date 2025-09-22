@@ -42,9 +42,11 @@ export default async function AuthorPage({
             <AuthorCardName className="text-[2.375rem] leading-[1.2]">
               {data.author.username}
             </AuthorCardName>
-            <AuthorCardNickname>
-              {data.author.nickname ? `@${data.author.nickname}` : ""}
-            </AuthorCardNickname>
+            {data.author.nickname && (
+              <AuthorCardNickname>
+                {`@${data.author.nickname}`}
+              </AuthorCardNickname>
+            )}
           </div>
           <AuthorCardDescription>{data.author.bio}</AuthorCardDescription>
         </AuthorCard>

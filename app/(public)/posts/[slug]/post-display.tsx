@@ -195,9 +195,11 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                 </AuthorCardName>
                 <Link href={`/author/${post.author.nickname}`} prefetch>
                   <span className="absolute inset-0 z-50" />
-                  <AuthorCardNickname>
-                    @{post.author.nickname || "unknown"}
-                  </AuthorCardNickname>
+                  {post.author.nickname && (
+                    <AuthorCardNickname>
+                      {`@${post.author.nickname}`}
+                    </AuthorCardNickname>
+                  )}
                 </Link>
               </div>
               <AuthorCardDescription>
