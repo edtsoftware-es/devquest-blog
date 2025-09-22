@@ -232,7 +232,7 @@ function SearchContent({
         >
           {posts.map((post) => (
             <CompactCard
-              className="h-full w-full border-none bg-background"
+              className="h-full w-full max-w-full border-none bg-background"
               key={post._id}
             >
               <CompactCardImageContainer>
@@ -244,12 +244,12 @@ function SearchContent({
                   src={post.image}
                 />
               </CompactCardImageContainer>
-              <CompactCardContent>
+              <CompactCardContent className="mr-0 xs:mr-0">
                 <Link href={`/posts/${post.slug}`} prefetch>
                   <span className="absolute inset-0 z-50" />
                   <CompactCardTitle>{post.title}</CompactCardTitle>
                 </Link>
-                <CompactCardFooter>
+                <CompactCardFooter className="mr-0 xs:mr-0">
                   <CompactCardPublishedAt>
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString()
