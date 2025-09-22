@@ -208,9 +208,13 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
           <div className="top-8 block space-y-14 lg:sticky">
             <div>
               <Heading className="mb-6">Tendencias semanales</Heading>
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
                 {post.weeklyTrendingPosts.map((trendingPost, index) => (
-                  <CompactCard key={post._id} variant="reverse">
+                  <CompactCard
+                    className="max-w-full"
+                    key={post._id}
+                    variant="reverse"
+                  >
                     <CompactCardImageContainer>
                       <Image
                         alt={trendingPost.title}
@@ -222,14 +226,14 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                         width={1000}
                       />
                     </CompactCardImageContainer>
-                    <CompactCardContent className="mr-0">
+                    <CompactCardContent className="mr-0 xs:mr-0">
                       <Link href={`/posts/${trendingPost.slug}`} prefetch>
                         <span className="absolute inset-0 z-50" />
                         <CompactCardTitle>
                           {trendingPost.title}
                         </CompactCardTitle>
                       </Link>
-                      <CompactCardFooter className="mr-0">
+                      <CompactCardFooter className="mr-0 xs:mr-0">
                         <CompactCardPublishedAt>
                           {post.publishedAt
                             ? formatDate(post.publishedAt)
