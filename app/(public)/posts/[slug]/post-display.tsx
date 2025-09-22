@@ -36,14 +36,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-
-const formatDate = (timestamp: number) => {
-  return new Date(timestamp).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+import { formatDate } from "@/lib/utils";
 
 type PostDisplayProps = {
   preloadedPost: Preloaded<typeof api.posts.getPdpPost>;
@@ -126,9 +119,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
 
             <div className="flex items-center gap-2">
               <span className="text-body-7 text-neutral-600">
-                {post.publishedAt
-                  ? formatDate(post.publishedAt)
-                  : formatDate(post._creationTime)}
+                {formatDate(post.publishedAt ?? post._creationTime)}
               </span>
             </div>
 
@@ -237,9 +228,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       </Link>
                       <CompactCardFooter className="mr-0 xs:mr-0">
                         <CompactCardPublishedAt>
-                          {post.publishedAt
-                            ? formatDate(post.publishedAt)
-                            : formatDate(post._creationTime)}
+                          {formatDate(post.publishedAt ?? post._creationTime)}
                         </CompactCardPublishedAt>
                         <CompactCardReadingTime>
                           {post.duration} min

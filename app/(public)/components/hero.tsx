@@ -27,7 +27,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import type { PostWithAuthorData } from "@/convex/lib/types";
-import { getPublishedDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 const AUTO_PLAY_INTERVAL = 8000;
 
@@ -110,7 +110,7 @@ function HeroItem({
                   <StandardCardAuthorName>{authorName}</StandardCardAuthorName>
                 </StandardCardAuthor>
                 <StandardCardPublishedAt className="text-secondary">
-                  {getPublishedDate(publishedAt ?? _creationTime)}
+                  {formatDate(publishedAt ?? _creationTime)}
                 </StandardCardPublishedAt>
               </StandardCardAuthorContainer>
               <StandardCardStats

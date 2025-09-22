@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { Category, Post } from "@/types";
 import {
   CompactCard,
@@ -253,9 +253,7 @@ function SearchContent({
                 </Link>
                 <CompactCardFooter className="mr-0 xs:mr-0">
                   <CompactCardPublishedAt>
-                    {post.publishedAt
-                      ? new Date(post.publishedAt).toLocaleDateString()
-                      : new Date(post._creationTime).toLocaleDateString()}
+                    {formatDate(post.publishedAt ?? post._creationTime)}
                   </CompactCardPublishedAt>
                   <CompactCardReadingTime>
                     {post.duration} min

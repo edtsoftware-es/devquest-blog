@@ -36,7 +36,7 @@ import {
 import { SectionHeading } from "@/components/headings";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { PostWithAuthorData } from "@/convex/lib/types";
-import { getPublishedDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import type { Post } from "@/types";
 
 export default function Trending({
@@ -75,7 +75,7 @@ export default function Trending({
               tags={mainPopularPost.tags}
             >
               <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
-                {getPublishedDate(
+                {formatDate(
                   mainPopularPost.publishedAt ?? mainPopularPost._creationTime
                 )}
               </FeaturedCardPublishedAt>
@@ -116,7 +116,7 @@ export default function Trending({
                   </FeaturedCardAuthorName>
                 </FeaturedCardAuthor>
                 <FeaturedCardPublishedAt className="hidden lg:inline">
-                  {getPublishedDate(
+                  {formatDate(
                     mainPopularPost.publishedAt ?? mainPopularPost._creationTime
                   )}
                 </FeaturedCardPublishedAt>
@@ -169,7 +169,7 @@ export default function Trending({
                   </Link>
                   <CompactCardFooter className="xs:mr-24">
                     <CompactCardPublishedAt>
-                      {getPublishedDate(post.publishedAt ?? post._creationTime)}
+                      {formatDate(post.publishedAt ?? post._creationTime)}
                     </CompactCardPublishedAt>
                     <CompactCardReadingTime>
                       {post.duration} min
