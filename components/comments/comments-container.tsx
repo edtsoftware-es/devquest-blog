@@ -13,6 +13,7 @@ import type { Id } from "@/convex/_generated/dataModel";
 import { CommentForm } from "./comment-form";
 import { CommentTree } from "./comment-tree";
 import { buildCommentTree } from "./utils";
+import Link from "next/link";
 
 type CommentsContainerProps = {
   postId: Id<"posts">;
@@ -99,9 +100,9 @@ export function CommentsContainer({
           ) : (
             <div className="rounded-lg border bg-muted/50 p-4 text-center">
               <p className="text-muted-foreground text-sm">
-                <a className="hover:underline dark:text-primary" href="/auth">
+                <Link className="hover:underline dark:text-white text-black " href="/auth">
                   Inicia sesión
-                </a>{" "}
+                </Link>{" "}
                 para unirte a la conversación
               </p>
             </div>

@@ -50,6 +50,8 @@ export default async function Header() {
               height={32}
               src="/devi-laptop.svg"
               width={32}
+              loading="eager"
+              
             />
             <Image
               alt="Logotipo de DevQuest"
@@ -57,6 +59,7 @@ export default async function Header() {
               height={100}
               src="/logo-black.svg"
               width={100}
+              loading="eager"
             />
             <Image
               alt="Logotipo de DevQuest"
@@ -64,6 +67,7 @@ export default async function Header() {
               height={100}
               src="/logo-white.svg"
               width={100}
+              loading="eager"
             />
           </Link>
           <nav>
