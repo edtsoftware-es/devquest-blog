@@ -106,7 +106,10 @@ export default function Trending({
                       aria-hidden
                       src={mainPopularPost.authorImage || ""}
                     />
-                    <AvatarFallback>JJ</AvatarFallback>
+                    <AvatarFallback>
+                      {mainPopularPost.authorName?.charAt(0).toUpperCase() ||
+                        "A"}
+                    </AvatarFallback>
                   </Avatar>
                   <FeaturedCardAuthorName>
                     {mainPopularPost.authorName}
@@ -118,7 +121,10 @@ export default function Trending({
                   )}
                 </FeaturedCardPublishedAt>
               </FeaturedCardAuthorContainer>
-              <FeaturedCardStats commentsCount={33} viewsCount={300} />
+              <FeaturedCardStats
+                commentsCount={mainPopularPost.commentsCount}
+                viewsCount={mainPopularPost.viewCount}
+              />
             </FeaturedCardFooter>
           </FeaturedCardShell>
         </FeaturedCard>

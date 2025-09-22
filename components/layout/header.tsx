@@ -38,7 +38,7 @@ export default async function Header() {
 
   return (
     <header className="sticky top-0 z-50 flex w-full items-center justify-center md:static md:px-7">
-      <div className="flex h-16 w-full max-w-6xl flex-row-reverse items-center justify-between border border-secondary-200 bg-primary px-4 md:mt-7 md:h-20 md:flex-row md:rounded-2xl md:px-7">
+      <div className="flex h-16 w-full max-w-6xl flex-row-reverse items-center justify-between border border-neutral-200 bg-primary/90 px-4 backdrop-blur-lg md:mt-7 md:h-20 md:flex-row md:rounded-2xl md:bg-primary md:px-7 md:backdrop-blur-none">
         <section className="hidden items-center gap-9 md:flex">
           <Link
             aria-label="Ir al inicio de DevQuest"
