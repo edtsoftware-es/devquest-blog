@@ -154,10 +154,12 @@
 }
 
 ::selection {
-  background-color: oklch(89.598% 0.15256 196.882 / 0.322) !important;
+  background-color: var(--selection-bg) !important;
+  color: var(--selection-fg) !important;
 }
 ::-moz-selection {
-  background-color: oklch(89.598% 0.15256 196.882 / 0.322) !important;
+  background-color: var(--selection-bg) !important;
+  color: var(--selection-fg) !important;
 }
 
 :root {
@@ -187,6 +189,9 @@
   --background-3: oklch(98.08% 0.01 181.42);
   --background-4: oklch(96.19% 0.018 272.31);
   --background-5: oklch(97.99% 0.015 70.89);
+
+  --selection-bg: oklch(70% 0.25 240 / 0.75);
+  --selection-fg: oklch(15% 0.1 240);
 }
 
 .dark {
@@ -214,6 +219,9 @@
   --background-3: oklch(20.44% 0.006 178.94);
   --background-4: oklch(19.49% 0.007 258.37);
   --background-5: oklch(16.92% 0.003 67.65);
+
+  --selection-bg: oklch(75% 0.3 230 / 0.8);
+  --selection-fg: oklch(95% 0.05 230);
 }
 
 @layer base {
