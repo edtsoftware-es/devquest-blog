@@ -96,11 +96,11 @@ function HeroItem({
                   <StandardCardTitle>{title}</StandardCardTitle>
                 </Link>
               </StandardCardHeader>
-              <StandardCardDescription className="text-secondary">
+              <StandardCardDescription className="mr-0 text-secondary">
                 {excerpt}
               </StandardCardDescription>
             </StandardCardContent>
-            <StandardCardFooter>
+            <StandardCardFooter className="mr-0">
               <StandardCardAuthorContainer>
                 <StandardCardAuthor>
                   <Avatar className="size-8 xs:size-10">
