@@ -43,9 +43,7 @@ export default async function AuthorPage({
               {data.author.username}
             </AuthorCardName>
             {data.author.nickname && (
-              <AuthorCardNickname>
-                {`@${data.author.nickname}`}
-              </AuthorCardNickname>
+              <AuthorCardNickname>@{data.author.nickname}</AuthorCardNickname>
             )}
           </div>
           <AuthorCardDescription>{data.author.bio}</AuthorCardDescription>

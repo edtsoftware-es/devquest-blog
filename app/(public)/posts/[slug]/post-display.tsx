@@ -193,14 +193,14 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       ? "Administrador"
                       : "Usuario")}
                 </AuthorCardName>
-                <Link href={`/author/${post.author.nickname}`} prefetch>
-                  <span className="absolute inset-0 z-50" />
-                  {post.author.nickname && (
+                {post.author.nickname && (
+                  <Link href={`/author/${post.author.nickname}`} prefetch>
+                    <span className="absolute inset-0 z-50" />
                     <AuthorCardNickname>
-                      {`@${post.author.nickname}`}
+                      @{post.author.nickname}
                     </AuthorCardNickname>
-                  )}
-                </Link>
+                  </Link>
+                )}
               </div>
               <AuthorCardDescription>
                 {post.author.bio || ""}
