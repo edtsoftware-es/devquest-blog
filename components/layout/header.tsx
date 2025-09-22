@@ -76,17 +76,15 @@ export default async function Header() {
                 <CategoriesDropdown categories={categories} />
               </li>
               <li>
-                <Button asChild className="group h-auto p-0" variant="link">
+                <Button asChild className="h-auto p-0" variant="link">
                   <Link
                     className="relative"
                     href="https://cursos.devtalles.com/"
                     rel="noopener"
                     target="_blank"
                   >
-                    <span className="z-50 group-hover:text-[#1d1238]">
-                      Cursos
-                    </span>
-                    <GraduationCap className="-right-[-1px] -top-[10px] absolute size-5 rotate-[15deg] bg-primary group-hover:text-[#1d1238]" />
+                    <span className="z-50">Cursos</span>
+                    <GraduationCap className="-right-[-1px] -top-[10px] absolute size-5 rotate-[15deg] bg-primary" />
                   </Link>
                 </Button>
               </li>
