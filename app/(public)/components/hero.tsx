@@ -29,12 +29,12 @@ import {
 import type { PostWithAuthorData } from "@/convex/lib/types";
 import { getPublishedDate } from "@/lib/utils";
 
-const AUTO_PLAY_INTERVAL = 5000;
+const AUTO_PLAY_INTERVAL = 8000;
 
 export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
   return (
     <Carousel
-      className="w-full max-w-screen pl-4 md:px-8 lg:max-w-[1150px] xl:px-0 2xl:max-w-[1400px]"
+      className="w-full max-w-screen lg:max-w-6xl lg:px-2 2xl:max-w-[1400px]"
       opts={{ loop: true }}
       plugins={[
         Autoplay({
@@ -42,15 +42,15 @@ export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
         }),
       ]}
     >
-      <CarouselContent className="w-full pl-6 lg:pl-0">
+      <CarouselContent className="w-full">
         {posts.map((post, index) => (
           <CarouselItem className="w-full" key={post._id}>
             <HeroItem {...post} index={index} />
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="hidden lg:flex" />
+      <CarouselNext className="hidden lg:flex" />
     </Carousel>
   );
 }
@@ -69,7 +69,7 @@ function HeroItem({
   index,
 }: PostWithAuthorData & { index: number }) {
   return (
-    <div className="group relative mt-8 h-[350px] w-full max-w-[1400px] overflow-hidden rounded-2xl lg:h-[670px]">
+    <div className="relative mt-8 h-[350px] w-full max-w-[1400px] overflow-hidden rounded-2xl lg:h-[670px]">
       <Image
         alt={title}
         className="object-cover"
@@ -80,7 +80,7 @@ function HeroItem({
         src={image}
       />
       <div className="absolute inset-0 flex items-center">
-        <StandardCard className="h-full w-full rounded-2xl border border-transparent bg-primary/60 backdrop-blur-xs group-hover:border-neutral-600 lg:ml-24 lg:h-auto lg:max-w-[700px]">
+        <StandardCard className="h-full w-full grid-rows-1 rounded-2xl border border-transparent bg-primary/60 backdrop-blur-xs transition-border duration-300 hover:border-neutral-600 lg:ml-24 lg:h-auto lg:max-w-[700px] lg:grid-cols-1">
           <StandardCardShell
             className="h-full border-none bg-transparent p-0"
             hasButton={false}
@@ -89,7 +89,7 @@ function HeroItem({
               className="flex lg:hidden"
               tags={["technology", "react"]}
             />
-            <StandardCardContent className="mb-14 p-0 lg:mb-24">
+            <StandardCardContent className="mb-6 p-0">
               <StandardCardHeader>
                 <Link href={`/posts/${slug}`} prefetch>
                   <span className="absolute inset-0 z-50" />

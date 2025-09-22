@@ -143,7 +143,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
       <div
         className={cn(
           "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
+          orientation === "horizontal" ? "-ml-4 lg:-ml-2" : "-mt-4 flex-col",
           className
         )}
         {...props}
@@ -160,7 +160,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       aria-roledescription="slide"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        orientation === "horizontal" ? "pl-8 lg:pl-4" : "pt-4",
         className
       )}
       data-slot="carousel-item"
@@ -181,7 +181,7 @@ function CarouselPrevious({
   return (
     <Button
       className={cn(
-        "group absolute size-8 rounded-full border border-secondary hover:bg-secondary hover:text-primary lg:size-10",
+        "group absolute size-8 rounded-full border border-transparent bg-primary/60 transition-all duration-300 hover:border-secondary hover:bg-secondary hover:text-primary lg:size-10",
         orientation === "horizontal"
           ? "-left-[-18px] 2xl:-left-16 -translate-y-1/2 top-1/2"
           : "-top-12 -translate-x-1/2 left-1/2 rotate-90",
@@ -211,9 +211,9 @@ function CarouselNext({
   return (
     <Button
       className={cn(
-        "group absolute size-8 rounded-full border border-secondary hover:bg-secondary hover:text-primary lg:size-10",
+        "group absolute size-8 rounded-full border border-transparent bg-primary/60 transition-all duration-300 hover:border-secondary hover:bg-secondary hover:text-primary lg:size-10",
         orientation === "horizontal"
-          ? "-right-[-30px] 2xl:-right-16 -translate-y-1/2 top-1/2"
+          ? "-right-[-18px] 2xl:-right-16 -translate-y-1/2 top-1/2"
           : "-bottom-12 -translate-x-1/2 left-1/2 rotate-90",
         className
       )}
