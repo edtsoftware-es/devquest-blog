@@ -26,14 +26,19 @@ function HighlightCardImageContainer({
   return (
     <div
       className={cn(
-        "relative flex h-57 w-full overflow-hidden rounded-[1rem] rounded-br-[1.75rem] bg-neutral-200",
+        "relative flex h-57 w-full overflow-hidden rounded-[1rem] rounded-br-[1.75rem]",
         className
       )}
       {...props}
     >
       {children}
       <div className="absolute right-2 bottom-2">
-        <Button aria-label="Read full article" size="icon" type="button">
+        <Button
+          aria-label="Read full article"
+          className="group-hover:border-neutral-600 group-hover:bg-primary/60 group-hover:backdrop-blur-lg"
+          size="icon"
+          type="button"
+        >
           <ArrowRight aria-hidden="true" />
         </Button>
       </div>

@@ -9,10 +9,7 @@ function FeaturedCard({
 }: React.ComponentProps<"article">) {
   return (
     <article
-      className={cn(
-        "group relative h-100 max-w-146 gap-2.5 lg:h-141",
-        className
-      )}
+      className={cn("relative h-100 max-w-146 gap-2.5 lg:h-141", className)}
       {...props}
     />
   );
@@ -41,12 +38,12 @@ function FeaturedCardShell({
   return (
     <div
       className={cn(
-        "absolute bottom-0 isolate flex min-h-53 w-full justify-center lg:min-h-64",
+        "group absolute bottom-0 isolate flex min-h-53 w-full justify-center lg:min-h-64",
         className
       )}
       {...props}
     >
-      <div className="relative flex w-11/12 rounded-[1rem] border bg-primary/60 backdrop-blur-lg group-hover:border-neutral-600">
+      <div className="relative flex w-11/12 rounded-[1rem] border bg-primary/60 backdrop-blur-lg transition-border duration-300 group-hover:border-neutral-600">
         <div className="flex h-full w-full flex-col gap-y-6 p-6 xs:p-8 pb-5 xs:pb-6 lg:p-10 lg:pb-8">
           <div className="flex h-full flex-col gap-y-3">{children}</div>
         </div>
@@ -54,17 +51,17 @@ function FeaturedCardShell({
         {/* Corner decorations */}
         <div className="-right-[1px] absolute bottom-[53px] z-10 size-6">
           <div className="absolute size-full bg-background" />
-          <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary/60 group-hover:border-neutral-600" />
+          <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary/60 transition-border duration-300 group-hover:border-neutral-600" />
         </div>
         <div className="-bottom-[1px] absolute right-[53px] z-10 size-6">
           <div className="absolute size-full bg-background" />
-          <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary/60 group-hover:border-neutral-600" />
+          <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary/60 transition-border duration-300 group-hover:border-neutral-600" />
         </div>
 
         {/* Footer button */}
         <div className="-right-[1px] -bottom-[1px] absolute h-[55px] w-[55px]">
           <div className="absolute size-full bg-transparent" />
-          <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background group-hover:border-neutral-600">
+          <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background transition-border duration-300 group-hover:border-neutral-600">
             <div className="absolute right-0 bottom-0">
               <Button aria-label="Read full article" size="icon" type="button">
                 <ArrowRight aria-hidden="true" />
