@@ -13,14 +13,14 @@ export default function Explore({
   return (
     <section
       className={cn(
-        "flex w-full max-w-[1024px] flex-col items-center justify-center gap-8",
+        "flex w-full max-w-[1024px] flex-col items-center justify-center gap-4",
         className
       )}
     >
       <h2 className="font-semibold text-secondary text-xl">
         Explora los trending topics
       </h2>
-      <div className="flex flex-wrap items-center justify-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {categories.map((category) => (
           <Link
             href={`/categories/${category.slug}`}
