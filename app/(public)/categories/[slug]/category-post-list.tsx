@@ -28,37 +28,39 @@ import {
 } from "@/components/cards/standard-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { formatDate } from "@/lib/utils";
-import { DEFAULT_SEARCH_POSTS_LIMIT } from "./page";
+import { DEFAULT_CATEGORY_POSTS_LIMIT } from "./page";
 
-export default function SearchList({
-  q,
+export default function CategoryPostList({
+  categoryId,
   preloaded,
 }: {
-  q?: string;
-  preloaded: Preloaded<typeof api.posts.getSearchPosts>;
+  categoryId: Id<"categories">;
+  preloaded: Preloaded<typeof api.posts.getPostsByCategoryId>;
 }) {
   const firstPage = usePreloadedQuery(preloaded);
 
   const { results, status, loadMore } = usePaginatedQuery(
-    api.posts.getSearchPosts,
-    { q },
-    { initialNumItems: DEFAULT_SEARCH_POSTS_LIMIT }
+    api.posts.getPostsByCategoryId,
+    { categoryId },
+    { initialNumItems: DEFAULT_CATEGORY_POSTS_LIMIT }
   );
 
   const { ref, inView } = useInView({
-    threshold: 0.7,
+    threshold: 0,
+    rootMargin: "500px",
   });
 
   useEffect(() => {
     if (inView && status === "CanLoadMore") {
-      loadMore(DEFAULT_SEARCH_POSTS_LIMIT);
+      loadMore(DEFAULT_CATEGORY_POSTS_LIMIT);
     }
   }, [inView, status, loadMore]);
 
   const items = results.length ? results : firstPage.page;
 
-  if (q && status !== "LoadingFirstPage" && items.length === 0) {
+  if (status !== "LoadingFirstPage" && items.length === 0) {
     return (
       <section className="flex w-full max-w-6xl flex-col justify-center">
         <h2 className="font-normal text-base text-neutral-600">
@@ -70,10 +72,7 @@ export default function SearchList({
 
   return (
     <section className="mt-4 mb-8 flex w-full max-w-6xl flex-col justify-center">
-      <div
-        className="grid grid-cols-1 gap-x-6 gap-y-8 [@media(min-width:936px)]:grid-cols-2"
-        ref={ref}
-      >
+      <div className="grid grid-cols-1 gap-x-6 gap-y-8 [@media(min-width:936px)]:grid-cols-2">
         {items.map((post) => (
           <StandardCard key={post._id} variant="compact">
             <StandardCardImageContainer className="lg:w-full">
@@ -130,6 +129,7 @@ export default function SearchList({
           </StandardCard>
         ))}
       </div>
+      <div ref={ref} />
     </section>
   );
 }

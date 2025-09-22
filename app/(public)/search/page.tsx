@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { api } from "@/convex/_generated/api";
-import SearchList from "./search-list";
+import SearchPostList from "./search-post-list";
 
 export const DEFAULT_SEARCH_POSTS_LIMIT = 8;
 
@@ -52,7 +52,7 @@ export default async function SearchPage({
             : "Introduce un término de búsqueda para encontrar posts"}
         </h1>
 
-        <SearchList preloaded={preloaded} q={q} />
+        <SearchPostList preloaded={preloaded} q={q} />
       </div>
     </main>
   );
