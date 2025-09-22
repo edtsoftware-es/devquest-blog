@@ -427,11 +427,10 @@ export const getPostsByCategoryId = query({
   },
 });
 
-export const getPaginatedPostsWithAuthorByNickname = query({
+export const getPostsAndAuthorByNickname = query({
   args: {
     nickname: v.string(),
-    page: v.optional(v.number()),
-    postsPerPage: v.optional(v.number()),
+    paginationOpts: paginationOptsValidator,
   },
 
   handler: async (ctx, args) => {
@@ -444,28 +443,24 @@ export const getPaginatedPostsWithAuthorByNickname = query({
       throw AuthErrors.userNotFound();
     }
 
-    const currentPage = args.page || 1;
-    const postsPerPage = args.postsPerPage || DEFAULT_POSTS_PER_PAGE;
-    const offset = (currentPage - 1) * postsPerPage;
-
-    const allPosts = await ctx.db
+    const posts = await ctx.db
       .query("posts")
       .withIndex("by_author_published", (q) => q.eq("authorId", user._id))
       .filter((q) => q.eq(q.field("published"), true))
       .order("desc")
-      .collect();
+      .paginate(
+        args.paginationOpts ?? {
+          numItems: DEFAULT_POSTS_PER_PAGE,
+          cursor: null,
+        }
+      );
 
-    const totalPosts = allPosts.length;
-    const totalPages = Math.ceil(totalPosts / postsPerPage);
-
-    const paginatedPosts = allPosts.slice(offset, offset + postsPerPage);
-
-    const postsWithAuthorData = await Promise.all(
-      paginatedPosts.map(async (post) => ({
+    const postsWithImages = await Promise.all(
+      posts.page.map(async (post) => ({
         ...post,
+        image: getImageUrl(ctx, post.image),
         authorName: user.name || "Usuario desconocido",
         authorImage: getUserImageUrl(ctx, user),
-        image: getImageUrl(ctx, post.image),
       }))
     );
 
@@ -476,12 +471,8 @@ export const getPaginatedPostsWithAuthorByNickname = query({
         avatarUrl: getUserImageUrl(ctx, user),
         bio: user.bio,
       },
-      posts: postsWithAuthorData,
-      totalPosts,
-      totalPages,
-      currentPage,
-      hasNextPage: currentPage < totalPages,
-      hasPreviousPage: currentPage > 1,
+      ...posts,
+      page: postsWithImages,
     };
   },
 });

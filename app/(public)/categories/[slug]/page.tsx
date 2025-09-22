@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import PostList from "./post-list";
+import CategoryPostList from "./category-post-list";
 
 export const DEFAULT_CATEGORY_POSTS_LIMIT = 8;
 
@@ -84,7 +84,7 @@ async function CategoryPageContent({
         {categoryName}
       </h1>
 
-      <PostList categoryId={categoryId} preloaded={preloaded} />
+      <CategoryPostList categoryId={categoryId} preloaded={preloaded} />
     </>
   );
 }
