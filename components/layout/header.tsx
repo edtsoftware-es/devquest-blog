@@ -39,28 +39,32 @@ export default async function Header() {
     <header className="sticky top-0 z-50 flex w-full items-center justify-center md:static md:px-7">
       <div className="flex h-16 w-full max-w-6xl flex-row-reverse items-center justify-between border border-secondary-200 bg-primary px-4 md:mt-7 md:h-20 md:flex-row md:rounded-2xl md:px-3 md:px-7">
         <section className="hidden items-center gap-9 md:flex">
-          <div className="flex items-center">
+          <Link
+            aria-label="Ir al inicio de DevQuest"
+            className="flex items-center"
+            href="/"
+          >
             <Image
-              alt="Convex Logo"
+              alt="Icono de Convex"
               height={32}
               src="/devi-laptop.svg"
               width={32}
             />
             <Image
-              alt="DevQuest Logo"
+              alt="Logotipo de DevQuest"
               className="ml-3 inline-block pt-[1px] dark:hidden"
               height={100}
               src="/logo-black.svg"
               width={100}
             />
             <Image
-              alt="DevQuest Logo"
+              alt="Logotipo de DevQuest"
               className="ml-3 hidden pt-[1px] dark:inline-block"
               height={100}
               src="/logo-white.svg"
               width={100}
             />
-          </div>
+          </Link>
           <nav>
             <ul className="flex gap-10">
               <li>
