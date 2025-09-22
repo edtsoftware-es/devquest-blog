@@ -43,15 +43,17 @@ export default async function SearchPage({
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+      </div>
 
+      <div className="flex w-full max-w-6xl flex-col justify-center">
         <h1 className="line-clamp-2 break-words pb-8 font-semibold text-3xl xs:text-4xl leading-[1.2] md:text-6xl">
           {q
             ? `“${q}”`
             : "Introduce un término de búsqueda para encontrar posts"}
         </h1>
-      </div>
 
-      <SearchList preloaded={preloaded} q={q} />
+        <SearchList preloaded={preloaded} q={q} />
+      </div>
     </main>
   );
 }
