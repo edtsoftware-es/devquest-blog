@@ -58,7 +58,7 @@ export default function StandardPostList({
     <section className="flex w-full flex-col gap-6">
       <div className={cn("flex flex-col gap-6", className)}>
         {items.map((post) => (
-          <StandardCard className="" key={post._id}>
+          <StandardCard key={post._id}>
             <StandardCardImageContainer className="lg:h-[245px] lg:w-[225px]">
               <Image
                 alt={post.title}
