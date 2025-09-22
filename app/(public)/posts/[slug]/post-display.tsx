@@ -253,10 +253,12 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                 <Heading className="mb-6">Popular tags</Heading>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag: string) => (
-                    <Button className="w-fit" key={tag} size={"xs"}>
-                      {tag}
-                      <Badge variant="tertiary">26</Badge>
-                    </Button>
+                    <Link href={`/search?q=${tag}`} key={tag} prefetch>
+                      <Button className="w-fit" key={tag} size={"xs"}>
+                        {tag}
+                        <Badge variant="tertiary">26</Badge>
+                      </Button>
+                    </Link>
                   ))}
                 </div>
               </div>
