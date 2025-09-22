@@ -153,6 +153,13 @@
   --font-weight-body-8: 500;
 }
 
+::selection {
+  background-color: oklch(89.598% 0.15256 196.882 / 0.322) !important;
+}
+::-moz-selection {
+  background-color: oklch(89.598% 0.15256 196.882 / 0.322) !important;
+}
+
 :root {
   --radius: 0.5rem;
 
