@@ -17,7 +17,6 @@ import {
   CompactCardReadingTime,
   CompactCardTitle,
 } from "../cards/compact-card";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -216,7 +215,6 @@ function SearchContent({
             size="xs"
           >
             {category.name}
-            <Badge variant="tertiary">26</Badge>
           </Button>
         ))}
       </div>

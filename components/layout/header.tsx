@@ -1,7 +1,7 @@
 import type { User } from "@auth/core/types";
 import { convexAuthNextjsToken } from "@convex-dev/auth/nextjs/server";
 import { fetchQuery } from "convex/nextjs";
-import { MenuIcon } from "lucide-react";
+import { GraduationCap, MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/convex/_generated/api";
@@ -76,13 +76,17 @@ export default async function Header() {
                 <CategoriesDropdown categories={categories} />
               </li>
               <li>
-                <Button asChild className="h-auto p-0" variant="link">
+                <Button asChild className="group h-auto p-0" variant="link">
                   <Link
+                    className="relative"
                     href="https://cursos.devtalles.com/"
                     rel="noopener"
                     target="_blank"
                   >
-                    Cursos
+                    <span className="z-50 group-hover:text-[#1d1238]">
+                      Cursos
+                    </span>
+                    <GraduationCap className="-right-[-1px] -top-[10px] absolute size-5 rotate-[15deg] bg-primary group-hover:text-[#1d1238]" />
                   </Link>
                 </Button>
               </li>
