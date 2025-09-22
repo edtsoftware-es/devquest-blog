@@ -73,8 +73,7 @@ export function SearchDialog({
     router.prefetch(`/categories/${slug}`);
   };
 
-  const handlePostClick = (post: Post) => {
-    router.push(`/posts/${post.categoryId}/${post.slug}`);
+  const handlePostClick = () => {
     setOpen(false);
   };
 
@@ -169,7 +168,7 @@ type SearchContentProps = {
   isDesktop: boolean;
   onCategoryClick: (slug: string) => void;
   onCategoryHover: (slug: string) => void;
-  onPostClick: (post: Post) => void;
+  onPostClick: () => void;
   onSearch: () => void;
   onSearchValueChange: (value: string) => void;
   posts: Post[];
@@ -183,6 +182,7 @@ function SearchContent({
   isDesktop,
   onCategoryClick,
   onCategoryHover,
+  onPostClick,
   onSearch,
   onSearchValueChange,
   posts,
@@ -232,7 +232,7 @@ function SearchContent({
         >
           {posts.map((post) => (
             <CompactCard
-              className="h-full w-full max-w-full border-none bg-background"
+              className="h-full w-full max-w-full border-transparent bg-background duration-300 hover:border-neutral-600"
               key={post._id}
             >
               <CompactCardImageContainer>
@@ -245,7 +245,11 @@ function SearchContent({
                 />
               </CompactCardImageContainer>
               <CompactCardContent className="mr-0 xs:mr-0">
-                <Link href={`/posts/${post.slug}`} prefetch>
+                <Link
+                  href={`/posts/${post.slug}`}
+                  onClick={onPostClick}
+                  prefetch
+                >
                   <span className="absolute inset-0 z-50" />
                   <CompactCardTitle>{post.title}</CompactCardTitle>
                 </Link>

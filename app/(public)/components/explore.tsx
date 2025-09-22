@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Category } from "@/convex/lib/types";
 import { cn } from "@/lib/utils";
@@ -21,9 +22,15 @@ export default function Explore({
       </h2>
       <div className="flex flex-wrap items-center justify-center gap-3">
         {categories.map((category) => (
-          <Button className="w-fit rounded-full" key={category.slug} size="xs">
-            {category.name}
-          </Button>
+          <Link
+            href={`/categories/${category.slug}`}
+            key={category._id}
+            prefetch
+          >
+            <Button className="w-fit rounded-full" size="xs">
+              {category.name}
+            </Button>
+          </Link>
         ))}
       </div>
     </section>
