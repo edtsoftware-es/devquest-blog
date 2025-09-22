@@ -242,7 +242,7 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                             : formatDate(post._creationTime)}
                         </CompactCardPublishedAt>
                         <CompactCardReadingTime>
-                          {post.duration} mins
+                          {post.duration} min
                         </CompactCardReadingTime>
                       </CompactCardFooter>
                     </CompactCardContent>

@@ -172,7 +172,7 @@ export default function Trending({
                       {getPublishedDate(post.publishedAt ?? post._creationTime)}
                     </CompactCardPublishedAt>
                     <CompactCardReadingTime>
-                      {post.duration || "0 mins"}
+                      {post.duration} min
                     </CompactCardReadingTime>
                   </CompactCardFooter>
                   <CompactCardStats

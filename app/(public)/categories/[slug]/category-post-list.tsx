@@ -96,7 +96,7 @@ export default function CategoryPostList({
                     <StandardCardTitle>{post.title}</StandardCardTitle>
                   </Link>
                   <StandardCardReadingTime>
-                    {`${post.duration} mins`}
+                    {post.duration} min
                   </StandardCardReadingTime>
                 </StandardCardHeader>
                 <StandardCardDescription>

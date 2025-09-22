@@ -42,7 +42,7 @@ export default function CompactPostList({
                 {getPublishedDate(post.publishedAt ?? post._creationTime)}
               </CompactCardPublishedAt>
               <CompactCardReadingTime>
-                {post.duration} mins
+                {post.duration} min
               </CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>

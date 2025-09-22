@@ -258,7 +258,7 @@ function SearchContent({
                       : new Date(post._creationTime).toLocaleDateString()}
                   </CompactCardPublishedAt>
                   <CompactCardReadingTime>
-                    {post.duration} mins
+                    {post.duration} min
                   </CompactCardReadingTime>
                 </CompactCardFooter>
               </CompactCardContent>
