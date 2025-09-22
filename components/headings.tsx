@@ -35,7 +35,7 @@ export function SectionHeading({
 }) {
   return (
     <div className="flex w-full items-center justify-between rounded-[10px] border border-neutral-200 bg-primary px-4 py-4 md:px-8">
-      <div className="flex flex-col items-start md:flex-row md:items-center md:gap-4 md:pl-8">
+      <div className="flex flex-col items-start md:flex-row md:items-center md:gap-4">
         <Heading className="mb-0 pl-0">{title}</Heading>
         <p className="items-center pt-1 text-muted-foreground text-sm">
           {subtitle}

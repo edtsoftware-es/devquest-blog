@@ -55,7 +55,7 @@ export default function Trending({
         title="Top Trending"
       />
       <div className="mt-7 grid w-full grid-cols-1 gap-6 md:grid-cols-2">
-        <FeaturedCard>
+        <FeaturedCard className="max-w-full">
           <FeaturedCardImageContainer>
             <Image
               alt={`Image for ${mainPopularPost.title}`}
@@ -129,8 +129,8 @@ export default function Trending({
                 <HighlightCardImageContainer>
                   <Image
                     alt={`Image for ${post.title}`}
-                    className="rounded-[1rem] rounded-br-[1.75rem] transition-all duration-300 group-hover:scale-105"
-                    layout="fill"
+                    className="rounded-[1rem] rounded-br-[1.75rem]"
+                    fill
                     objectFit="cover"
                     quality={65}
                     src={post.image || ""}
@@ -146,7 +146,7 @@ export default function Trending({
           </div>
           <div className="flex w-full flex-col gap-4">
             {compactPosts.map((post) => (
-              <CompactCard className="bg-background" key={post._id}>
+              <CompactCard className="max-w-full bg-background" key={post._id}>
                 <CompactCardImageContainer>
                   <Image
                     alt={`Image for ${post.title}`}
@@ -156,12 +156,12 @@ export default function Trending({
                     src={post.image || ""}
                   />
                 </CompactCardImageContainer>
-                <CompactCardContent>
+                <CompactCardContent className="xs:mr-0">
                   <Link href={`/posts/${post.slug}`} prefetch>
                     <span className="absolute inset-0 z-50" />
                     <CompactCardTitle>{post.title}</CompactCardTitle>
                   </Link>
-                  <CompactCardFooter>
+                  <CompactCardFooter className="xs:mr-24">
                     <CompactCardPublishedAt>
                       {getPublishedDate(post.publishedAt ?? post._creationTime)}
                     </CompactCardPublishedAt>

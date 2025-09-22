@@ -20,9 +20,9 @@ export default function CompactPostList({
   className?: string;
 }) {
   return (
-    <div className={cn("flex w-full flex-col gap-4", className)}>
+    <div className={cn("flex w-full flex-col gap-2", className)}>
       {posts.map((post) => (
-        <CompactCard key={post._id} variant="reverse">
+        <CompactCard className="max-w-full" key={post._id} variant="reverse">
           <CompactCardImageContainer>
             <Image
               alt={`Image for ${post.title}`}
@@ -32,12 +32,12 @@ export default function CompactPostList({
               src={post.image || ""}
             />
           </CompactCardImageContainer>
-          <CompactCardContent className="mr-0">
+          <CompactCardContent className="mr-0 xs:mr-0">
             <Link href={`/posts/${post.slug}`} prefetch>
               <span className="absolute inset-0 z-50" />
               <CompactCardTitle>{post.title}</CompactCardTitle>
             </Link>
-            <CompactCardFooter className="mr-0">
+            <CompactCardFooter className="mr-0 xs:mr-0">
               <CompactCardPublishedAt>
                 {getPublishedDate(post.publishedAt ?? post._creationTime)}
               </CompactCardPublishedAt>

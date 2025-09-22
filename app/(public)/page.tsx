@@ -38,14 +38,18 @@ export default async function Home() {
         </div>
 
         <aside className="flex h-full w-full flex-col lg:col-span-1">
-          <div className="sticky top-8 flex w-full flex-col gap-10">
-            <div className="flex flex-col gap-6">
-              <Heading>Tendencias semanales</Heading>
+          <div className="sticky top-0 flex w-full flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <Heading className="border border-transparent py-4">
+                Tendencias semanales
+              </Heading>
               <CompactPostList posts={posts.weeklys} />
             </div>
-            <div>
-              <Heading>Popular Tags</Heading>
-              <TagList className="mt-4" tags={posts.popularTags} />
+            <div className="flex flex-col gap-2">
+              <Heading className="border border-transparent py-4">
+                Popular Tags
+              </Heading>
+              <TagList tags={posts.popularTags} />
             </div>
           </div>
         </aside>
