@@ -63,7 +63,12 @@ function FeaturedCardShell({
           <div className="absolute size-full bg-transparent" />
           <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background transition-all duration-300 group-hover:border-neutral-600">
             <div className="absolute right-0 bottom-0">
-              <Button aria-label="Read full article" size="icon" type="button">
+              <Button
+                aria-label="Read full article"
+                className="transition-all duration-300 group-hover:border-neutral-600"
+                size="icon"
+                type="button"
+              >
                 <ArrowRight aria-hidden="true" />
               </Button>
             </div>
