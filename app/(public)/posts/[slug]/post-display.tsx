@@ -255,39 +255,37 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
       </div>
       <hr className="mt-12 mb-8" />
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="flex items-center justify-between lg:col-span-2">
-          <div className="flex flex-wrap items-center gap-2">
-            {post.tags.map((tag: string) => (
-              <Badge className="text-xs" key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </div>
+      <div className="flex xs:flex-row flex-col xs:items-center xs:justify-between gap-6">
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((tag: string) => (
+            <Badge className="text-xs" key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-body-6 text-neutral-900">Compartir:</span>
-            <div className="flex items-center gap-1 rounded-lg border bg-muted px-3 py-2">
-              <Button
-                aria-label="Compartir en Twitter"
-                className="h-8 w-8 rounded-sm bg-black p-0"
-                onClick={shareOnTwitter}
-                size="sm"
-                variant="ghost"
-              >
-                <span className="font-bold text-sm text-white">X</span>
-              </Button>
-              <div className="h-4 w-px bg-border" />
-              <Button
-                aria-label="Compartir en LinkedIn"
-                className="h-8 w-8 rounded-sm bg-[#0a66c2] p-0"
-                onClick={shareOnLinkedIn}
-                size="sm"
-                variant="ghost"
-              >
-                <span className="font-bold text-sm text-white">in</span>
-              </Button>
-            </div>
+        <div className="flex items-center gap-3">
+          <span className="text-body-6 text-neutral-900">Compartir:</span>
+          <div className="flex items-center gap-1">
+            <Button
+              aria-label="Compartir en Twitter"
+              className="h-8 w-8 rounded-sm bg-black p-0"
+              onClick={shareOnTwitter}
+              size="sm"
+              variant="ghost"
+            >
+              <span className="font-bold text-sm text-white">X</span>
+            </Button>
+            <div className="h-4 w-px bg-border" />
+            <Button
+              aria-label="Compartir en LinkedIn"
+              className="h-8 w-8 rounded-sm bg-[#0a66c2] p-0"
+              onClick={shareOnLinkedIn}
+              size="sm"
+              variant="ghost"
+            >
+              <span className="font-bold text-sm text-white">in</span>
+            </Button>
           </div>
         </div>
       </div>
