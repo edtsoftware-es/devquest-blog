@@ -4,7 +4,7 @@ function AuthorCard({ className, ...props }: React.ComponentProps<"article">) {
   return (
     <article
       className={cn(
-        "relative isolate flex max-w-95 flex-col items-center gap-y-6 rounded-[1rem] border border-neutral-200 bg-primary px-6 xs:px-12 py-10 xs:py-20 transition-border duration-300 hover:border-neutral-600",
+        "relative isolate flex max-w-95 flex-col items-center gap-y-6 rounded-[1rem] border border-neutral-200 bg-primary px-6 xs:px-12 py-10 xs:py-20 transition-all duration-300 hover:border-neutral-600",
         className
       )}
       {...props}

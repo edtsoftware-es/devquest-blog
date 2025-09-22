@@ -39,7 +39,7 @@ export default async function CategoryPage({
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>{category?.name || slug}</BreadcrumbPage>
+              <BreadcrumbPage>Categoría</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

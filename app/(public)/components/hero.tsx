@@ -80,7 +80,7 @@ function HeroItem({
         src={image}
       />
       <div className="absolute inset-0 flex items-center">
-        <StandardCard className="h-full w-full grid-rows-1 rounded-2xl border border-transparent bg-primary/60 backdrop-blur-xs transition-border duration-300 hover:border-neutral-600 lg:ml-24 lg:h-auto lg:max-w-[700px] lg:grid-cols-1">
+        <StandardCard className="h-full w-full grid-rows-1 rounded-2xl border border-transparent bg-primary/60 backdrop-blur-xs transition-all duration-300 hover:border-neutral-600 lg:ml-24 lg:h-auto lg:max-w-[700px] lg:grid-cols-1">
           <StandardCardShell
             className="h-full border-none bg-transparent p-0"
             hasButton={false}

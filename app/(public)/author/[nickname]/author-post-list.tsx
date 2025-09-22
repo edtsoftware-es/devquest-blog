@@ -79,7 +79,7 @@ export default function AuthorPostList({
                 alt={post.title}
                 className="h-full w-full object-cover"
                 fill
-                src={"/images/galaxia.jpg"}
+                src={post.image}
               />
               <StandardCardTags
                 className="absolute bottom-3 left-3 z-10 xs:hidden"

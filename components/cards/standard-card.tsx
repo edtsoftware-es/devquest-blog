@@ -48,7 +48,7 @@ function StandardCardShell({
   return (
     <div
       className={cn(
-        "flex h-full w-full rounded-[1rem] border bg-primary transition-border duration-300 group-hover:border-neutral-600",
+        "flex h-full w-full rounded-[1rem] border bg-primary transition-all duration-300 group-hover:border-neutral-600",
         className
       )}
       {...props}
@@ -62,19 +62,23 @@ function StandardCardShell({
           {/* Corner decorations */}
           <div className="absolute right-0 bottom-[53px] z-10 size-6">
             <div className="absolute size-full bg-background" />
-            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary transition-border duration-300 group-hover:border-neutral-600" />
+            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary transition-all duration-300 group-hover:border-neutral-600" />
           </div>
           <div className="absolute right-[53px] bottom-0 z-10 size-6">
             <div className="absolute size-full bg-background" />
-            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary transition-border duration-300 group-hover:border-neutral-600" />
+            <div className="absolute size-full rounded-br-[1rem] border-neutral-200 border-r border-b bg-primary transition-all duration-300 group-hover:border-neutral-600" />
           </div>
 
           {/* Footer button */}
           <div className="absolute right-0 bottom-0 h-[54px] w-[54px]">
             <div className="absolute size-full bg-transparent" />
-            <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background transition-border duration-300 group-hover:border-neutral-600">
+            <div className="absolute size-full rounded-tl-[1.75rem] border-neutral-200 border-t border-l bg-background transition-all duration-300 group-hover:border-neutral-600">
               <div className="absolute right-0 bottom-0">
-                <Button size="icon" type="button">
+                <Button
+                  className="transition-all duration-300 group-hover:border-neutral-600"
+                  size="icon"
+                  type="button"
+                >
                   <ArrowRight aria-hidden="true" />
                 </Button>
               </div>

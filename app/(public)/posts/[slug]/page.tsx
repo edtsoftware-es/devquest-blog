@@ -26,7 +26,7 @@ export default async function PostPage({
   ]);
 
   return (
-    <div className="container mx-auto max-w-8xl px-4 py-10 lg:px-0">
+    <div className="mx-auto max-w-6xl max-w-8xl px-4 py-10 lg:px-0">
       <PostDisplay preloadedPost={preloadedPost} />
       <div className="flex w-full">
         <div className="w-full">
