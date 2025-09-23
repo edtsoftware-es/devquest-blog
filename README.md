@@ -140,8 +140,14 @@ Una vez que Convex esté configurado y el proyecto en marcha, puedes generar dat
 ```bash
 # Ejecuta el proyecto (esto iniciará tanto Next.js como Convex)
 pnpm dev
+```
 
+Este comando iniciará automáticamente:
+- **Next.js** en [http://localhost:3000](http://localhost:3000)
+- **Convex backend**
+- **Convex Dashboard cloud** (entorno desarrollo)
 
+```bash
 # En otra terminal, ejecuta el seed
 npx convex run init
 ```
@@ -155,17 +161,8 @@ Este comando generará:
 
 ### 7. Ejecutar el proyecto
 
-```bash
-# Ejecutar el proyecto completo (frontend + backend)
-pnpm dev
-```
+✨Ya estás listo para ejecutar el proyecto completo✨
 
-Este comando iniciará automáticamente:
-- **Next.js** en [http://localhost:3000](http://localhost:3000)
-- **Convex backend**
-- **Convex Dashboard cloud** (entorno desarrollo)
-
-El proyecto estará disponible en [http://localhost:3000](http://localhost:3000)
 
 ## 🔧 Configuración adicional
 
