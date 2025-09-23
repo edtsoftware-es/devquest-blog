@@ -130,7 +130,9 @@ function FeaturedCardContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
+  return (
+    <div className={cn("mb-2 flex flex-col gap-y-3", className)} {...props} />
+  );
 }
 
 function FeaturedCardHeader({
@@ -167,7 +169,7 @@ function FeaturedCardDescription({
   return (
     <p
       className={cn(
-        "mr-12 line-clamp-2 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5] lg:mr-8",
+        "line-clamp-2 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5] lg:mr-8",
         className
       )}
       {...props}
@@ -182,7 +184,7 @@ function FeaturedCardFooter({
   return (
     <div
       className={cn(
-        "mt-auto mr-12 flex flex-wrap justify-between gap-3 lg:mr-8",
+        "mt-auto mr-12 flex flex-wrap justify-between gap-x-3 gap-y-2 lg:mr-8",
         className
       )}
       {...props}

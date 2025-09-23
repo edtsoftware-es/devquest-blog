@@ -123,7 +123,9 @@ function StandardCardContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
+  return (
+    <div className={cn("mb-2 flex flex-col gap-y-3", className)} {...props} />
+  );
 }
 
 function StandardCardHeader({
@@ -160,7 +162,7 @@ function StandardCardDescription({
   return (
     <p
       className={cn(
-        "mr-12 line-clamp-5 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "line-clamp-5 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
@@ -175,7 +177,7 @@ function StandardCardFooter({
   return (
     <div
       className={cn(
-        "mt-auto mr-12 flex flex-wrap justify-between gap-3",
+        "mt-auto mr-12 flex flex-wrap justify-between gap-x-3 gap-y-2",
         className
       )}
       {...props}

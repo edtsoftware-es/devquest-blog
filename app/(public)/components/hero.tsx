@@ -62,6 +62,7 @@ function HeroItem({
   authorImage,
   authorName,
   publishedAt,
+  duration,
   commentsCount,
   viewCount,
   image,
@@ -120,6 +121,7 @@ function HeroItem({
               <StandardCardStats
                 className="text-secondary [&_span]:text-secondary"
                 commentsCount={commentsCount}
+                duration={duration}
                 viewsCount={viewCount}
               />
             </StandardCardFooter>

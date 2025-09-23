@@ -82,7 +82,7 @@ export default function StandardPostList({
                     </StandardCardTitle>
                   </Link>
                 </StandardCardHeader>
-                <StandardCardDescription className="line-clamp-2">
+                <StandardCardDescription className="line-clamp-3">
                   {post.excerpt}
                 </StandardCardDescription>
               </StandardCardContent>
