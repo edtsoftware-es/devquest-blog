@@ -83,7 +83,7 @@ export default function StandardPostList({
                     </StandardCardTitle>
                   </Link>
                   <StandardCardReadingTime>
-                    {`${post.duration} mins`}
+                    {post.duration} min
                   </StandardCardReadingTime>
                 </StandardCardHeader>
                 <StandardCardDescription className="line-clamp-2">

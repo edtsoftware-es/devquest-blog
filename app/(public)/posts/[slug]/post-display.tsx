@@ -1,7 +1,7 @@
 "use client";
 
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { Clock, Eye, MessageCircle } from "lucide-react";
+import { Clock, Eye, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -36,14 +36,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-
-const formatDate = (timestamp: number) => {
-  return new Date(timestamp).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-};
+import { formatDate } from "@/lib/utils";
 
 type PostDisplayProps = {
   preloadedPost: Preloaded<typeof api.posts.getPdpPost>;
@@ -126,15 +119,13 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
 
             <div className="flex items-center gap-2">
               <span className="text-body-7 text-neutral-600">
-                {post.publishedAt
-                  ? formatDate(post.publishedAt)
-                  : formatDate(post._creationTime)}
+                {formatDate(post.publishedAt ?? post._creationTime)}
               </span>
             </div>
 
             <div className="ml-14 flex items-center gap-5">
               <div className="flex items-center gap-2 text-body-7 text-neutral-600">
-                <MessageCircle className="size-4" />
+                <MessageSquare className="size-4" />
                 <span>{post.commentsCount} comentarios</span>
               </div>
 
@@ -237,12 +228,10 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                       </Link>
                       <CompactCardFooter className="mr-0 xs:mr-0">
                         <CompactCardPublishedAt>
-                          {post.publishedAt
-                            ? formatDate(post.publishedAt)
-                            : formatDate(post._creationTime)}
+                          {formatDate(post.publishedAt ?? post._creationTime)}
                         </CompactCardPublishedAt>
                         <CompactCardReadingTime>
-                          {post.duration} mins
+                          {post.duration} min
                         </CompactCardReadingTime>
                       </CompactCardFooter>
                     </CompactCardContent>
@@ -250,59 +239,42 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                 ))}
               </div>
             </div>
-            <div>
-              <div>
-                <Heading className="mb-6">Popular tags</Heading>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag: string) => (
-                    <Link href={`/search?q=${tag}`} key={tag} prefetch>
-                      <Button className="w-fit" key={tag} size={"xs"}>
-                        {tag}
-                        <Badge variant="tertiary">26</Badge>
-                      </Button>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </aside>
       </div>
       <hr className="mt-12 mb-8" />
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="flex items-center justify-between lg:col-span-2">
-          <div className="flex flex-wrap items-center gap-2">
-            {post.tags.map((tag: string) => (
-              <Badge className="text-xs" key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </div>
+      <div className="flex xs:flex-row flex-col xs:items-center xs:justify-between gap-6">
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((tag: string) => (
+            <Badge className="text-xs" key={tag} variant="secondary">
+              {tag}
+            </Badge>
+          ))}
+        </div>
 
-          <div className="flex items-center gap-3">
-            <span className="text-body-6 text-neutral-900">Compartir:</span>
-            <div className="flex items-center gap-1 rounded-lg border bg-muted px-3 py-2">
-              <Button
-                aria-label="Compartir en Twitter"
-                className="h-8 w-8 rounded-sm bg-black p-0"
-                onClick={shareOnTwitter}
-                size="sm"
-                variant="ghost"
-              >
-                <span className="font-bold text-sm text-white">X</span>
-              </Button>
-              <div className="h-4 w-px bg-border" />
-              <Button
-                aria-label="Compartir en LinkedIn"
-                className="h-8 w-8 rounded-sm bg-[#0a66c2] p-0"
-                onClick={shareOnLinkedIn}
-                size="sm"
-                variant="ghost"
-              >
-                <span className="font-bold text-sm text-white">in</span>
-              </Button>
-            </div>
+        <div className="flex items-center gap-3">
+          <span className="text-body-6 text-neutral-900">Compartir:</span>
+          <div className="flex items-center gap-1">
+            <Button
+              aria-label="Compartir en Twitter"
+              className="h-8 w-8 rounded-sm bg-black p-0"
+              onClick={shareOnTwitter}
+              size="sm"
+              variant="ghost"
+            >
+              <span className="font-bold text-sm text-white">X</span>
+            </Button>
+            <div className="h-4 w-px bg-border" />
+            <Button
+              aria-label="Compartir en LinkedIn"
+              className="h-8 w-8 rounded-sm bg-[#0a66c2] p-0"
+              onClick={shareOnLinkedIn}
+              size="sm"
+              variant="ghost"
+            >
+              <span className="font-bold text-sm text-white">in</span>
+            </Button>
           </div>
         </div>
       </div>

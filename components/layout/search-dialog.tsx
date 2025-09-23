@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { Category, Post } from "@/types";
 import {
   CompactCard,
@@ -110,7 +110,7 @@ export function SearchDialog({
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>{triggerButton}</DialogTrigger>
         <DialogContent
-          className="!w-[991px] !max-w-none top-[42%] px-14 py-10"
+          className="!w-[991px] !max-w-none  px-14 py-10"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
@@ -193,6 +193,11 @@ function SearchContent({
         <Input
           className={cn("rounded-full px-5", isDesktop ? "h-full" : "h-12")}
           onChange={(event) => onSearchValueChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              onSearch();
+            }
+          }}
           placeholder="¿Qué estás buscando?"
           value={searchValue}
         />
@@ -253,12 +258,10 @@ function SearchContent({
                 </Link>
                 <CompactCardFooter className="mr-0 xs:mr-0">
                   <CompactCardPublishedAt>
-                    {post.publishedAt
-                      ? new Date(post.publishedAt).toLocaleDateString()
-                      : new Date(post._creationTime).toLocaleDateString()}
+                    {formatDate(post.publishedAt ?? post._creationTime)}
                   </CompactCardPublishedAt>
                   <CompactCardReadingTime>
-                    {post.duration} mins
+                    {post.duration} min
                   </CompactCardReadingTime>
                 </CompactCardFooter>
               </CompactCardContent>

@@ -10,7 +10,7 @@ import {
   CompactCardTitle,
 } from "@/components/cards/compact-card";
 import type { Post } from "@/convex/lib/types";
-import { cn, getPublishedDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 export default function CompactPostList({
   posts,
@@ -39,10 +39,10 @@ export default function CompactPostList({
             </Link>
             <CompactCardFooter className="mr-0 xs:mr-0">
               <CompactCardPublishedAt>
-                {getPublishedDate(post.publishedAt ?? post._creationTime)}
+                {formatDate(post.publishedAt ?? post._creationTime)}
               </CompactCardPublishedAt>
               <CompactCardReadingTime>
-                {post.duration} mins
+                {post.duration} min
               </CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>

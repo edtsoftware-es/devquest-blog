@@ -95,7 +95,7 @@ export default function SearchPostList({
                     <StandardCardTitle>{post.title}</StandardCardTitle>
                   </Link>
                   <StandardCardReadingTime>
-                    {`${post.duration} mins`}
+                    {post.duration} min
                   </StandardCardReadingTime>
                 </StandardCardHeader>
                 <StandardCardDescription>
