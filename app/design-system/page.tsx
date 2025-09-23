@@ -59,7 +59,6 @@ import {
   StandardCardHeader,
   StandardCardImageContainer,
   StandardCardPublishedAt,
-  StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
   StandardCardTags,
@@ -311,7 +310,6 @@ export default function DesignSystem() {
             <StandardCardContent>
               <StandardCardHeader>
                 <StandardCardTitle>Frontend Development</StandardCardTitle>
-                <StandardCardReadingTime>6 mins</StandardCardReadingTime>
               </StandardCardHeader>
               <StandardCardDescription>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -341,7 +339,11 @@ export default function DesignSystem() {
                 </StandardCardAuthor>
                 <StandardCardPublishedAt>Sep 13, 2025</StandardCardPublishedAt>
               </StandardCardAuthorContainer>
-              <StandardCardStats commentsCount={33} viewsCount={300} />
+              <StandardCardStats
+                commentsCount={0}
+                duration={2}
+                viewsCount={300}
+              />
             </StandardCardFooter>
           </StandardCardShell>
         </StandardCard>

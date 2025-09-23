@@ -1,4 +1,4 @@
-import { ArrowRight, Eye, MessageSquare } from "lucide-react";
+import { ArrowRight, Clock, Eye, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
@@ -153,24 +153,6 @@ function StandardCardTitle({
   );
 }
 
-function StandardCardReadingTime({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"span">) {
-  return (
-    <span
-      className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
-        className
-      )}
-      {...props}
-    >
-      • {children}
-    </span>
-  );
-}
-
 function StandardCardDescription({
   className,
   ...props
@@ -256,11 +238,13 @@ function StandardCardPublishedAt({
 }
 
 type StandardCardStatsProps = {
+  duration?: number;
   commentsCount?: number;
   viewsCount?: number;
 };
 
 function StandardCardStats({
+  duration,
   commentsCount = 0,
   viewsCount = 0,
   className,
@@ -269,6 +253,14 @@ function StandardCardStats({
     <div
       className={cn("flex items-center gap-x-4 text-neutral-600", className)}
     >
+      {duration !== undefined && (
+        <div className="flex items-center gap-x-1">
+          <Clock className="size-4" />
+          <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+            {duration} min
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-x-1">
         <MessageSquare className="size-4" />
         <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
@@ -293,7 +285,6 @@ export {
   StandardCardContent,
   StandardCardHeader,
   StandardCardTitle,
-  StandardCardReadingTime,
   StandardCardDescription,
   StandardCardFooter,
   StandardCardAuthorContainer,

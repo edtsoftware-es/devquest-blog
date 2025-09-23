@@ -20,7 +20,6 @@ import {
   StandardCardHeader,
   StandardCardImageContainer,
   StandardCardPublishedAt,
-  StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
   StandardCardTags,
@@ -95,9 +94,6 @@ export default function CategoryPostList({
                     <span className="absolute inset-0 z-50" />
                     <StandardCardTitle>{post.title}</StandardCardTitle>
                   </Link>
-                  <StandardCardReadingTime>
-                    {post.duration} min
-                  </StandardCardReadingTime>
                 </StandardCardHeader>
                 <StandardCardDescription>
                   {post.excerpt}
@@ -122,6 +118,7 @@ export default function CategoryPostList({
                 </StandardCardAuthorContainer>
                 <StandardCardStats
                   commentsCount={post.commentsCount}
+                  duration={post.duration}
                   viewsCount={post.viewCount}
                 />
               </StandardCardFooter>

@@ -104,7 +104,11 @@ function HeroItem({
               <StandardCardAuthorContainer>
                 <StandardCardAuthor>
                   <Avatar className="size-8 xs:size-10">
-                    <AvatarImage src={authorImage} loading={index === 0 ? "eager" : "lazy"} decoding={index === 0 ? "sync" : "async"} />
+                    <AvatarImage
+                      decoding={index === 0 ? "sync" : "async"}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      src={authorImage}
+                    />
                     <AvatarFallback>AF</AvatarFallback>
                   </Avatar>
                   <StandardCardAuthorName>{authorName}</StandardCardAuthorName>
