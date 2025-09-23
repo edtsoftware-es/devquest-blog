@@ -36,7 +36,6 @@ import {
   FeaturedCardHeader,
   FeaturedCardImageContainer,
   FeaturedCardPublishedAt,
-  FeaturedCardReadingTime,
   FeaturedCardShell,
   FeaturedCardStats,
   FeaturedCardTags,
@@ -259,16 +258,10 @@ export default function DesignSystem() {
               <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
                 Sep 13, 2025
               </FeaturedCardPublishedAt>
-              <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
-                5 mins
-              </FeaturedCardReadingTime>
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
                 <FeaturedCardTitle>Understanding React</FeaturedCardTitle>
-                <FeaturedCardReadingTime className="hidden lg:inline">
-                  5 mins
-                </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -288,7 +281,11 @@ export default function DesignSystem() {
                   Sep 13, 2025
                 </FeaturedCardPublishedAt>
               </FeaturedCardAuthorContainer>
-              <FeaturedCardStats commentsCount={33} viewsCount={300} />
+              <FeaturedCardStats
+                commentsCount={33}
+                duration={3}
+                viewsCount={300}
+              />
             </FeaturedCardFooter>
           </FeaturedCardShell>
         </FeaturedCard>

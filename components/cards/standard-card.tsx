@@ -251,24 +251,27 @@ function StandardCardStats({
 }: React.ComponentProps<"div"> & StandardCardStatsProps) {
   return (
     <div
-      className={cn("flex items-center gap-x-4 text-neutral-600", className)}
+      className={cn(
+        "flex flex-1 items-center justify-end gap-x-3 text-neutral-600",
+        className
+      )}
     >
       {duration !== undefined && (
         <div className="flex items-center gap-x-1">
-          <Clock className="size-4" />
-          <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+          <Clock className="size-3 shrink-0" />
+          <span className="whitespace-nowrap font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
             {duration} min
           </span>
         </div>
       )}
       <div className="flex items-center gap-x-1">
-        <MessageSquare className="size-4" />
+        <MessageSquare className="size-3 shrink-0" />
         <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
           {commentsCount}
         </span>
       </div>
       <div className="flex items-center gap-x-1">
-        <Eye className="size-4" />
+        <Eye className="size-3 shrink-0" />
         <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
           {viewsCount}
         </span>
