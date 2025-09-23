@@ -1,4 +1,4 @@
-import { ArrowRight, Eye, MessageSquare } from "lucide-react";
+import { ArrowRight, Clock, Eye, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
@@ -123,7 +123,9 @@ function StandardCardContent({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  return <div className={cn("flex flex-col gap-y-3", className)} {...props} />;
+  return (
+    <div className={cn("mb-2 flex flex-col gap-y-3", className)} {...props} />
+  );
 }
 
 function StandardCardHeader({
@@ -153,24 +155,6 @@ function StandardCardTitle({
   );
 }
 
-function StandardCardReadingTime({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<"span">) {
-  return (
-    <span
-      className={cn(
-        "font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
-        className
-      )}
-      {...props}
-    >
-      • {children}
-    </span>
-  );
-}
-
 function StandardCardDescription({
   className,
   ...props
@@ -178,7 +162,7 @@ function StandardCardDescription({
   return (
     <p
       className={cn(
-        "mr-12 line-clamp-5 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
+        "line-clamp-5 font-medium xs:font-normal text-[0.75rem] text-neutral-600 xs:text-[0.875rem] leading-[1.2] xs:leading-[1.5]",
         className
       )}
       {...props}
@@ -193,7 +177,7 @@ function StandardCardFooter({
   return (
     <div
       className={cn(
-        "mt-auto mr-12 flex flex-wrap justify-between gap-3",
+        "mt-auto mr-12 flex flex-wrap justify-between gap-x-3 gap-y-2",
         className
       )}
       {...props}
@@ -256,27 +240,40 @@ function StandardCardPublishedAt({
 }
 
 type StandardCardStatsProps = {
+  duration?: number;
   commentsCount?: number;
   viewsCount?: number;
 };
 
 function StandardCardStats({
+  duration,
   commentsCount = 0,
   viewsCount = 0,
   className,
 }: React.ComponentProps<"div"> & StandardCardStatsProps) {
   return (
     <div
-      className={cn("flex items-center gap-x-4 text-neutral-600", className)}
+      className={cn(
+        "flex flex-1 items-center justify-end gap-x-3 text-neutral-600",
+        className
+      )}
     >
+      {duration !== undefined && (
+        <div className="flex items-center gap-x-1">
+          <Clock className="size-3 shrink-0" />
+          <span className="whitespace-nowrap font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
+            {duration} min
+          </span>
+        </div>
+      )}
       <div className="flex items-center gap-x-1">
-        <MessageSquare className="size-4" />
+        <MessageSquare className="size-3 shrink-0" />
         <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
           {commentsCount}
         </span>
       </div>
       <div className="flex items-center gap-x-1">
-        <Eye className="size-4" />
+        <Eye className="size-3 shrink-0" />
         <span className="font-medium text-[0.75rem] text-neutral-600 leading-[1.2]">
           {viewsCount}
         </span>
@@ -293,7 +290,6 @@ export {
   StandardCardContent,
   StandardCardHeader,
   StandardCardTitle,
-  StandardCardReadingTime,
   StandardCardDescription,
   StandardCardFooter,
   StandardCardAuthorContainer,

@@ -19,7 +19,6 @@ import {
   StandardCardFooter,
   StandardCardHeader,
   StandardCardImageContainer,
-  StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
   StandardCardTags,
@@ -82,17 +81,15 @@ export default function StandardPostList({
                       {post.title}
                     </StandardCardTitle>
                   </Link>
-                  <StandardCardReadingTime>
-                    {post.duration} min
-                  </StandardCardReadingTime>
                 </StandardCardHeader>
-                <StandardCardDescription className="line-clamp-2">
+                <StandardCardDescription className="line-clamp-3">
                   {post.excerpt}
                 </StandardCardDescription>
               </StandardCardContent>
               <StandardCardFooter>
                 <StandardCardStats
                   commentsCount={post.commentsCount}
+                  duration={post.duration}
                   viewsCount={post.viewCount}
                 />
               </StandardCardFooter>

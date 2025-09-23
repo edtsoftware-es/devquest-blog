@@ -34,7 +34,7 @@ const AUTO_PLAY_INTERVAL = 8000;
 export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
   return (
     <Carousel
-      className="w-full max-w-screen lg:max-w-6xl lg:px-2 2xl:max-w-[1400px]"
+      className="w-full max-w-screen lg:max-w-6xl 2xl:max-w-[1400px]"
       opts={{ loop: true }}
       plugins={[
         Autoplay({
@@ -62,6 +62,7 @@ function HeroItem({
   authorImage,
   authorName,
   publishedAt,
+  duration,
   commentsCount,
   viewCount,
   image,
@@ -104,7 +105,11 @@ function HeroItem({
               <StandardCardAuthorContainer>
                 <StandardCardAuthor>
                   <Avatar className="size-8 xs:size-10">
-                    <AvatarImage src={authorImage} loading={index === 0 ? "eager" : "lazy"} decoding={index === 0 ? "sync" : "async"} />
+                    <AvatarImage
+                      decoding={index === 0 ? "sync" : "async"}
+                      loading={index === 0 ? "eager" : "lazy"}
+                      src={authorImage}
+                    />
                     <AvatarFallback>AF</AvatarFallback>
                   </Avatar>
                   <StandardCardAuthorName>{authorName}</StandardCardAuthorName>
@@ -116,6 +121,7 @@ function HeroItem({
               <StandardCardStats
                 className="text-secondary [&_span]:text-secondary"
                 commentsCount={commentsCount}
+                duration={duration}
                 viewsCount={viewCount}
               />
             </StandardCardFooter>

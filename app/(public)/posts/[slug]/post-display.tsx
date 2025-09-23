@@ -1,7 +1,7 @@
 "use client";
 
 import { type Preloaded, useMutation, usePreloadedQuery } from "convex/react";
-import { Clock, Eye, MessageSquare } from "lucide-react";
+import { Calendar, Clock, Eye, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,7 +19,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
 import { Heading } from "@/components/headings";
@@ -70,40 +69,32 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
 
   return (
     <div className="space-y-6">
-      <div className="mb-8">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>{post.category.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
+      <Breadcrumb className="pt-8 pb-2">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{post.category.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       <div className="border-none shadow-none">
         <div className="space-y-4 px-0 pb-4">
-          <div className="flex items-center gap-6">
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2">
-                {post.tags.map((tag: string) => (
-                  <Badge className="text-xs" key={tag} variant="tag">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
-            <div className="flex items-center gap-2 text-body-8 text-neutral-600">
-              <Clock className="size-4" />
-              <span>{post.duration} min</span>
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              {post.tags.map((tag: string) => (
+                <Badge className="text-xs" key={tag} variant="tag">
+                  {tag}
+                </Badge>
+              ))}
             </div>
-          </div>
+          )}
           <h1 className="text-heading-3">{post.title}</h1>
 
-          <div className="mt-[30px] flex flex-wrap items-center gap-4 text-muted-foreground text-sm">
+          <div className="mt-[30px] flex flex-wrap items-center justify-between gap-4 text-muted-foreground text-sm">
             <div className="flex items-center gap-2">
               <Avatar className="size-10">
                 <AvatarImage src={post.author.image} />
@@ -111,27 +102,36 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                   {post.author.name?.charAt(0).toUpperCase() || "A"}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-body-7 text-neutral-900">
+              <span className="mr-6 text-body-7 text-neutral-900">
                 {post.author.name ||
                   (post.author.role === "admin" ? "Administrador" : "Usuario")}
               </span>
+              <div className="flex items-center gap-2 text-body-7 text-neutral-600">
+                <Calendar className="size-4" />
+                <span className="whitespace-nowrap capitalize">
+                  {formatDate(post.publishedAt ?? post._creationTime)}
+                </span>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-body-7 text-neutral-600">
-                {formatDate(post.publishedAt ?? post._creationTime)}
-              </span>
-            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2 text-body-7 text-neutral-600">
+                <Clock className="size-4" />
+                <span className="whitespace-nowrap">{post.duration} min</span>
+              </div>
 
-            <div className="ml-14 flex items-center gap-5">
               <div className="flex items-center gap-2 text-body-7 text-neutral-600">
                 <MessageSquare className="size-4" />
-                <span>{post.commentsCount} comentarios</span>
+                <span className="whitespace-nowrap">
+                  {post.commentsCount} comentarios
+                </span>
               </div>
 
               <div className="flex items-center gap-2 text-body-7 text-neutral-600">
                 <Eye className="size-4" />
-                <span>{post.viewCount} vistas</span>
+                <span className="whitespace-nowrap">
+                  {post.viewCount} vistas
+                </span>
               </div>
             </div>
           </div>
@@ -230,9 +230,6 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                         <CompactCardPublishedAt>
                           {formatDate(post.publishedAt ?? post._creationTime)}
                         </CompactCardPublishedAt>
-                        <CompactCardReadingTime>
-                          {post.duration} min
-                        </CompactCardReadingTime>
                       </CompactCardFooter>
                     </CompactCardContent>
                   </CompactCard>

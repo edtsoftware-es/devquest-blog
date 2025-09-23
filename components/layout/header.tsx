@@ -37,7 +37,7 @@ export default async function Header() {
   ]);
 
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-center md:static md:px-7">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-center md:static md:px-8">
       <div className="flex h-16 w-full max-w-6xl flex-row-reverse items-center justify-between border border-neutral-200 bg-primary/90 px-4 backdrop-blur-lg md:mt-7 md:h-20 md:flex-row md:rounded-2xl md:bg-primary md:px-7 md:backdrop-blur-none">
         <section className="hidden items-center gap-9 md:flex">
           <Link
@@ -48,26 +48,25 @@ export default async function Header() {
             <Image
               alt="Logotipo de DevQuest"
               height={32}
+              loading="eager"
               src="/devi-laptop.svg"
               width={32}
-              loading="eager"
-              
             />
             <Image
               alt="Logotipo de DevQuest"
               className="ml-3 inline-block pt-[1px] dark:hidden"
               height={100}
+              loading="eager"
               src="/logo-black.svg"
               width={100}
-              loading="eager"
             />
             <Image
               alt="Logotipo de DevQuest"
               className="ml-3 hidden pt-[1px] dark:inline-block"
               height={100}
+              loading="eager"
               src="/logo-white.svg"
               width={100}
-              loading="eager"
             />
           </Link>
           <nav>

@@ -6,7 +6,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardStats,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
@@ -21,7 +20,6 @@ import {
   FeaturedCardHeader,
   FeaturedCardImageContainer,
   FeaturedCardPublishedAt,
-  FeaturedCardReadingTime,
   FeaturedCardShell,
   FeaturedCardStats,
   FeaturedCardTags,
@@ -79,9 +77,6 @@ export default function Trending({
                   mainPopularPost.publishedAt ?? mainPopularPost._creationTime
                 )}
               </FeaturedCardPublishedAt>
-              <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
-                {mainPopularPost.duration} min
-              </FeaturedCardReadingTime>
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
@@ -89,9 +84,6 @@ export default function Trending({
                   <span className="absolute inset-0 z-50" />
                   <FeaturedCardTitle>{mainPopularPost.title}</FeaturedCardTitle>
                 </Link>
-                <FeaturedCardReadingTime className="hidden lg:inline">
-                  {mainPopularPost.duration} min
-                </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>
                 {mainPopularPost.excerpt}
@@ -123,6 +115,7 @@ export default function Trending({
               </FeaturedCardAuthorContainer>
               <FeaturedCardStats
                 commentsCount={mainPopularPost.commentsCount}
+                duration={mainPopularPost.duration}
                 viewsCount={mainPopularPost.viewCount}
               />
             </FeaturedCardFooter>
@@ -171,13 +164,12 @@ export default function Trending({
                     <CompactCardPublishedAt>
                       {formatDate(post.publishedAt ?? post._creationTime)}
                     </CompactCardPublishedAt>
-                    <CompactCardReadingTime>
-                      {post.duration} min
-                    </CompactCardReadingTime>
                   </CompactCardFooter>
                   <CompactCardStats
                     className="xs:flex hidden"
                     commentsCount={post.commentsCount}
+                    duration={post.duration}
+                    viewsCount={post.viewCount}
                   />
                 </CompactCardContent>
               </CompactCard>

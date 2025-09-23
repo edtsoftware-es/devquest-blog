@@ -26,17 +26,19 @@ export default async function PostPage({
   ]);
 
   return (
-    <div className="mx-auto max-w-6xl max-w-8xl px-4 py-10 lg:px-0">
-      <PostDisplay preloadedPost={preloadedPost} />
-      <div className="flex w-full">
-        <div className="w-full">
-          <CommentsSection
-            postId={post._id}
-            preloadedPost={preloadedPost}
-            preloadedUser={preloadedUser}
-          />
+    <main className="flex flex-col items-center px-4 sm:px-8">
+      <div className="flex w-full max-w-6xl flex-col justify-center">
+        <PostDisplay preloadedPost={preloadedPost} />
+        <div className="flex w-full">
+          <div className="w-full">
+            <CommentsSection
+              postId={post._id}
+              preloadedPost={preloadedPost}
+              preloadedUser={preloadedUser}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

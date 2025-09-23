@@ -21,7 +21,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardStats,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
@@ -36,7 +35,6 @@ import {
   FeaturedCardHeader,
   FeaturedCardImageContainer,
   FeaturedCardPublishedAt,
-  FeaturedCardReadingTime,
   FeaturedCardShell,
   FeaturedCardStats,
   FeaturedCardTags,
@@ -59,7 +57,6 @@ import {
   StandardCardHeader,
   StandardCardImageContainer,
   StandardCardPublishedAt,
-  StandardCardReadingTime,
   StandardCardShell,
   StandardCardStats,
   StandardCardTags,
@@ -260,16 +257,10 @@ export default function DesignSystem() {
               <FeaturedCardPublishedAt className="ml-0 inline lg:hidden">
                 Sep 13, 2025
               </FeaturedCardPublishedAt>
-              <FeaturedCardReadingTime className="ml-0 inline lg:hidden">
-                5 mins
-              </FeaturedCardReadingTime>
             </FeaturedCardTags>
             <FeaturedCardContent>
               <FeaturedCardHeader>
                 <FeaturedCardTitle>Understanding React</FeaturedCardTitle>
-                <FeaturedCardReadingTime className="hidden lg:inline">
-                  5 mins
-                </FeaturedCardReadingTime>
               </FeaturedCardHeader>
               <FeaturedCardDescription>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -289,7 +280,11 @@ export default function DesignSystem() {
                   Sep 13, 2025
                 </FeaturedCardPublishedAt>
               </FeaturedCardAuthorContainer>
-              <FeaturedCardStats commentsCount={33} viewsCount={300} />
+              <FeaturedCardStats
+                commentsCount={33}
+                duration={3}
+                viewsCount={300}
+              />
             </FeaturedCardFooter>
           </FeaturedCardShell>
         </FeaturedCard>
@@ -311,7 +306,6 @@ export default function DesignSystem() {
             <StandardCardContent>
               <StandardCardHeader>
                 <StandardCardTitle>Frontend Development</StandardCardTitle>
-                <StandardCardReadingTime>6 mins</StandardCardReadingTime>
               </StandardCardHeader>
               <StandardCardDescription>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -341,7 +335,11 @@ export default function DesignSystem() {
                 </StandardCardAuthor>
                 <StandardCardPublishedAt>Sep 13, 2025</StandardCardPublishedAt>
               </StandardCardAuthorContainer>
-              <StandardCardStats commentsCount={33} viewsCount={300} />
+              <StandardCardStats
+                commentsCount={0}
+                duration={2}
+                viewsCount={300}
+              />
             </StandardCardFooter>
           </StandardCardShell>
         </StandardCard>
@@ -366,7 +364,6 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
@@ -379,11 +376,11 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
             <CompactCardStats
               className="xs:flex hidden"
               commentsCount={12}
+              duration={5}
               viewsCount={150}
             />
           </CompactCardContent>
@@ -397,7 +394,6 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter className="mr-0">
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
