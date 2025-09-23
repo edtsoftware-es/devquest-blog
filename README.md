@@ -235,6 +235,14 @@ npx convex run init
 2. Confirma que la callback URL coincida exactamente 
 3. Reinicia el servidor de desarrollo
 
+## Documentación oficial relacionada
+- [Next.js 15](https://nextjs.org/docs)
+- [Convex](https://docs.convex.dev)
+- [Convex Auth](https://labs.convex.dev/auth)
+- [shadcn/ui](https://ui.shadcn.com)
+- [TipTap Editor](https://tiptap.dev/)
+- [Google OAuth](https://developers.google.com/identity/protocols/oauth2)
+
 ## 📄 License
 
 Este proyecto está licenciado bajo la MIT License - ver el archivo [LICENSE](LICENSE) para más detalles.
