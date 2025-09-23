@@ -175,6 +175,13 @@ Este comando generará:
 
 ✨Accede a tu blog en [http://localhost:3000](http://localhost:3000)✨
 
+### 8. Usuario administrador y dashboard
+
+Para acceder al dashboard de administración, inicia sesión con un usuario que tenga permisos de administrador.
+
+También puedes modificar el rol de tu usuario directamente en la base de datos de Convex para otorgarte permisos de administrador.
+
+Desde el dashboard, podrás gestionar el contenido del blog, revisar posts pendientes de aprobación, y crear los tuyos propios.
 
 ## 🔧 Configuración adicional
 
