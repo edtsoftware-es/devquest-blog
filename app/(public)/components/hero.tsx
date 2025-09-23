@@ -34,7 +34,7 @@ const AUTO_PLAY_INTERVAL = 8000;
 export default function Hero({ posts }: { posts: PostWithAuthorData[] }) {
   return (
     <Carousel
-      className="w-full max-w-screen lg:max-w-6xl lg:px-2 2xl:max-w-[1400px]"
+      className="w-full max-w-screen lg:max-w-6xl 2xl:max-w-[1400px]"
       opts={{ loop: true }}
       plugins={[
         Autoplay({
