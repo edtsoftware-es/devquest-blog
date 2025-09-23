@@ -1,4 +1,4 @@
-# Blog DevQuest
+# 📝⚔️ Blog DevQuest
 
 Un blog moderno desarrollado con Next.js 15 y Convex, con autenticación, sistema de comentarios y gestión de contenido.
 
@@ -7,9 +7,9 @@ Un blog moderno desarrollado con Next.js 15 y Convex, con autenticación, sistem
 - ✨ **Next.js 15** con App Router y React 19
 - 🔐 **Convex Auth** para autenticación
 - 💬 **Sistema de comentarios** en tiempo real
-- 🎨 **shadcn/ui** componentes con Tailwind CSS
+- 🎨 **shadcn/ui** componentes con TailwindCSS
 - 📱 **Responsive** y accesible
-- 🌙 **Modo oscuro** 
+- 🌙 **Modo oscuro / ☀️ claro** 
 - 🔍 **Búsqueda** de posts y categorías
 - 📝 **Editor de contenido** con TipTap
 - ⚡ **Optimizado** para rendimiento
@@ -74,21 +74,21 @@ NEXT_PUBLIC_CONVEX_URL=https://tu-deployment.convex.cloud
 SETUP_SCRIPT_RAN=1
 ```
 
-#### 4.2. Variables de autenticación requeridas (aplicables en el dashboard de Convex)
-
-**Variables obligatorias para el funcionamiento tras instalar Auth:**
-```env
-# URL del sitio (requerida para auth)
-SITE_URL=http://localhost:3000
-
-# Claves JWT (generadas automáticamente por Convex Auth)
-JWT_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----...
-JWKS={"keys":[...]}
-```
+Si no se generó, crea un archivo `.env.local` en la raíz del proyecto con estas variables.
 
 ### 5. Configuración de autenticación
 
-#### 5.1. Ejecuta el script de configuración de auth
+#### 5.1. Ejecuta el script de instalación de dependencias necesarias
+
+```bash
+#Uso de pnpm (recomendado)
+pnpm add @convex-dev/auth @auth/core@0.37.0
+
+#O usando npm
+npm install @convex-dev/auth @auth/core@0.37.0
+```
+
+#### 5.2. Ejecuta el script de configuración de auth
 ```bash
 npx @convex-dev/auth
 ```
@@ -98,11 +98,21 @@ npx @convex-dev/auth
 npx @convex-dev/auth prod
 ```
 
-Este comando te guiará para configurar:
-- **Google OAuth** (opcional)
-- **Discord OAuth** (opcional)
+#### 5.3. Variables de autenticación requeridas (aplicables en el dashboard de Convex)
 
-#### 5.2. Configurar Google OAuth
+**Variables obligatorias para el funcionamiento:**
+```env
+# URL del sitio (requerida para auth)
+
+SITE_URL=http://localhost:3000
+
+# Claves JWT (generadas automáticamente por Convex Auth)
+
+JWT_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----...
+JWKS={"keys":[...]}
+```
+
+#### 5.3. Configurar Google OAuth
 [Documentación oficial](https://labs.convex.dev/auth/config/oauth/google)
 
 1. Ve a [Google Cloud Console](https://console.cloud.google.com/)
@@ -119,7 +129,7 @@ AUTH_GOOGLE_ID=tu-google-client-id
 AUTH_GOOGLE_SECRET=tu-google-client-secret
 ```
 
-#### 5.3. Configurar Discord OAuth
+#### 5.4. Configurar Discord OAuth
 
 1. Ve a [Discord Developer Portal](https://discord.com/developers/applications)
 2. Crea una nueva aplicación
@@ -135,7 +145,7 @@ DISCORD_AUTH_CLIENT_SECRET=tu-discord-client-secret
 
 ### 6. Generar datos de prueba con faker
 
-Una vez que Convex esté configurado y el proyecto en marcha, puedes generar datos de prueba para el blog:
+Una vez que Convex esté configurado, puedes generar datos de prueba para el blog:
 
 ```bash
 # Ejecuta el proyecto (esto iniciará tanto Next.js como Convex)
@@ -159,9 +169,9 @@ Este comando generará:
 - Comentarios de prueba
 - Datos necesarios para el funcionamiento del blog
 
-### 7. Ejecutar el proyecto
+### 7. Accede al blog
 
-✨Ya estás listo para ejecutar el proyecto completo✨
+✨Accede a tu blog en [http://localhost:3000](http://localhost:3000)✨
 
 
 ## 🔧 Configuración adicional
