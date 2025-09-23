@@ -6,7 +6,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardStats,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
@@ -165,13 +164,12 @@ export default function Trending({
                     <CompactCardPublishedAt>
                       {formatDate(post.publishedAt ?? post._creationTime)}
                     </CompactCardPublishedAt>
-                    <CompactCardReadingTime>
-                      {post.duration} min
-                    </CompactCardReadingTime>
                   </CompactCardFooter>
                   <CompactCardStats
                     className="xs:flex hidden"
                     commentsCount={post.commentsCount}
+                    duration={post.duration}
+                    viewsCount={post.viewCount}
                   />
                 </CompactCardContent>
               </CompactCard>

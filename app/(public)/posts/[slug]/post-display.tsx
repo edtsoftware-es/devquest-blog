@@ -19,7 +19,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
 import { Heading } from "@/components/headings";
@@ -230,9 +229,6 @@ export function PostDisplay({ preloadedPost }: PostDisplayProps) {
                         <CompactCardPublishedAt>
                           {formatDate(post.publishedAt ?? post._creationTime)}
                         </CompactCardPublishedAt>
-                        <CompactCardReadingTime>
-                          {post.duration} min
-                        </CompactCardReadingTime>
                       </CompactCardFooter>
                     </CompactCardContent>
                   </CompactCard>

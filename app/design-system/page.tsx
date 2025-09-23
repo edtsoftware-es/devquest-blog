@@ -21,7 +21,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardStats,
   CompactCardTitle,
 } from "@/components/cards/compact-card";
@@ -365,7 +364,6 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>
@@ -378,11 +376,11 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter>
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
             <CompactCardStats
               className="xs:flex hidden"
               commentsCount={12}
+              duration={5}
               viewsCount={150}
             />
           </CompactCardContent>
@@ -396,7 +394,6 @@ export default function DesignSystem() {
             <CompactCardTitle>Understanding React Hooks</CompactCardTitle>
             <CompactCardFooter className="mr-0">
               <CompactCardPublishedAt>Oct 5, 2024</CompactCardPublishedAt>
-              <CompactCardReadingTime>5 mins</CompactCardReadingTime>
             </CompactCardFooter>
           </CompactCardContent>
         </CompactCard>

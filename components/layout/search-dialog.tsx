@@ -14,7 +14,6 @@ import {
   CompactCardFooter,
   CompactCardImageContainer,
   CompactCardPublishedAt,
-  CompactCardReadingTime,
   CompactCardTitle,
 } from "../cards/compact-card";
 import { Button } from "../ui/button";
@@ -110,7 +109,7 @@ export function SearchDialog({
       <Dialog onOpenChange={setOpen} open={open}>
         <DialogTrigger asChild>{triggerButton}</DialogTrigger>
         <DialogContent
-          className="!w-[991px] !max-w-none  px-14 py-10"
+          className="!w-[991px] !max-w-none px-14 py-10"
           onInteractOutside={(e) => e.preventDefault()}
         >
           <DialogHeader>
@@ -260,9 +259,6 @@ function SearchContent({
                   <CompactCardPublishedAt>
                     {formatDate(post.publishedAt ?? post._creationTime)}
                   </CompactCardPublishedAt>
-                  <CompactCardReadingTime>
-                    {post.duration} min
-                  </CompactCardReadingTime>
                 </CompactCardFooter>
               </CompactCardContent>
             </CompactCard>
